@@ -9,9 +9,12 @@ with open(sys.argv[1], 'r') as f:
         regs[line.split()[0]] = 0
         regs[line.split()[4]] = 0
 
+highest = 0
+
 for i in inst:
     (run, cond) = i.split(" if ")
     (reg, op, val) = cond.split()
+    val = int(val)
     dorun = False
     if op == "<":
         if regs[reg] < val:
@@ -34,9 +37,10 @@ for i in inst:
 
     if dorun:
         (reg, incdec, val) = run.split()
+        val = int(val)
         if incdec == "inc":
             regs[reg] += val
         elif incdec == "dec":
             regs[reg] -= val
 
-print(max(regs, key=regs.get))
+print(regs[max(regs, key=regs.get)])
