@@ -14,26 +14,22 @@ with open(sys.argv[1], 'r') as f:
         while i < len(line):
             try:
                 if line[i] + line[i + 1] in doubles:
-                    founddouble = True
-                    print("double: ", line[i] + line[i + 1])
+                    if doubles[line[i] + line[i + 1]] != i - 1:
+                        founddouble = line[i] + line[i + 1]
                 else:
-                    doubles[line[i] + line[i + 1]] = 1
+                    doubles[line[i] + line[i + 1]] = i
                 if line[i] == line[i + 2]:
-                    print("pali: ", line[i] + line[i + 1] + line[i + 2])
-                    foundpali = True
+                    foundpali = line[i] + line[i + 1] + line[i + 2]
             except IndexError:
                 pass
             i += 1
         if not founddouble:
             nice = False
-            print(line, "no double")
 
         if not foundpali:
             nice = False
-            print(line, "no palindrome")
 
         if nice:
-            print(line, "NICE")
             nicecount += 1
 
 print(nicecount)
