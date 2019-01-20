@@ -16,5 +16,12 @@ TO DO:<br>
 23.2    4D nanobots -- octree<br>
 <br>
 2017<br>
-7.2     figure out if disk platters should be recursive
-9-25
+7.2     figure out if disk platters should be recursive<br>
+9-25<br>
+<br>
+2015<br>
+7       bitwise logic<br>
+12.2    JSON<br>
+15.2    calories<br>
+17      eggnog<br>
+19-25
