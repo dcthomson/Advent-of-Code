@@ -1,14 +1,27 @@
 import sys
 
 class Flavor:
-    def __init__(self, name, capacity, durability, flavor, texture):
+    def __init__(self, name, capacity, durability, flavor, texture, calories):
         self.name = name
+        capacity = int(capacity)
+        durability = int(durability)
+        flavor = int(flavor)
+        texture = int(texture)
+        calories = int(calories)
+        self.properties = dict()
+        self.properties['capacity'] = capacity
+        self.properties['durability'] = durability
+        self.properties['flavor'] = flavor
+        self.properties['texture'] = texture
+        self.properties['calories'] = calories
         self.capacity = capacity
         self.durability = durability
         self.flavor = flavor
         self.texture = texture
+        self.calories = calories
 
-flavors = list()
+flavorprops = ['capacity', 'durability', 'flavor', 'texture']
+flavors = dict()
 
 with open(sys.argv[1], 'r') as f:
     for line in f:
@@ -18,25 +31,49 @@ with open(sys.argv[1], 'r') as f:
         for prop in props.split(", "):
             (prop, count) = prop.split()
             pd[prop] = count
-        flavors.append(Flavor(flavor, pd['capacity'], pd['durability'], pd['flavor'], pd['texture'], pd['calories']))
+        flavors[flavor] = (Flavor(flavor, pd['capacity'], pd['durability'], pd['flavor'], pd['texture'], pd['calories']))
 
+def getTotals(arr, count, total, flavors, flavorprops, highestscore):
+    popped = arr.pop()
+    while count[popped] <= total:
+        tc = 0
+        for k in count:
+            tc += count[k]
+        if len(arr) == 0 and tc == total:
+            ingprops =  dict()
+            for k in count:
+                for prop in flavorprops:
+                    if prop not in ingprops:
+                        ingprops[prop] = flavors[k].properties[prop] * count[k]
+                    else:
+                        ingprops[prop] += flavors[k].properties[prop] * count[k]
+            score = False
+            for k in ingprops:
+                if ingprops[k] < 0:
+                    ingprops[k] = 0
+                if not score:
+                    score = ingprops[k]
+                else:
+                    score *= ingprops[k]
+            if score > highestscore:
+                highestscore = score
+            return highestscore
+        if tc > total:
+            return highestscore
+        if len(arr) != 0:
+            highestscore = getTotals(arr.copy(), count.copy(), total, flavors, flavorprops, highestscore)
+        count[popped] += 1
+    return highestscore
 
-def get_flavors(flavors, total=0):
-    for f in flavors:
-        for c in range(0, 101):
-            total += c
+flist = list()
+count = dict()
+for k in flavors:
+    flist.append(flavors[k].name)
+    count[flavors[k].name] = 0
 
+total = 100
+highestscore = 0
 
+highestscore = getTotals(flist, count, total, flavors, flavorprops, highestscore)
 
-# highestscore = False
-
-# for f in range(0, 101):
-#     for c in range(0, 101):
-#         if f + c > 100:
-#             break
-#         for b in range(0, 101):
-#             if f + c + b > 100:
-#                 break
-#             for s in range(0, 101):
-#                 if f + c + b + s == 100:
-#                     flavors["Frosting"]["capacity"]
+print(highestscore)
