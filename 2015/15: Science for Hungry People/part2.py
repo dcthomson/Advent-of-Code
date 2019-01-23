@@ -48,6 +48,8 @@ def getTotals(arr, count, total, flavors, flavorprops, highestscore):
                     else:
                         ingprops[prop] += flavors[k].properties[prop] * count[k]
             score = False
+            print(flavors)
+            print(ingprops)
             for k in ingprops:
                 if ingprops[k] < 0:
                     ingprops[k] = 0
