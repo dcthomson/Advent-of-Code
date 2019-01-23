@@ -6,8 +6,6 @@ with open(sys.argv[1], 'r') as f:
     for line in f:
         containers.append(int(line.strip()))
 
-#containers = [20, 15, 10, 5, 5]
-
 goal = 150
 
 count = 0
