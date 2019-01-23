@@ -16,16 +16,21 @@ with open(sys.argv[1], 'r') as f:
         elif line != "":
             molecule = line
 
-print(changes)
-print(molecule)
+molecules = dict()
 
 for start in changes:
     i = 0
     while i <= len(molecule):
         l = len(start)
-        if start == molecule[i, i + l - 1]:
-
+        if start == molecule[i:i + l]:
+            for replacement in changes[start]:
+                front = molecule[:i]
+                back = molecule[i + l:]
+                if front + replacement + back not in molecules:
+                    molecules[front + replacement + back] = 1
+                else:
+                    molecules[front + replacement + back] += 1
 
         i += 1
-        for end in changes[start]:
 
+print(len(molecules))
