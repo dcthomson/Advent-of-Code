@@ -20,6 +20,12 @@ class Flavor:
         self.texture = texture
         self.calories = calories
 
+    def __repr__(self):
+        retstr = self.name + "\n"
+        for prop in self.properties:
+            retstr += "       " + prop.strip() + ":" + str(self.properties[prop]) + "\n"
+        return retstr
+
 flavorprops = ['capacity', 'durability', 'flavor', 'texture']
 flavors = dict()
 
@@ -41,15 +47,16 @@ def getTotals(arr, count, total, flavors, flavorprops, highestscore):
             tc += count[k]
         if len(arr) == 0 and tc == total:
             ingprops =  dict()
+            calories = 0
             for k in count:
                 for prop in flavorprops:
                     if prop not in ingprops:
                         ingprops[prop] = flavors[k].properties[prop] * count[k]
                     else:
                         ingprops[prop] += flavors[k].properties[prop] * count[k]
+                calories += flavors[k].properties['calories'] * count[k]
             score = False
-            print(flavors)
-            print(ingprops)
+#
             for k in ingprops:
                 if ingprops[k] < 0:
                     ingprops[k] = 0
@@ -57,7 +64,7 @@ def getTotals(arr, count, total, flavors, flavorprops, highestscore):
                     score = ingprops[k]
                 else:
                     score *= ingprops[k]
-            if score and score > highestscore:
+            if score and score > highestscore and calories == 500:
                 highestscore = score
             return highestscore
         if tc > total:
