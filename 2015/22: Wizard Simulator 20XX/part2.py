@@ -23,7 +23,6 @@ class Unit:
         self.toprint = dict()
 
     def cast(self, spell, attackee):
-#        print("casting", spell)
         if spell == "m":
             return self.magicmissle(attackee)
         elif spell == "d":
@@ -36,6 +35,10 @@ class Unit:
             return self.recharge()
 
     def taketurn(self, attackee, spell=False):
+        if self.name == "Player":
+            self.hp -= 1
+            if self.hp <= 0:
+                return "DEAD"
         if spell:
             if spell == 's':
                 if me.shieldeffect > 1:
@@ -190,16 +193,16 @@ manaused = [False]
 def run(me, boss, spell, manaused, spells=[]):
 
     if manaused[0] and me.manaused > manaused[0]:
-#        print("  manaused > least mana used")
         return manaused
-    if not me.taketurn(boss, spell):
-#        print("  cant run", spell)
+    myturn = me.taketurn(boss, spell)
+    if not myturn:
         return manaused
     else:
-#        print("  appending:", spell)
+        if myturn == "DEAD":
+            if me.isDead():
+                return manaused
         newspells = spells.copy()
         newspells.append(spell)
-#        print(newspells)
     if boss.isDead():
         print("  BOSS DEAD")
         if not manaused[0] or me.manaused < manaused[0]:
@@ -207,24 +210,18 @@ def run(me, boss, spell, manaused, spells=[]):
             print("  BOSS DEAD", me.manaused)
         return manaused
     if me.isDead():
-#        print("  I'm dead :(")
         return manaused
     if me.mana <= 0:
-#        print("  Out of Mana")
         return manaused
     boss.taketurn(me)
     if boss.isDead():
-        print("  BOSS DEAD")
         if not manaused[0] or me.manaused < manaused[0]:
             manaused = [me.manaused]
-            print("  BOSS DEAD", me.manaused)
         return manaused
     if me.isDead():
-#        print("  I'm dead :(")
         return manaused
     for spell in me.spells:
         manaused = run(copy.deepcopy(me), copy.deepcopy(boss), spell, manaused, newspells.copy())
-#    print("done with this recursion level")
     return manaused
 
 for spell in me.spells:
