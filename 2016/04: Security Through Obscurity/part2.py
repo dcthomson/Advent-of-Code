@@ -41,4 +41,5 @@ for letters, sector in realrooms:
             for i in range(0, sector + 1):
                 newletter = next(atozcycle)
             realname += newletter
-    print(sector, realname)
+    if "orth" in realname:
+        print(sector)
