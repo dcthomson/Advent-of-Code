@@ -1,7 +1,6 @@
 import sys
 
 molecule = ""
-molecules = dict()
 changes = dict()
 
 with open(sys.argv[1], 'r') as f:
@@ -17,10 +16,8 @@ with open(sys.argv[1], 'r') as f:
 
 molecules = dict()
 
-def changemolecule(mol, molecule, steps):
-#    print("mol:", mol)
-    if len(mol) > len(molecule):
-        return
+def changemolecule(mol, molecule, steps, mollen):
+    print(mol)
     for start in changes:
         i = 0
 #        print(start)
@@ -30,11 +27,13 @@ def changemolecule(mol, molecule, steps):
                 for replacement in changes[start]:
                     front = mol[:i]
                     back = mol[i + l:]
-                    mol = front + replacement + back
-                    if mol == molecule:
-                        print("steps", steps)
+                    newmol = front + replacement + back
+                    if len(newmol) > mollen:
+                        continue
+                    if newmol == molecule:
+                        print("steps", steps + 1)
                     else:
-                        changemolecule(mol, molecule, steps + 1)
+                        changemolecule(newmol, molecule, steps + 1, mollen)
             i += 1
 
-changemolecule('e', molecule, 0)
+changemolecule('e', molecule, 0, len(molecule))
