@@ -1,43 +1,37 @@
 import sys
+from random import shuffle
 
-molecule = ""
 changes = list()
+molecule = ""
 
 with open(sys.argv[1], 'r') as f:
     for line in f:
         line = line.strip()
-        if " => " in line:
+        if "=>" in line:
             (start, end) = line.split(" => ")
-
             changes.append((start, end))
         elif line != "":
             molecule = line
 
-# lets change big substrings first
-changes.sort(key=lambda tup: len(tup[1]), reverse=True)
+mol = molecule
+steps = 0
 
-molecules = dict()
-
-def changemolecule(mol, steps):
-#    if mol in molecules and steps >= molecules[mol]:
-    if mol in molecules and steps >= molecules[mol]:
-        molecules[mol] += 1
-#        print("DUPLICATE: ", molecules[mol], "      ", mol)
-        return
-    else:
-        molecules[mol] = 1
-    for (start, end) in changes:
+while True:
+    anychanges = False
+    for start, end in changes:
         i = 0
-#        print(start)
+        l = len(end)
         while i <= len(mol):
-            l = len(end)
-            if end == mol[i:i + l]:
-                newmol = mol[:i] + start + mol[i + l:]
-                if newmol == 'e':
-                    print("steps", steps + 1)
-                else:
-                    changemolecule(newmol, steps + 1)
+            if mol[i:i + l] == end:
+                mol = mol[:i] + start + mol[i + l:]
+                steps += 1
+                anychanges = True
+            if mol == 'e':
+                print(steps)
+                sys.exit()
             i += 1
-#        print("NOTHING ELSE TO CHANGE")
 
-changemolecule(molecule, 0)
+    if not anychanges:
+        steps = 0
+        mol = molecule
+        shuffle(changes)
