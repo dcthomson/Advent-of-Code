@@ -20,8 +20,4 @@ TO DO:<br>
 9-25<br>
 <br>
 2015<br>
-7       bitwise logic<br>
-12.2    JSON<br>
-15.2    calories<br>
-17      eggnog<br>
-19-25
+DONE, YAY!
