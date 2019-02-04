@@ -17,7 +17,6 @@ with open(sys.argv[1]) as f:
         ribbon += dims[0] * dims[1] * dims[2]
         for i in surfaces:
             wrap += i * 2
-        print("ribbon: ", ribbon)
 
-print("ribbon: ", ribbon)
-print("wrap:   ", wrap)
+#print(ribbon)
+print(wrap)
