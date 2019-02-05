@@ -17,11 +17,11 @@ TO DO:<br>
 <br>
 2017<br>
 7.2     figure out if disk platters should be recursive<br>
-9-25<br>
+9, 10, 13, 14<br>
+15.2, 17.2-25<br>
+<br>
+2016<br>
+9.2-25<br>
 <br>
 2015<br>
-7       bitwise logic<br>
-12.2    JSON<br>
-15.2    calories<br>
-17      eggnog<br>
-19-25
+DONE, YAY!
