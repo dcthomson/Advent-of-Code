@@ -3,7 +3,7 @@ import sys
 with open(sys.argv[1], 'r') as f:
     for line in f:
         line = line.strip()
-        total = 0
+        total = depth = totalgarbage= 0
         depth = 0
         garbage = False
         cancelnext = False
@@ -13,12 +13,14 @@ with open(sys.argv[1], 'r') as f:
                 continue
             if c == "!":
                 cancelnext = True
-            if c == "<":
-                garbage = True
             if c == ">":
                 garbage = False
             if garbage:
+                if c != "!":
+                    totalgarbage += 1
                 continue
+            if c == "<":
+                garbage = True
             if c == "{":
                 depth += 1
                 total += depth
@@ -26,4 +28,4 @@ with open(sys.argv[1], 'r') as f:
             elif c == "}":
                 depth -= 1
             lastc = c
-        print(total)
+        print(totalgarbage)
