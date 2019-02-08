@@ -91,4 +91,4 @@ total = 0
 for coordxy in coords:
     total += coords[coordxy].type
 
-print total
+print(total)

@@ -77,9 +77,9 @@ for x in range(1, 301):
                 largestpower = maxpower
                 lpcoord = (x,y)
                 lpsize = max(power, key=power.get)
-                print "%s,%s,%s: %s" % (lpcoord[0], lpcoord[1], lpsize, largestpower)
+                print("%s,%s,%s: %s" % (lpcoord[0], lpcoord[1], lpsize, largestpower))
         except ValueError:
             pass
                     
-print largestpower
-print "%s,%s,%s" % (lpcoord[0], lpcoord[1], lpsize)
+print(largestpower)
+print("%s,%s,%s" % (lpcoord[0], lpcoord[1], lpsize))

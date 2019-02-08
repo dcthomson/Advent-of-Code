@@ -162,4 +162,4 @@ for line in file:
             instructions = line.split()
             oper.setInstructions(instructions)
 
-print totalcount
+print(totalcount)

@@ -44,4 +44,4 @@ for x in range(1, 301):
         if tp > largestPower[2]:
             largestPower = (x, y, tp)
 
-print largestPower
+print(largestPower)
