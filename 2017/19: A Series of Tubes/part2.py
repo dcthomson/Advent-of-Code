@@ -21,6 +21,7 @@ while grid[(x, 0)] != "|":
 letters = ""
 coord = (x, 0)
 keepgoing = True
+steps = 0
 while keepgoing:
     if dir == 'd' or dir == 'u':
         if dir == 'u':
@@ -50,5 +51,6 @@ while keepgoing:
         letters += grid[coord]
     else:
         keepgoing = False
+    steps += 1
 
-print(letters)
+print(steps)
