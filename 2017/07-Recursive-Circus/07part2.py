@@ -25,14 +25,14 @@ class Program:
     def checkChildren(self):
         num = False
         ret = True
-        print()
+#        print()
         for c in self.children:
             if not num:
                 num = c.getTotal()
             else:
                 if c.getTotal() != num:
                     ret = False
-            print(c.name, c.getTotal())
+#                    print(c.name, c.getTotal())
 
         return ret
 
@@ -64,4 +64,6 @@ for line in lines:
 
 for k in programs:
     if not programs[k].checkChildren():
-        print(programs[k].name)
+        for c in programs[k].children:
+            print(c.name, c.getTotal())
+        print()
