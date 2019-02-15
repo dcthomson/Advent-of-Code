@@ -27,8 +27,29 @@ class Scanner:
         self.dir = 'down'
 
 
-    def __str__(self):
-        return(str(self.name) + ": " + str(self.scanner) + " " + self.dir)
+class Packet:
+
+    def __init__(self, delay, lastscanner):
+        self.delay = delay
+        self.scanner = 0
+        self.lastscanner = lastscanner
+
+    def move(self):
+        self.scanner += 1
+
+    def through(self):
+        if self.scanner > self.lastscanner:
+            return True
+        else:
+            return False
+
+    def caught(self, scanners):
+        if self.scanner in scanners:
+            if scanners[self.scanner].scanner == 0:
+                # caught
+                return True
+        return False
+
 
 scanners = dict()
 
@@ -43,26 +64,31 @@ with open(sys.argv[1], 'r') as f:
         if num > largestscanner:
             largestscanner = num
 
+packets = dict()
+
 delay = 0
 while True:
-    i = 0
-    caught = False
-    for _ in range(delay):
-        for k in scanners:
-            scanners[k].move()
-    while i <= largestscanner:
-        if i in scanners:
-            if scanners[i].scanner == 0:
-                caught = True
-                break
-#        print("i: ", i)
-        for k in scanners:
-#            print("  ", str(scanners[k]))
-            scanners[k].move()
-        i += 1
-    if not caught:
-        break
+    packets[delay] = Packet(delay, largestscanner)
+
+    # check for caught packets
+    caughtkeys = list()
+    for k in packets:
+        if packets[k].caught(scanners):
+            caughtkeys.append(k)
+
+    # remove caught packets
+    for k in caughtkeys:
+        packets.pop(k)
+
+    # move scanners
     for k in scanners:
-        scanners[k].reset()
+        scanners[k].move()
+
+    # move packets
+    for k in packets:
+        packets[k].move()
+        if packets[k].through():
+            print(packets[k].delay)
+            sys.exit()
+
     delay += 1
-print(delay)
