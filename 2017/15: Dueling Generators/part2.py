@@ -15,24 +15,30 @@ blist = list()
 
 count = 0
 testcount = 0
+listnum = 0
 while True:
     A *= 16807
     B *= 48271
     A = A % 2147483647
     B = B % 2147483647
 
-    if int(str(A)[-2:]) % 4 == 0:
+    # if int(str(A)[-2:]) % 4 == 0:
+    #     alist.append(A)
+    # if int(str(B)[-3:]) % 8 == 0:
+    #     blist.append(B)
+
+    if A % 100 % 4 == 0:
         alist.append(A)
-    if int(str(B)[-3:]) % 8 == 0:
+    if B % 1000 % 8 == 0:
         blist.append(B)
 
-    if len(alist) and len(blist):
+    if len(alist) > listnum and len(blist) > listnum:
         testcount += 1
-        abin = format(alist.pop(0), 'b')
-        bbin = format(blist.pop(0), 'b')
+        abin = format(alist[listnum], 'b')
+        bbin = format(blist[listnum], 'b')
+        listnum += 1
         if abin[-16:] == bbin[-16:]:
             count += 1
-            print(testcount)
         if testcount == 5000000:
             break
 
