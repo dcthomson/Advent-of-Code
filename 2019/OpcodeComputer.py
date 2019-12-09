@@ -17,6 +17,7 @@ class Opcode:
         index = 0
         nums = self.nums.copy()
         while nums[index] != 99:
+            # print(nums)
             instcode = int(str(nums[index])[-2:])
             if instcode == 1:
                 # add
@@ -66,7 +67,10 @@ class Opcode:
                 if inpoot is None:
                     nums[nums[index + 1]] = int(input("Enter input: "))
                 else:
-                    nums[nums[index + 1]] = inpoot
+                    try:
+                        nums[nums[index + 1]] = inpoot.pop(0)
+                    except:
+                        nums[nums[index + 1]] = inpoot
                 index += 2
 
             elif instcode == 4:
@@ -79,8 +83,8 @@ class Opcode:
                     p1 = nums[index + 1]
                 else:
                     p1 = nums[nums[index + 1]]
-                
                 index += 2
+                return p1
 
             elif instcode == 5:
                 # JUMP-IF-TRUE
