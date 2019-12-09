@@ -11,7 +11,13 @@ def walloropen(x, y, fav):
 
 fav = int(sys.argv[1])
 
-for y in range(0,7):
-    for x in range(0,10):
+for y in range(0,45):
+    for x in range(0,37):
         print(walloropen(x,y,fav), end='')
     print()
+
+# BFS
+curr = (1,1)
+queue = []
+while curr != (31,39):
+    
