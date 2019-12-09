@@ -1,0 +1,4 @@
+# 1 PRG PRM
+# 2 COG CUG RUG PLG
+# 3 COM CUM RUM PLM
+# 4

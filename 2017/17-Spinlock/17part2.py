@@ -4,21 +4,24 @@ step = int(sys.argv[1])
 
 # use linked list
 
-cb = list()
+class Node:
 
-cb.append(0)
+    def __init__(self, num):
+        self.num = num
+        self.next = self
 
-index = 0
+    def insertafter(self, node):
+        node.next = self.next
+        self.next = node
+        return node
 
-for i in range(1, 11):
-    if i % 10000 == 0:
-        print(i)
-    print(index, cb)
+index = Node(0)
+
+for i in range(1, 50000000):
+    print(i, round(i / 50000000 * 100, 2))
     for j in range(0, step):
-        index = cb[index]
-    print(index)
-    tmp = cb[index]
-    cb.insert(index, i)
-    cb[i] = tmp
-#    index = cb[index]
-print(cb[index])
+        index = index.next
+    index = index.insertafter(Node(i))
+
+index = index.next
+print(index.num)
