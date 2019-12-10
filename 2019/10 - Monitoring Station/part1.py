@@ -11,31 +11,22 @@ def is_line(a, b, c):
 
 def get_middle(a, b, c):
     if a[0] == b[0] == c[0]:
-        if a[1] < b[1] < c[1]:
-            return b
-        elif c[1] < b[1] < a[1]:
-            return b
-        elif b[1] < a[1] < c[1]:
-            return a
-        elif c[1] < a[1] < b[1]:
-            return a
-        elif a[1] < c[1] < b[1]:
-            return c
-        elif b[1] < c[1] < a[1]:
-            return c
+        xy = 1
     else:
-        if a[0] < b[0] < c[0]:
-            return b
-        elif c[0] < b[0] < a[0]:
-            return b
-        elif b[0] < a[0] < c[0]:
-            return a
-        elif c[0] < a[0] < b[0]:
-            return a
-        elif a[0] < c[0] < b[0]:
-            return c
-        elif b[0] < c[0] < a[0]:
-            return c
+        xy = 0
+    if a[xy] < b[xy] < c[xy]:
+        return b
+    elif c[xy] < b[xy] < a[xy]:
+        return b
+    elif b[xy] < a[xy] < c[xy]:
+        return a
+    elif c[xy] < a[xy] < b[xy]:
+        return a
+    elif a[xy] < c[xy] < b[xy]:
+        return c
+    elif b[xy] < c[xy] < a[xy]:
+        return c
+
 
 
 asteroids = []
@@ -56,36 +47,39 @@ with open(sys.argv[1]) as f:
 
 for ast in combinations(asteroids, 3):
     if is_line(ast[0], ast[1], ast[2]):
-        print(ast[0], ast[1], ast[2])
-        print(get_middle(ast[0], ast[1], ast[2]))
+        # print(ast[0], ast[1], ast[2])
+        # print(get_middle(ast[0], ast[1], ast[2]))
         mid = get_middle(ast[0], ast[1], ast[2])
         if mid == ast[0]:
             if ast[1] not in asteroidblindspots:
-                asteroidblindspots[ast[1]] = []
-            asteroidblindspots[ast[1]].append(ast[2])
+                asteroidblindspots[ast[1]] = {}
+            asteroidblindspots[ast[1]][ast[2]] = True
             if ast[2] not in asteroidblindspots:
-                asteroidblindspots[ast[2]] = []
-            asteroidblindspots[ast[2]].append(ast[1])
+                asteroidblindspots[ast[2]] = {}
+            asteroidblindspots[ast[2]][ast[1]] = True
         elif mid == ast[1]:
             if ast[0] not in asteroidblindspots:
-                asteroidblindspots[ast[0]] = []
-            asteroidblindspots[ast[0]].append(ast[2])
+                asteroidblindspots[ast[0]] = {}
+            asteroidblindspots[ast[0]][ast[2]] = True
             if ast[2] not in asteroidblindspots:
-                asteroidblindspots[ast[2]] = []
-            asteroidblindspots[ast[2]].append(ast[0])
+                asteroidblindspots[ast[2]] = {}
+            asteroidblindspots[ast[2]][ast[0]] = True
         elif mid == ast[2]:
             if ast[1] not in asteroidblindspots:
-                asteroidblindspots[ast[1]] = []
-            asteroidblindspots[ast[1]].append(ast[0])
+                asteroidblindspots[ast[1]] = {}
+            asteroidblindspots[ast[1]][ast[0]] = True
             if ast[0] not in asteroidblindspots:
-                asteroidblindspots[ast[0]] = []
-            asteroidblindspots[ast[0]].append(ast[1])
+                asteroidblindspots[ast[0]] = {}
+            asteroidblindspots[ast[0]][ast[1]] = True
 
 asteroidcount = len(asteroidblindspots)
+# print(asteroidcount)
 bestasteroidcount = 0
+bestasteroid = (-1,-1)
 
 for k, v in asteroidblindspots.items():
     if asteroidcount - len(v) > bestasteroidcount:
-        bestasteroidcount = asteroidcount - len(v)
+        bestasteroidcount = asteroidcount - len(v) - 1
+        bestasteroid = k
 
-print(bestasteroidcount)
+print(bestasteroid, bestasteroidcount)
