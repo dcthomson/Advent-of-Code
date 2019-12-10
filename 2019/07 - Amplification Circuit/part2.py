@@ -12,23 +12,55 @@ phasesettings = [5,6,7,8,9]
 
 largestsignal = None
 
-for i in permutations(phasesettings):
-    inpoot = 0
-    A = OpcodeComputer.Opcode(line)
-    B = OpcodeComputer.Opcode(line)
-    C = OpcodeComputer.Opcode(line)
-    D = OpcodeComputer.Opcode(line)
-    E = OpcodeComputer.Opcode(line)
+# for i in permutations(phasesettings):
+#     inpoot = 0
+#     A = OpcodeComputer.Opcode(line)
+#     B = OpcodeComputer.Opcode(line)
+#     C = OpcodeComputer.Opcode(line)
+#     D = OpcodeComputer.Opcode(line)
+#     E = OpcodeComputer.Opcode(line)
     
     
-    inpoot = opcode.runOpcode([i[0], inpoot])
-    inpoot = opcode.runOpcode([i[1], inpoot])
-    inpoot = opcode.runOpcode([i[2], inpoot])
-    inpoot = opcode.runOpcode([i[3], inpoot])
-    signal = opcode.runOpcode([i[4], inpoot])
-    if largestsignal is None:
-        largestsignal = signal
-    elif signal > largestsignal:
-        largestsignal = signal
+#     inpoot = opcode.runOpcode([i[0], inpoot])
+#     inpoot = opcode.runOpcode([i[1], inpoot])
+#     inpoot = opcode.runOpcode([i[2], inpoot])
+#     inpoot = opcode.runOpcode([i[3], inpoot])
+#     signal = opcode.runOpcode([i[4], inpoot])
+#     if largestsignal is None:
+#         largestsignal = signal
+#     elif signal > largestsignal:
+#         largestsignal = signal
 
-print(largestsignal)
+# print(largestsignal)
+
+A = OpcodeComputer.Opcode(line)
+B = OpcodeComputer.Opcode(line)
+C = OpcodeComputer.Opcode(line)
+D = OpcodeComputer.Opcode(line)
+E = OpcodeComputer.Opcode(line)
+
+A.runOpcode(9)
+B.runOpcode(8)
+C.runOpcode(7)
+D.runOpcode(6)
+inpoot = E.runOpcode(5)
+final = ""
+while not A.done and not B.done and not C.done and not D.done and not E.done:
+    inpoot = A.runOpcode(inpoot)
+    print("A",inpoot)
+    inpoot = B.runOpcode(inpoot)
+    print("B", inpoot)
+    inpoot = C.runOpcode(inpoot)
+    print("C", inpoot)
+    inpoot = D.runOpcode(inpoot)
+    print("D", inpoot)
+    inpoot = E.runOpcode(inpoot)
+    print("E", inpoot)
+
+    try:
+        inpoot[0]
+    except:
+        final = inpoot
+
+    print("inpoot:", inpoot)
+print(final)
