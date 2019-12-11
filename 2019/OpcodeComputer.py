@@ -18,7 +18,7 @@ class Opcode:
         # nums = self.nums.copy()
 
         while self.nums[self.index] != 99:
-            print(self.index, self.nums)
+            # print(self.index, self.nums)
             instcode = int(str(self.nums[self.index])[-2:])
             if instcode == 1:
                 # add
@@ -65,6 +65,7 @@ class Opcode:
 
             elif instcode == 3:
                 # input value
+                print("inputting val")
                 if inpoot is None:
                     self.nums[self.nums[self.index + 1]] = int(input("Enter input: "))
                 else:

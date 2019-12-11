@@ -39,12 +39,9 @@ C = OpcodeComputer.Opcode(line)
 D = OpcodeComputer.Opcode(line)
 E = OpcodeComputer.Opcode(line)
 
-A.runOpcode(9)
-B.runOpcode(8)
-C.runOpcode(7)
-D.runOpcode(6)
-inpoot = E.runOpcode(5)
 final = ""
+
+inpoot = E.runOpcode([5, D.runOpcode([6, C.runOpcode([7, B.runOpcode([8, A.runOpcode(9)])])])])
 while not A.done and not B.done and not C.done and not D.done and not E.done:
     inpoot = A.runOpcode(inpoot)
     print("A",inpoot)
