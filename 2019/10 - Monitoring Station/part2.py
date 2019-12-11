@@ -238,7 +238,8 @@ while len(asteroidsleft) >= 1 and asteroidsdestroyed < 200:
         lastremoved = closest
         dasteroidsbyangle.remove(closest)
         asteroidsdestroyed += 1
-        print(lastremoved[0] * 100 + lastremoved[1])
+        if asteroidsdestroyed == 200:
+            print(lastremoved[0] * 100 + lastremoved[1])
 
     # DOWN LEFT
     for k in sorted(lasteroidsbyangle, reverse=True):
