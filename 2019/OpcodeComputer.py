@@ -1,7 +1,7 @@
 import time
 
 class Opcode:
-    def __init__(self, s, name, replacements=False):
+    def __init__(self, s, name=False, replacements=False):
         self.setInput(s, replacements)
         self.name = name
         self.done = False
@@ -25,20 +25,23 @@ class Opcode:
 
             def _getparams(num):
                 params = []
-                if num < 100:
-                    p1type = 0
-                if num < 1000:
-                    p2type = 0
+                ptype = []
+                
                 for i in range(0, len(str(num)) - 2):
-                    ptype[i] = int(str(self.nums[self.index])[-3 - i])
+                    ptype.append(int(str(num)[-3 - i]))
+                if num < 100:
+                    ptype.append(0)
+                if num < 1000:
+                    ptype.append(0)
+
                 pnum = 1
-                for i in ptype:
+                for i in range(0, len(ptype)):
                     if ptype[i] == 0:
-                        params[i] = self.nums[self.nums[self.index + pnum]]
+                        params.append(self.nums[self.nums[self.index + pnum]])
                     elif ptype[i] == 1:
-                        params[i] = self.nums[self.index + pnum]
+                        params.append(self.nums[self.index + pnum])
                     elif ptype[i] == 2:
-                        params[i] = self.nums[self.relativebase + self.nums[self.index + pnum]]
+                        params.append(self.nums[self.relativebase + self.nums[self.index + pnum]])
                     pnum += 1
 
                 return params
@@ -60,7 +63,7 @@ class Opcode:
             elif instcode == 3:
                 # FIXME
                 # input value
-                print(self.name, "inputting val", inpoot)
+                # print(self.name, "inputting val", inpoot)
                 if inpoot is None:
                     self.nums[self.nums[self.index + 1]] = int(input("Enter input: "))
                 else:
