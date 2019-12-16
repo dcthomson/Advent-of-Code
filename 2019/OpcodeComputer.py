@@ -1,8 +1,9 @@
 import time
 
 class Opcode:
-    def __init__(self, s, replacements=False):
+    def __init__(self, s, name, replacements=False):
         self.setInput(s, replacements)
+        self.name = name
         self.done = False
         self.index = 0
 
@@ -65,7 +66,7 @@ class Opcode:
 
             elif instcode == 3:
                 # input value
-                print("inputting val")
+                print(self.name, "inputting val", inpoot)
                 if inpoot is None:
                     self.nums[self.nums[self.index + 1]] = int(input("Enter input: "))
                 else:
