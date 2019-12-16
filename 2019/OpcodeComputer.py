@@ -7,6 +7,7 @@ class Opcode:
         self.done = False
         self.index = 0
         self.relativebase = 0
+        self.input = []
 
     def setInput(self, s, replacements):
         nums = s.split(",")
@@ -17,6 +18,8 @@ class Opcode:
 
 
     def runOpcode(self, inpoot=None):
+        if inpoot is not None:
+            self.input.append(inpoot)
         # nums = self.nums.copy()
 
         while self.nums[self.index] != 99:
@@ -75,13 +78,11 @@ class Opcode:
                 # input value
                 # print(self.name, "inputting val", inpoot)
                 params = _getparams(self.nums[self.index])
-                if inpoot is None:
+                if len(self.input) == 0:
                     self.nums[self.nums[self.index + 1]] = int(input("Enter input: "))
                 else:
-                    try:
-                        self.nums[self.nums[self.index + 1]] = inpoot.pop(0)
-                    except:
-                        self.nums[self.nums[self.index + 1]] = inpoot
+                    self.nums[self.nums[self.index + 1]] = self.input.pop(0)
+
                 self.index += 2
 
             elif instcode == 4:
