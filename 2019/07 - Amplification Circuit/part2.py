@@ -33,11 +33,11 @@ largestsignal = None
 
 # print(largestsignal)
 
-A = OpcodeComputer.Opcode(line)
-B = OpcodeComputer.Opcode(line)
-C = OpcodeComputer.Opcode(line)
-D = OpcodeComputer.Opcode(line)
-E = OpcodeComputer.Opcode(line)
+A = OpcodeComputer.Opcode(line, "A")
+B = OpcodeComputer.Opcode(line, "B")
+C = OpcodeComputer.Opcode(line, "C")
+D = OpcodeComputer.Opcode(line, "D")
+E = OpcodeComputer.Opcode(line, "E")
 
 final = ""
 
