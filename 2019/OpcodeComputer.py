@@ -24,6 +24,7 @@ class Opcode:
             instcode = int(str(self.nums[self.index])[-2:])
 
             def _getparams(num):
+                # print(num)
                 params = []
                 ptype = []
                 
@@ -35,13 +36,22 @@ class Opcode:
                     ptype.append(0)
 
                 pnum = 1
+                # print(ptype)
                 for i in range(0, len(ptype)):
-                    if ptype[i] == 0:
-                        params.append(self.nums[self.nums[self.index + pnum]])
-                    elif ptype[i] == 1:
-                        params.append(self.nums[self.index + pnum])
-                    elif ptype[i] == 2:
-                        params.append(self.nums[self.relativebase + self.nums[self.index + pnum]])
+                    # print("i", i)
+                    # print("pnum:", pnum)
+                    # print("1:", self.index + pnum)
+                    # print("2:", self.nums[self.index + pnum])
+                    # print("3:", self.nums[self.nums[self.index + pnum]])
+                    try:
+                        if ptype[i] == 0:
+                            params.append(self.nums[self.nums[self.index + pnum]])
+                        elif ptype[i] == 1:
+                            params.append(self.nums[self.index + pnum])
+                        elif ptype[i] == 2:
+                            params.append(self.nums[self.relativebase + self.nums[self.index + pnum]])
+                    except:
+                        pass
                     pnum += 1
 
                 return params
@@ -64,6 +74,7 @@ class Opcode:
                 # FIXME
                 # input value
                 # print(self.name, "inputting val", inpoot)
+                params = _getparams(self.nums[self.index])
                 if inpoot is None:
                     self.nums[self.nums[self.index + 1]] = int(input("Enter input: "))
                 else:
@@ -75,19 +86,20 @@ class Opcode:
 
             elif instcode == 4:
                 # output value
-                try:
-                    p1type = int(str(self.nums[self.index])[-3])
-                except:
-                    p1type = 0
-                if p1type == 1:
-                    p1 = self.nums[self.index + 1]
-                elif p1type == 0:
-                    p1 = self.nums[self.nums[self.index + 1]]
-                elif p1type == 2:
-                    p1 = self.nums[self.relativebase + self.nums[self.index + 1]]
+                params = _getparams(self.nums[self.index])
+                # try:
+                #     p1type = int(str(self.nums[self.index])[-3])
+                # except:
+                #     p1type = 0
+                # if p1type == 1:
+                #     p1 = self.nums[self.index + 1]
+                # elif p1type == 0:
+                #     p1 = self.nums[self.nums[self.index + 1]]
+                # elif p1type == 2:
+                #     p1 = self.nums[self.relativebase + self.nums[self.index + 1]]
 
                 self.index += 2
-                return p1
+                return params[0]
 
             elif instcode == 5:
                 # JUMP-IF-TRUE
