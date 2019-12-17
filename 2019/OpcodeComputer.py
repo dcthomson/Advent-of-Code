@@ -20,6 +20,8 @@ class Opcode:
     def runOpcode(self, inpoot=None):
         if inpoot is not None:
             self.input.append(inpoot)
+        print(self.input)
+        print(len(self.input))
         # nums = self.nums.copy()
 
         while self.nums[self.index] != 99:
@@ -79,7 +81,10 @@ class Opcode:
                 # print(self.name, "inputting val", inpoot)
                 params = _getparams(self.nums[self.index])
                 if len(self.input) == 0:
-                    self.nums[self.nums[self.index + 1]] = int(input("Enter input: "))
+                    if self.name:
+                        self.nums[self.nums[self.index + 1]] = int(input(self.name + ": Enter input: "))
+                    else:
+                        self.nums[self.nums[self.index + 1]] = int(input("Enter input: "))
                 else:
                     self.nums[self.nums[self.index + 1]] = self.input.pop(0)
 

@@ -41,7 +41,8 @@ E = OpcodeComputer.Opcode(line, "E")
 
 final = ""
 
-inpoot = E.runOpcode([5, D.runOpcode([6, C.runOpcode([7, B.runOpcode([8, A.runOpcode(9)])])])])
+inpoot = E.runOpcode([9, D.runOpcode([8, C.runOpcode([7, B.runOpcode([6, A.runOpcode(5)])])])])
+print("Past initial")
 while not A.done and not B.done and not C.done and not D.done and not E.done:
     inpoot = A.runOpcode(inpoot)
     print("A",inpoot)
