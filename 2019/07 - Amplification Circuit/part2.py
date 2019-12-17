@@ -12,53 +12,60 @@ phasesettings = [5,6,7,8,9]
 
 largestsignal = None
 
-# for i in permutations(phasesettings):
-#     inpoot = 0
-#     A = OpcodeComputer.Opcode(line)
-#     B = OpcodeComputer.Opcode(line)
-#     C = OpcodeComputer.Opcode(line)
-#     D = OpcodeComputer.Opcode(line)
-#     E = OpcodeComputer.Opcode(line)
+for i in permutations(phasesettings):
+    inpoot = 0
+    A = OpcodeComputer.Opcode(line, "A")
+    B = OpcodeComputer.Opcode(line, "B")
+    C = OpcodeComputer.Opcode(line, "C")
+    D = OpcodeComputer.Opcode(line, "D")
+    E = OpcodeComputer.Opcode(line, "E")
     
+    inpoot = E.runOpcode([i[0], D.runOpcode([i[1], C.runOpcode([i[2], B.runOpcode([i[3], A.runOpcode([i[4], 0])])])])])
     
-#     inpoot = opcode.runOpcode([i[0], inpoot])
-#     inpoot = opcode.runOpcode([i[1], inpoot])
-#     inpoot = opcode.runOpcode([i[2], inpoot])
-#     inpoot = opcode.runOpcode([i[3], inpoot])
-#     signal = opcode.runOpcode([i[4], inpoot])
-#     if largestsignal is None:
-#         largestsignal = signal
-#     elif signal > largestsignal:
-#         largestsignal = signal
+    while not A.done and not B.done and not C.done and not D.done and not E.done:
+        inpoot = A.runOpcode(inpoot)
+        inpoot = B.runOpcode(inpoot)
+        inpoot = C.runOpcode(inpoot)
+        inpoot = D.runOpcode(inpoot)
+        inpoot = E.runOpcode(inpoot)
 
-# print(largestsignal)
+        try:
+            inpoot[0]
+        except:
+            signal = inpoot
 
-A = OpcodeComputer.Opcode(line, "A")
-B = OpcodeComputer.Opcode(line, "B")
-C = OpcodeComputer.Opcode(line, "C")
-D = OpcodeComputer.Opcode(line, "D")
-E = OpcodeComputer.Opcode(line, "E")
+    if largestsignal is None:
+        largestsignal = signal
+    elif signal > largestsignal:
+        largestsignal = signal
 
-final = ""
+print(largestsignal)
 
-inpoot = E.runOpcode([9, D.runOpcode([8, C.runOpcode([7, B.runOpcode([6, A.runOpcode(5)])])])])
-print("Past initial")
-while not A.done and not B.done and not C.done and not D.done and not E.done:
-    inpoot = A.runOpcode(inpoot)
-    print("A",inpoot)
-    inpoot = B.runOpcode(inpoot)
-    print("B", inpoot)
-    inpoot = C.runOpcode(inpoot)
-    print("C", inpoot)
-    inpoot = D.runOpcode(inpoot)
-    print("D", inpoot)
-    inpoot = E.runOpcode(inpoot)
-    print("E", inpoot)
+# A = OpcodeComputer.Opcode(line, "A")
+# B = OpcodeComputer.Opcode(line, "B")
+# C = OpcodeComputer.Opcode(line, "C")
+# D = OpcodeComputer.Opcode(line, "D")
+# E = OpcodeComputer.Opcode(line, "E")
 
-    try:
-        inpoot[0]
-    except:
-        final = inpoot
+# final = ""
+# inpoot = E.runOpcode([6, D.runOpcode([5, C.runOpcode([8, B.runOpcode([7, A.runOpcode([9, 0])])])])])
+# print("Past initial")
+# while not A.done and not B.done and not C.done and not D.done and not E.done:
+#     inpoot = A.runOpcode(inpoot)
+#     # print("A",inpoot)
+#     inpoot = B.runOpcode(inpoot)
+#     # print("B", inpoot)
+#     inpoot = C.runOpcode(inpoot)
+#     # print("C", inpoot)
+#     inpoot = D.runOpcode(inpoot)
+#     # print("D", inpoot)
+#     inpoot = E.runOpcode(inpoot)
+#     # print("E", inpoot)
 
-    print("inpoot:", inpoot)
-print(final)
+#     try:
+#         inpoot[0]
+#     except:
+#         final = inpoot
+
+#     print("inpoot:", inpoot)
+# print(final)

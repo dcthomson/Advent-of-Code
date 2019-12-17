@@ -19,17 +19,22 @@ class Opcode:
 
     def runOpcode(self, inpoot=None):
         if inpoot is not None:
-            self.input.append(inpoot)
-        print(self.input)
-        print(len(self.input))
-        # nums = self.nums.copy()
+            try:
+                for i in inpoot:
+                    self.input.append(i)
+            except:
+                self.input.append(inpoot)
+        # print(self.input)
+        # print(len(self.input))
 
         while self.nums[self.index] != 99:
             # print(self.index, self.nums)
             instcode = int(str(self.nums[self.index])[-2:])
 
             def _getparams(num):
-                # print(num)
+                # if self.name:
+                #     print(self.name, end=": ")
+                # print("intcode:", num)
                 params = []
                 ptype = []
                 
@@ -64,7 +69,7 @@ class Opcode:
             if instcode == 1:
                 # add
                 params = _getparams(self.nums[self.index])
-
+                # print(params)
                 self.nums[self.nums[self.index + 3]] = params[0] + params[1]
                 self.index += 4
 
@@ -87,24 +92,16 @@ class Opcode:
                         self.nums[self.nums[self.index + 1]] = int(input("Enter input: "))
                 else:
                     self.nums[self.nums[self.index + 1]] = self.input.pop(0)
+                    # print("Got 1 input")
 
                 self.index += 2
 
             elif instcode == 4:
                 # output value
                 params = _getparams(self.nums[self.index])
-                # try:
-                #     p1type = int(str(self.nums[self.index])[-3])
-                # except:
-                #     p1type = 0
-                # if p1type == 1:
-                #     p1 = self.nums[self.index + 1]
-                # elif p1type == 0:
-                #     p1 = self.nums[self.nums[self.index + 1]]
-                # elif p1type == 2:
-                #     p1 = self.nums[self.relativebase + self.nums[self.index + 1]]
 
                 self.index += 2
+                # print(self.name, "Outputting value")
                 return params[0]
 
             elif instcode == 5:
@@ -156,25 +153,3 @@ class Opcode:
         self.done = True
 
         return self.nums
-
-    # def _get_params(self, paramnum, nums, index):
-    #     params = {}
-    #     instcode = nums[index]
-    #     # print("instcode", instcode)
-    #     # print("index", index)
-    #     # print("nums:", nums)
-    #     for i in range(1, paramnum + 1):
-    #         # print("i", i)
-    #         try:
-    #             immediate = int(str(instcode)[-1 - i])
-    #         except:
-    #             immediate = 0
-    #         # print("immediate:", immediate)
-    #         if immediate:
-    #             # print("immediate")
-    #             params[i] = nums[index + i]
-    #         else:
-    #             # print("positional")
-    #             # print(index, i)
-    #             params[i] = nums[nums[index + i]]
-    #     return params
