@@ -40,32 +40,3 @@ for i in permutations(phasesettings):
         largestsignal = signal
 
 print(largestsignal)
-
-# A = OpcodeComputer.Opcode(line, "A")
-# B = OpcodeComputer.Opcode(line, "B")
-# C = OpcodeComputer.Opcode(line, "C")
-# D = OpcodeComputer.Opcode(line, "D")
-# E = OpcodeComputer.Opcode(line, "E")
-
-# final = ""
-# inpoot = E.runOpcode([6, D.runOpcode([5, C.runOpcode([8, B.runOpcode([7, A.runOpcode([9, 0])])])])])
-# print("Past initial")
-# while not A.done and not B.done and not C.done and not D.done and not E.done:
-#     inpoot = A.runOpcode(inpoot)
-#     # print("A",inpoot)
-#     inpoot = B.runOpcode(inpoot)
-#     # print("B", inpoot)
-#     inpoot = C.runOpcode(inpoot)
-#     # print("C", inpoot)
-#     inpoot = D.runOpcode(inpoot)
-#     # print("D", inpoot)
-#     inpoot = E.runOpcode(inpoot)
-#     # print("E", inpoot)
-
-#     try:
-#         inpoot[0]
-#     except:
-#         final = inpoot
-
-#     print("inpoot:", inpoot)
-# print(final)
