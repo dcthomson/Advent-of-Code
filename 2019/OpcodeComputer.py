@@ -18,6 +18,8 @@ class Opcode:
 
 
     def runOpcode(self, inpoot=None):
+        if self.done:
+            exit()
         if inpoot is not None:
             try:
                 for i in inpoot:
@@ -32,9 +34,9 @@ class Opcode:
             instcode = int(str(self.nums[self.index])[-2:])
 
             def _getparams(num):
-                # if self.name:
-                #     print(self.name, end=": ")
-                # print("intcode:", num)
+                if self.name:
+                    print(self.name, end=": ")
+                print("intcode:", num)
                 params = []
                 ptype = []
                 
@@ -67,9 +69,16 @@ class Opcode:
                 return params
 
             if instcode == 1:
+                # TODO: Write a set index function that will create array
+                #       addresses that don't exist yet instead of using "="
+                
                 # add
                 params = _getparams(self.nums[self.index])
                 # print(params)
+                print(params)
+                print(self.index + 3)
+                print(self.nums[self.index + 3])
+                print(self.nums[self.nums[self.index + 3]])
                 self.nums[self.nums[self.index + 3]] = params[0] + params[1]
                 self.index += 4
 
@@ -147,6 +156,7 @@ class Opcode:
                 params = _getparams(self.nums[self.index])
 
                 self.relativebase + params[0]
+                self.index += 2
 
 
 
