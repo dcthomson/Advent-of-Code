@@ -39,11 +39,11 @@ class Opcode:
                 params = []
                 ptype = []
                 
+                charcount = 0
                 for i in range(0, len(str(num)) - 2):
                     ptype.append(int(str(num)[-3 - i]))
-                if num < 100:
-                    ptype.append(0)
-                if num < 1000:
+                    charcount += 1
+                for i in range(charcount, pcount):
                     ptype.append(0)
 
                 pnum = 1
@@ -77,6 +77,7 @@ class Opcode:
             def _setvalue(index, value, overwrite=True):
                 # when overwrite is set to false we do not overwrite the value,
                 # it is only used to fill up the array if it is not long enough
+
                 # print("index, value, len nums:", index, value, len(self.nums))
                 # print("index:", index, "len(self.nums):", len(self.nums), "value:", value)
                 if index >= len(self.nums):
@@ -89,25 +90,17 @@ class Opcode:
 
             if instcode == 1:
                 # add
-                params = _getparams(self.nums[self.index], 2)
+                params = _getparams(self.nums[self.index], 3, True)
 
-                _setvalue(self.nums[self.index + 3], params[0] + params[1])
+                _setvalue(params[2], self.nums[params[0]] + self.nums[params[1]])
                 self.index += 4
 
             elif instcode == 2:
                 # multiply
-                print(self.nums[self.index], self.nums[self.index + 1], self.nums[self.index + 2])
-                params = _getparams(self.nums[self.index], 2)
+                params = _getparams(self.nums[self.index], 3, True)
 
-                # print(params)
-                mult = None
-                for i in params:
-                    if mult is None:
-                        mult = i
-                    else:
-                        mult *= i
-                print("mult:", mult)
-                _setvalue(self.nums[self.index + 3], mult)
+                _setvalue(params[2], self.nums[params[0]] * self.nums[params[1]])
+
                 self.index += 4
 
             elif instcode == 3:
@@ -162,22 +155,23 @@ class Opcode:
 
             elif instcode == 7:
                 # LESS THAN
-                params = _getparams(self.nums[self.index], 2)
-
-                if params[0] < params[1]:
-                    _setvalue(self.nums[self.index + 3], 1)
+                params = _getparams(self.nums[self.index], 3, True)
+                # print(self.nums[self.index])
+                # print(params)
+                if self.nums[params[0]] < self.nums[params[1]]:
+                    _setvalue(params[2], 1)
                 else:
-                    _setvalue(self.nums[self.index + 3], 0)
+                    _setvalue(params[2], 0)
                 self.index += 4
 
             elif instcode == 8:
                 # EQUALS
-                params = _getparams(self.nums[self.index], 2)
+                params = _getparams(self.nums[self.index], 3, True)
   
-                if params[0] == params[1]:
-                    _setvalue(self.nums[self.index + 3], 1)
+                if self.nums[params[0]] == self.nums[params[1]]:
+                    _setvalue(params[2], 1)
                 else:
-                    _setvalue(self.nums[self.index + 3], 0)
+                    _setvalue(params[2], 0)
                 self.index += 4
         
             elif instcode == 9:
