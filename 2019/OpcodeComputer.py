@@ -16,9 +16,12 @@ class Opcode:
             for k, v in replacements.items():
                 self.nums[k] = v
 
+    def checkifdone(self):
+        return self.done
 
     def runOpcode(self, inpoot=None):
         if self.done:
+            print("Exiting")
             exit()
         if inpoot is not None:
             try:
@@ -182,8 +185,6 @@ class Opcode:
                 self.relativebase += params[0]
 
                 self.index += 2
-
-
 
         self.done = True
 
