@@ -64,28 +64,6 @@ with open(sys.argv[1]) as f:
         x += dirs[direction][0]
         y += dirs[direction][1]
 
-    top = None
-    left = None
-    bottom = None
-    right = None
-    for k in painting:
-        if left is None:
-            left = k[0]
-        if top is None:
-            top = k[1]
-        if right is None:
-            right = k[0]
-        if bottom is None:
-            bottom = k[1]
-        if k[0] < left:
-            left = k[0]
-        if k[1] > top:
-            top = k[1]
-        if k[0] > right:
-            right = k[0]
-        if k[1] < bottom:
-            bottom = k[1]
-
 thisline = None
 for k, v in sorted(painting.items()):
     if thisline is not None:
