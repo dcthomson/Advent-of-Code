@@ -1,6 +1,7 @@
 # Project
 .idea
 settings.json
+launch.json
 
 #############
 # Python
