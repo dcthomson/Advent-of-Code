@@ -1,5 +1,3 @@
-import time
-
 class Opcode:
     def __init__(self, s, name=False, replacements=False):
         self.setInput(s, replacements)
