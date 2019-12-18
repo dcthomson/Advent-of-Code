@@ -9,4 +9,4 @@ with open(sys.argv[1]) as f:
     opcode = OpcodeComputer.Opcode(line)
 
     while True:
-        print(opcode.runOpcode())
+        print("Output:", opcode.runOpcode())
