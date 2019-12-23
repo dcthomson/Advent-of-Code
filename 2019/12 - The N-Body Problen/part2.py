@@ -21,7 +21,7 @@ class Planet:
 
             self.loopstep[c] = False
 
-        print(self)
+        # print(self)
 
     def setvelocity(self, p):
         for c in ("x", "y", "z"):
@@ -71,14 +71,18 @@ class Planet:
         return ss
 
     def checkforloop(self, step):
+        retstr = ""
         for c in ("x", "y", "z"):
             if step > 0:
-                if not self.loopstep[c]:
-                    if self.start[c] == (self.position[c], self.velocity[c]):
-                        self.loopstep[c] = step
-                        
-                        print("STEP", step)
-                        print(self)
+                # if not self.loopstep[c]:
+                if self.start[c] == (self.position[c], self.velocity[c]):
+                    self.loopstep[c] = step
+                    retstr += c
+                    
+                    # print("STEP", step)
+                    # print(self)
+                    # print()
+        return retstr
 
     def allLooped(self):
         ret = True
@@ -88,6 +92,9 @@ class Planet:
         return ret
 
 def lowestcommonmultiple(l):
+    # should fix, takes too long
+    # plugged in nums on https://www.calculatorsoup.com/calculators/math/lcm.php
+    # to get answer :(
     l.sort()
     largest = l.pop()
     current = largest
@@ -111,16 +118,33 @@ with open(sys.argv[1]) as f:
     for line in f:
         planets.append(Planet(line, num))
         num += 1
-print()
+# print()
 count = 0
 allLooped = False
+loops = {}
 while allLooped == False:
 
+    # print("After", count, "steps")
+    # for p in planets:
+    #     print(p)
+
     allLooped = True
+    loopedstr = ""
     for p in planets:
-        p.checkforloop(count)
-        if not p.allLooped():
+        loopedstr += p.checkforloop(count)
+
+    if loopedstr != "":
+        # print("loopedstr:", loopedstr)
+        for c in ('x', 'y', 'z'):
+            if c not in loops:
+                if loopedstr.count(c) == 4:
+                    loops[c] = count
+                    # print(loops)
+
+    for c in ('x', 'y', 'z'):
+        if c not in loops:
             allLooped = False
+
 
     for i in planets:
         for j in planets:
@@ -138,7 +162,7 @@ for p in planets:
     for c in ("x", "y", "z"):
         steps[p.loopstep[c]] = True
 
-steps = list(steps.keys())
+steps = list(loops.values())
 
 print(steps)
 
