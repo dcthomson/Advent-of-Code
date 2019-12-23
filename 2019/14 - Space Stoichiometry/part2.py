@@ -1,7 +1,9 @@
 import sys
+import math
 
 chemicals = {}
-ore = 1000000000000
+totalore = 1000000000000
+ore = totalore
 
 class Chemical:
     def __init__(self, name, num, chems):
@@ -45,6 +47,7 @@ with open(sys.argv[1]) as f:
         chemicals[name] = Chemical(name, int(num), chems)
 
 fuelcount = 0
+orecount = 0
 while ore > 0:
     chemicals["FUEL"].make(1)
     fuelcount += 1
@@ -56,7 +59,9 @@ while ore > 0:
                 allzero = False
                 break
     if allzero:
-        print(fuelcount, ":", ore)
+        print(math.floor(totalore / (totalore - ore) * fuelcount))
+        # print(fuelcount, ":", totalore - ore)
+        break
 
 
-print(fuelcount)
+# print(fuelcount)
