@@ -64,4 +64,4 @@ while ore > 0:
         break
 
 
-# print(fuelcount)
+print("fuelcount:", fuelcount)
