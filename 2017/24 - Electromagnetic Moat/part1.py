@@ -18,20 +18,30 @@ class Bridge:
 
     def addcomponent(self, component):
 
-        if component.port1 == self.open:
+        if component[0] == self.open:
             self.components.append(component)
-            self.open = component.port2
-        elif component.port2 == self.open:
+            self.open = component[1]
+        elif component[1] == self.open:
             self.components.append(component)
-            self.open = component.port1
+            self.open = component[0]
         else:
             return False
         return True
 
+        # if component.port1 == self.open:
+        #     self.components.append(component)
+        #     self.open = component.port2
+        # elif component.port2 == self.open:
+        #     self.components.append(component)
+        #     self.open = component.port1
+        # else:
+        #     return False
+        # return True
+
     def getstrength(self):
         strength = 0
         for i in self.components:
-            strength += i.port1 + i.port2
+            strength += i[0] + i[1]
         return strength
 
     def __str__(self):
@@ -39,7 +49,7 @@ class Bridge:
         for c in self.components:
             if retstr != "":
                 retstr += "--"
-            retstr += str(c.port1) + "/" + str(c.port2)
+            retstr += str(c[0]) + "/" + str(c[1])
         return retstr
 
 components = list()
@@ -48,9 +58,11 @@ with open(sys.argv[1], 'r') as f:
     for line in f:
         line = line.strip()
         l = line.split("/")
-        components.append(Component(int(l[0]), int(l[1])))
+        # components.append(Component(int(l[0]), int(l[1])))
+        components.append((int(l[0]), int(l[1])))
 
 strongestbridge = 0
+bridges = {}
 
 def buildbridge(components, bridge=Bridge()):
     global strongestbridge
@@ -60,13 +72,16 @@ def buildbridge(components, bridge=Bridge()):
     if bs > strongestbridge:
         strongestbridge = bs
         print(bs)
+    bstr = bridge.__str__()
+    if bstr in bridges:
+        print("Found a Duplicate!!!")
+    else:
+        bridges[bstr] = True
     # print(strongestbridge)
     for component in components:
         b = copy.deepcopy(bridge)
         if b.addcomponent(component):
             buildbridge([c for c in components if c != component], b)
-
-
 
 buildbridge(components)
 print(strongestbridge)
