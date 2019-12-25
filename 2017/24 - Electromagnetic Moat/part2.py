@@ -16,6 +16,9 @@ class Bridge:
         self.components = list()
         self.open = 0
 
+    def getsize(self):
+        return len(self.components)
+
     def addcomponent(self, component):
 
         if component[0] == self.open:
@@ -69,10 +72,10 @@ def buildbridge(components, bridge=Bridge()):
     global longestbridge
     global bridges
 
-    if len(bridge) > longestbridge:
+    if bridge.getsize() > longestbridge:
         bridges = []
-        longestbridge = len(bridge)
-    if len(bridge) == longestbridge:
+        longestbridge = bridge.getsize()
+    if bridge.getsize() == longestbridge:
         bridges.append(bridge)
 
     # print(strongestbridge)
