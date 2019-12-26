@@ -94,22 +94,55 @@ for y in range(innertopright[0], innerbottomright[0]):
         portals[(y, x)] = donut[(y, x - 2)] + donut[(y, x - 1)]
 
 portalpairs = {}
+start = None
+end = None
 
 for k, v in portals.items():
     for k2, v2 in portals.items():
         if v == v2 and k != k2:
             portalpairs[k] = k2
+        if v == "AA":
+            start = k
+        if v == "ZZ":
+            end = k
 
-printdonut(donut)
-print()
-print(outertopleft)
-print(outertopright)
-print(innertopleft)
-print(innertopright)
-print(innerbottomleft)
-print(innerbottomright)
-print(outerbottomleft)
-print(outerbottomright)
+# printdonut(donut)
+# print()
+# print(outertopleft)
+# print(outertopright)
+# print(innertopleft)
+# print(innertopright)
+# print(innerbottomleft)
+# print(innerbottomright)
+# print(outerbottomleft)
+# print(outerbottomright)
 
-print(portals)
-print(portalpairs)
+# print(portals)
+# print(portalpairs)
+
+visited = {}
+
+distance = 0
+Q = [(start, 0)]
+
+while Q:
+    node, distance = Q.pop(0)
+    if node == end:
+        print(distance)
+        break
+    if node not in visited:
+        visited[node] = distance
+        neighbors = []
+        if donut[(node[0] - 1, node[1])] == ".":
+            neighbors.append((node[0] - 1, node[1]))
+        if donut[(node[0], node[1] + 1)] == ".":
+            neighbors.append((node[0], node[1] + 1))
+        if donut[(node[0] + 1, node[1])] == ".":
+            neighbors.append((node[0] + 1, node[1]))
+        if donut[(node[0], node[1] - 1)] == ".":
+            neighbors.append((node[0], node[1] - 1))
+        if (node[0], node[1]) in portalpairs:
+            neighbors.append(portalpairs[(node[0], node[1])])
+        
+        for neighbor in neighbors:
+            Q.append((neighbor, distance + 1))
