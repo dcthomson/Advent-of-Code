@@ -86,4 +86,7 @@ def buildbridge(components, bridge=Bridge()):
 
 buildbridge(components)
 
-print(bridges)
+for b in bridges:
+    print(b.getstrength())
+    print(b.components)
+    print()
