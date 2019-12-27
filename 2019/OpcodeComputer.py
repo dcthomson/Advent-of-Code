@@ -123,7 +123,9 @@ class Opcode:
                             _setvalue(params[0], int(input("Enter input: "))) 
                     else:
                         # _setvalue(self.nums[self.index + 1], self.input.pop(0))
-                        _setvalue(params[0], self.input.pop(0))
+                        val = self.input.pop(0)
+                        print(val)
+                        _setvalue(params[0], val)
                         # print("Got 1 input")
                     setval = True
 
