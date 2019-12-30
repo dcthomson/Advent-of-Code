@@ -35,7 +35,7 @@ with open(sys.argv[1]) as f:
 
 steps = 0
 beenthere = {}
-found = []
+found = {}
 
 Q = [(start, steps)]
 
@@ -44,9 +44,9 @@ while len(Q) > 0:
 
     try:
         if int(duct[coord]) not in found:
+            found[duct[coord]] = True
             print(found)
             print(tofind)
-            found.append(duct[coord])
             if len(tofind) == len(found):
                 print("found last num at ", coord, "in", steps, "steps")
                 break
