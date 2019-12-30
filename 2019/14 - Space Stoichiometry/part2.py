@@ -1,6 +1,8 @@
 import sys
 import math
 
+# brute forced it, took a couple days on the pi
+
 chemicals = {}
 totalore = 1000000000000
 ore = totalore
@@ -64,4 +66,4 @@ while ore > 0:
         break
 
 
-print("fuelcount:", fuelcount)
+print("fuelcount:", fuelcount - 1)
