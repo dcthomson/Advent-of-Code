@@ -32,7 +32,7 @@ class Program:
         else:
             instlist = instruction.split()
             # print(self.prognum, instlist)
-            print(self.prognum, instlist, self.getregsstr())
+            # print(self.prognum, instlist, self.getregsstr())
             instruction = instlist[0]
             regletter = instlist[1]
             if len(instlist) == 3:
