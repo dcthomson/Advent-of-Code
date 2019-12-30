@@ -1,9 +1,10 @@
 import sys
 
 # startimage = "#./#."
-# startimage = ".#./..#/###"
+startimage = ".#./..#/###"
 # startimage = "##../##../..##/..##"
-startimage = "###.../###.../###.../...###/...#.#/...###"
+# startimage = "#..#/..../..../#..#"
+# startimage = "###.../###.../###.../...###/...#.#/...###"
 
 class Image:
 
@@ -106,6 +107,14 @@ class Image:
         perms.append(_flip(_rotate(_rotate(_rotate(self.s)))))
         return perms
         
+    def combine(self, a):
+        self.s = ""
+        for sa in a:
+            for i in range(0, sa[0].count("/") + 1):
+                for s in sa:
+                    self.s += s.split("/")[i]
+                self.s += "/"
+        # print(self.s)
                        
 
 rules = dict()
@@ -116,32 +125,39 @@ with open(sys.argv[1], 'r') as f:
         rule, out = line.split(" => ")
         rules[rule] = out
 
-image = Image(startimage)
+mainimage = Image(startimage)
 
-image.printimage()
-print("\n")
-perms = image.flipandrotate()
+# mainimage.printimage()
+# print("\n")
 
-if perms:
-    for perm in perms:
-        i = Image(perm)
-        i.printimage()
-        print()
+for i in range(0, 5):
+    perms = mainimage.flipandrotate()
 
-print(image.divide())
-newsquares = []
-squares = image.divide()
-for rownum in range(0, len(squares)):
-    newsquares.append([])
-    for i in range(0, len(squares[rownum])):
-        print(squares[rownum][i])
-        img = Image(squares[rownum][i])
-        for perm in img.flipandrotate():
-            if perm in rules:
-                print(perm, "=> ", end="")
-                img.s = rules[perm]
-                print(img.s)
-                newsquares[0].append(img.s)
-                break
+    if perms:
+        for perm in perms:
+            i = Image(perm)
+            # i.printimage()
+            # print()
 
-print(newsquares)
+    # print(mainimage.divide())
+    newsquares = []
+    squares = mainimage.divide()
+    for rownum in range(0, len(squares)):
+        newsquares.append([])
+        for i in range(0, len(squares[rownum])):
+            # print(squares[rownum][i])
+            img = Image(squares[rownum][i])
+            for perm in img.flipandrotate():
+                if perm in rules:
+                    # print(perm, "=> ", end="")
+                    img.s = rules[perm]
+                    # print(img.s)
+                    newsquares[-1].append(img.s)
+                    break
+
+    # print(newsquares)
+    mainimage.combine(newsquares)
+
+mainimage.printimage()
+
+print(mainimage.getnumon())
