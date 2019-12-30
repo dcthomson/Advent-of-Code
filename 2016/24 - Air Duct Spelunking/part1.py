@@ -6,7 +6,7 @@ class Coord:
         self.y = y
         self.c = c
 
-map = {}
+duct = {}
 
 found = []
 
@@ -20,7 +20,7 @@ with open(sys.argv[1]) as f:
     for line in f:
         x = 0
         for c in line:
-            map[(x,y)] = c
+            duct[(x,y)] = c
             try:
                 num = int(c)
                 if num == 0:
@@ -37,15 +37,16 @@ steps = 0
 beenthere = {}
 found = []
 
-queue = [(start, steps)]
+Q = [(start, steps)]
 
-while len(queue) > 0:
-    coord, steps = queue.pop(0)
+while len(Q) > 0:
+    coord, steps = Q.pop(0)
 
     try:
-        if int(map[coord]) not in found:
+        if int(duct[coord]) not in found:
             print(found)
             print(tofind)
+            found.append(duct[coord])
             if len(tofind) == len(found):
                 print("found last num at ", coord, "in", steps, "steps")
                 break
@@ -57,4 +58,5 @@ while len(queue) > 0:
                   (coord[0], coord[1] + 1),
                   (coord[0], coord[1] - 1)]
     for coord in adj_coords:
-        queue.append((coord, steps + 1))
+        if duct[coord] != "#":
+            Q.append((coord, steps + 1))
