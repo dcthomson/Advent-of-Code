@@ -1,4 +1,6 @@
 import sys
+import curses
+import time
 
 class Cpu:
 
@@ -35,6 +37,7 @@ class Cpu:
     def printregs(self):
         for k in self.registers:
             print(self.registers[k].name, self.registers[k].value)
+
 
 class Register:
 
@@ -100,22 +103,42 @@ class Register:
         else:
             return 1
 
-instructions = list()
 
-with open(sys.argv[1], 'r') as f:
-    for line in f:
-        instructions.append(line.strip())
+def main(stdscr):
+    stdscr.clear()
 
-instnum = 0
-cpu = Cpu()
-while not str(instnum).startswith("recover"):
-    try:
-        ret = cpu.run(instructions[instnum])
-        instnum += ret
-    except IndexError:
-        break
+    instructions = list()
 
-muls = 0
-for k in cpu.registers:
-    muls += cpu.registers[k].mulrun
-print(muls)
+    with open(sys.argv[1], 'r') as f:
+        for line in f:
+            instructions.append(line.strip())
+
+    instnum = 0
+    cpu = Cpu()
+    while not str(instnum).startswith("recover"):
+        try:
+            ret = cpu.run(instructions[instnum])
+            
+            stdscr.addstr(1, 0, "                            ")
+            stdscr.addstr(1, 0, instructions[instnum])
+            stdscr.refresh()
+            # stuff = stdscr.getch(0,0)
+            # if stuff == ord("q"):
+                # exit()
+            x = 0
+            for k in sorted(cpu.registers):
+                stdscr.addstr(2, x, k)
+                stdscr.addstr(3, x, "         ")
+                stdscr.addstr(3, x, str(cpu.registers[k].value))
+                x += 10
+
+            instnum += ret
+        except IndexError:
+            break
+
+    muls = 0
+    for k in cpu.registers:
+        muls += cpu.registers[k].mulrun
+    print(muls)
+
+curses.wrapper(main)
