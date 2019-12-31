@@ -7,7 +7,6 @@ class Program:
         self.registers = dict()
         self.registers['p'] = Register('p')
         self.registers['p'].set(prognum)
-        self.lastvalue = False
         self.waiting = False
         self.rcvreg = False
         self.rcvqueue = []
@@ -16,57 +15,46 @@ class Program:
     def setbuddyprog(self, buddy):
         self.buddyprog = buddy
 
-    def runqueue(self):
-        if self.rcvqueue:
-            self.registers[self.rcvreg].set(self.rcvqueue.pop(0))
-            self.waiting = False
-            return True
-        return False
-
     def run(self, instruction):
-        if self.waiting:
-            if self.runqueue():
-                return 1
-            else:
-                return 0
-        else:
-            instlist = instruction.split()
-            # print(self.prognum, instlist)
-            # print(self.prognum, instlist, self.getregsstr())
-            instruction = instlist[0]
-            regletter = instlist[1]
-            if len(instlist) == 3:
+        self.waiting = False
+
+        instlist = instruction.split()
+        # print(self.prognum, instlist, self.rcvqueue)
+        # print(self.prognum, instlist, self.getregsstr())
+        instruction = instlist[0]
+        regletter = instlist[1]
+        if regletter not in self.registers:
+            # add regletter
+            self.registers[regletter] = Register(regletter)
+        if len(instlist) == 3:
+            try:
+                # 3rd arg is int
+                value = int(instlist[2])
+            except ValueError:
+                # 3rd arg is letter
                 try:
-                    # 3rd arg is int
-                    value = int(instlist[2])
-                except ValueError:
-                    # 3rd arg is letter
-                    try:
-                        value = self.registers[instlist[2]].value
-                    except KeyError:
-                        print(instlist)
-                        sys.exit()
-                if regletter not in self.registers:
-                    # add regletter
-                    self.registers[regletter] = Register(regletter)
-                retval = self.registers[regletter].run(instruction, value)
-            else:
-                # only 2 args (snd and rcv)
-                value = None
-                retval = 1
-                if instruction == 'snd':
-                    try:
-                        self.buddyprog.rcvqueue.append(int(regletter))
-                    except ValueError:
-                        self.buddyprog.rcvqueue.append(self.registers[regletter].value)
-                    self.totalsends += 1
-                elif instruction == 'rcv':
-                    self.rcvreg = regletter
-                    self.registers[regletter] = Register(regletter)
+                    value = self.registers[instlist[2]].value
+                except KeyError:
+                    print("ERROR:", instlist)
+                    sys.exit()
+
+            retval = self.registers[regletter].run(instruction, value)
+        else:
+            # only 2 args (snd and rcv)
+            value = None
+            retval = 1
+            if instruction == 'snd':
+                self.buddyprog.rcvqueue.append(self.registers[regletter].value)
+                self.totalsends += 1
+            elif instruction == 'rcv':
+                print(self.prognum, "len:", len(self.rcvqueue))
+                if len(self.rcvqueue):
+                    self.registers[regletter].set(self.rcvqueue.pop(0)) 
+                else:
+                    print("waiting")
                     self.waiting = True
-                    if not self.runqueue():
-                        retval = 0
-            return retval
+                    retval = 0
+        return retval
 
     def getregsstr(self):
         retstr = ""
@@ -82,53 +70,28 @@ class Register:
         self.name = name
         self.value = value
 
-    def run(self, instruction, val=None):
+    def run(self, instruction, val):
         method = getattr(self, instruction)
-        if val is None:
-            retval = method()
-        else:
-            retval = method(val)
+        retval = method(val)
         return retval
 
-#     def snd(self):
-# #        print("snd:", self.name)
-#         try:
-#             self.buddy.rcvqueue.append(int(self.value))
-#         except TypeError:
-#             self.buddy.rcvqueue.append(self.regist)
-#
-#         return "sound-" + str(self.value)
-
     def set(self, val):
-#        print("set:", self.name, val)
         self.value = val
         return 1
 
     def add(self, val):
-#        print("add:", self.name, val)
         self.value += val
         return 1
 
     def mul(self, val):
-#        print("mul:", self.name, val)
         self.value *= val
         return 1
 
     def mod(self, val):
-#        print("mod:", self.name, val)
         self.value = self.value % val
         return 1
 
-#     def rcv(self):
-#         if self.
-# #        print("rcv:", self.name)
-#         if self.value:
-#             return "recover"
-#         else:
-#             return 1
-
     def jgz(self, val):
-#        print("jgz:", self.name, val)
         if self.value > 0:
             return val
         else:
@@ -153,8 +116,10 @@ while not p0.waiting or not p1.waiting:
         # print("instnum0: ", instnum0)
         ret1 = p1.run(instructions[instnum1])
         instnum1 += ret1
+        # print(p1.totalsends)
         # print("instnum1: ", instnum1)
+        print(p0.waiting, p1.waiting)
     except TypeError:
-#        cpu.printregs()
+        cpu.printregs()
         break
 print(p1.totalsends)
