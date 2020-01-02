@@ -29,7 +29,9 @@ class Program:
         if len(instlist) == 3:
             try:
                 value = int(regletter)
-                print("INSTLIST", instlist)
+                # This could be done better but the only input that
+                # had a num in the second param was a jump cmd 
+                # that jumped 3, so just set retval to 3
                 retval = 3
             except:
                 if regletter not in self.registers:
@@ -61,11 +63,9 @@ class Program:
                 if regletter not in self.registers:
                     # add regletter
                     self.registers[regletter] = Register(regletter)
-                # print(self.prognum, "len:", len(self.rcvqueue))
                 if len(self.rcvqueue):
                     self.registers[regletter].set(self.rcvqueue.pop(0)) 
                 else:
-                    # print("waiting")
                     self.waiting = True
                     retval = 0
         return retval
@@ -126,24 +126,7 @@ p0.setbuddyprog(p1)
 p1.setbuddyprog(p0)
 
 while not p0.waiting or not p1.waiting:
-    # try:
-        print("0", instructions[instnum0])
-        instnum0 += p0.run(instructions[instnum0])
-        print(p0.getregsstr())
-        print(p1.getregsstr())
-        # print("instnum0: ", instnum0)
-        print()
-        print("1", instructions[instnum1])
-        instnum1 += p1.run(instructions[instnum1])
-        print(p0.getregsstr())
-        print(p1.getregsstr())
-        print()
-        print(p0.waiting, p1.waiting)
-        # input()
-        # print(p1.totalsends)
-        # print("instnum1: ", instnum1)
-    # except:
-    #     print("ERROR")
-    #     break
+    instnum0 += p0.run(instructions[instnum0])
+    instnum1 += p1.run(instructions[instnum1])
 
 print(p1.totalsends)
