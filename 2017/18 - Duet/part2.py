@@ -24,22 +24,29 @@ class Program:
         instruction = instlist[0]
         regletter = instlist[1]
 
-        if len(instlist) == 3:
-            if regletter not in self.registers:
-                # add regletter
-                self.registers[regletter] = Register(regletter)
-            try:
-                # 3rd arg is int
-                value = int(instlist[2])
-            except ValueError:
-                # 3rd arg is letter
-                try:
-                    value = self.registers[instlist[2]].value
-                except KeyError:
-                    print("ERROR:", instlist)
-                    sys.exit()
+        retval = 1
 
-            retval = self.registers[regletter].run(instruction, value)
+        if len(instlist) == 3:
+            try:
+                value = int(regletter)
+                print("INSTLIST", instlist)
+                retval = 3
+            except:
+                if regletter not in self.registers:
+                    # add regletter
+                    self.registers[regletter] = Register(regletter)
+                try:
+                    # 3rd arg is int
+                    value = int(instlist[2])
+                except ValueError:
+                    # 3rd arg is letter
+                    try:
+                        value = self.registers[instlist[2]].value
+                    except KeyError:
+                        print("ERROR:", instlist)
+                        sys.exit()
+
+                retval = self.registers[regletter].run(instruction, value)
         else:
             # only 2 args (snd and rcv)
             value = None
@@ -68,6 +75,7 @@ class Program:
         for k in self.registers:
             retstr += str(self.registers[k].name) + ": "
             retstr += str(self.registers[k].value) + ", "
+        retstr += "\n  Q: " + str(self.rcvqueue)
         return retstr.rstrip(", ")
 
 
@@ -118,15 +126,24 @@ p0.setbuddyprog(p1)
 p1.setbuddyprog(p0)
 
 while not p0.waiting or not p1.waiting:
-    # print("0", instructions[instnum0])
-    instnum0 += p0.run(instructions[instnum0])
-    # print(p0.getregsstr())
-    # print("instnum0: ", instnum0)
-    # print("1", instructions[instnum1])
-    instnum1 += p1.run(instructions[instnum1])
-    # print(p1.getregsstr())
-    # print()
-    # input()
-    # print(p1.totalsends)
-    # print("instnum1: ", instnum1)
+    # try:
+        print("0", instructions[instnum0])
+        instnum0 += p0.run(instructions[instnum0])
+        print(p0.getregsstr())
+        print(p1.getregsstr())
+        # print("instnum0: ", instnum0)
+        print()
+        print("1", instructions[instnum1])
+        instnum1 += p1.run(instructions[instnum1])
+        print(p0.getregsstr())
+        print(p1.getregsstr())
+        print()
+        print(p0.waiting, p1.waiting)
+        # input()
+        # print(p1.totalsends)
+        # print("instnum1: ", instnum1)
+    # except:
+    #     print("ERROR")
+    #     break
+
 print(p1.totalsends)
