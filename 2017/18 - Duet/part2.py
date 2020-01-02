@@ -23,10 +23,11 @@ class Program:
         # print(self.prognum, instlist, self.getregsstr())
         instruction = instlist[0]
         regletter = instlist[1]
-        if regletter not in self.registers:
-            # add regletter
-            self.registers[regletter] = Register(regletter)
+
         if len(instlist) == 3:
+            if regletter not in self.registers:
+                # add regletter
+                self.registers[regletter] = Register(regletter)
             try:
                 # 3rd arg is int
                 value = int(instlist[2])
@@ -44,14 +45,20 @@ class Program:
             value = None
             retval = 1
             if instruction == 'snd':
-                self.buddyprog.rcvqueue.append(self.registers[regletter].value)
+                try:
+                    self.buddyprog.rcvqueue.append(int(instlist[1]))
+                except:
+                    self.buddyprog.rcvqueue.append(self.registers[regletter].value)
                 self.totalsends += 1
             elif instruction == 'rcv':
-                print(self.prognum, "len:", len(self.rcvqueue))
+                if regletter not in self.registers:
+                    # add regletter
+                    self.registers[regletter] = Register(regletter)
+                # print(self.prognum, "len:", len(self.rcvqueue))
                 if len(self.rcvqueue):
                     self.registers[regletter].set(self.rcvqueue.pop(0)) 
                 else:
-                    print("waiting")
+                    # print("waiting")
                     self.waiting = True
                     retval = 0
         return retval
@@ -109,17 +116,17 @@ p0 = Program(0)
 p1 = Program(1)
 p0.setbuddyprog(p1)
 p1.setbuddyprog(p0)
+
 while not p0.waiting or not p1.waiting:
-    try:
-        ret0 = p0.run(instructions[instnum0])
-        instnum0 += ret0
-        # print("instnum0: ", instnum0)
-        ret1 = p1.run(instructions[instnum1])
-        instnum1 += ret1
-        # print(p1.totalsends)
-        # print("instnum1: ", instnum1)
-        print(p0.waiting, p1.waiting)
-    except TypeError:
-        cpu.printregs()
-        break
+    # print("0", instructions[instnum0])
+    instnum0 += p0.run(instructions[instnum0])
+    # print(p0.getregsstr())
+    # print("instnum0: ", instnum0)
+    # print("1", instructions[instnum1])
+    instnum1 += p1.run(instructions[instnum1])
+    # print(p1.getregsstr())
+    # print()
+    # input()
+    # print(p1.totalsends)
+    # print("instnum1: ", instnum1)
 print(p1.totalsends)
