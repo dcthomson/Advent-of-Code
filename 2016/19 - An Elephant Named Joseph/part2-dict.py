@@ -69,12 +69,15 @@ ring = Ring(elfcount)
 curelf = 1
 
 while elfcount > 1:
-    print("elfcount:", elfcount)
-    # print("ring:\n",  ring)
+    try:
+        print("elfcount:", elfcount)
+        # print("ring:\n",  ring)
 
-    ae = ring.acrosself(curelf)
-    ring.transferpresents(ae, curelf)
-    elfcount -= 1
-    curelf = ring.nextelf(curelf)
+        ae = ring.acrosself(curelf)
+        ring.transferpresents(ae, curelf)
+        elfcount -= 1
+        curelf = ring.nextelf(curelf)
+    except:
+        print(ring)
 
 print(curelf)

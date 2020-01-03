@@ -61,15 +61,19 @@ ring = Ring(elfcount)
 curelf = 0
 
 while elfcount > 1:
-    if not elfcount % 1000:
+    try:
+        # if not elfcount % 1000:
         print("elfcount:", elfcount)
-    # print("ring:\n",  ring)
+        # print("ring:\n",  ring)
 
-    ae = ring.acrosself(curelf, elfcount)
-    # print("ae", ae)
-    ring.transferpresents(ae)
-    elfcount -= 1
-    curelf = ring.nextelf(curelf)
+        ae = ring.acrosself(curelf, elfcount)
+        # print("ae", ae)
+        ring.transferpresents(ae)
+        elfcount -= 1
+        curelf = ring.nextelf(curelf)
+    except:
+        print(ring.elves)
+        break
 
 print(curelf)
 print(ring.elves[0])
