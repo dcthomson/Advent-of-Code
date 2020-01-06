@@ -85,12 +85,16 @@ class ElevatorSystem:
 # stuff['LG'] = 3
 # stuff['LM'] = 1
 
-# 1 PRG PRM
+# 1 PRG PRM ELG ELM DIG DIM
 # 2 COG CUG RUG PLG
 # 3 COM CUM RUM PLM
 # 4
 
 stuff = {}
+stuff['ELG'] = 1
+stuff['ELM'] = 1
+stuff['DIG'] = 1
+stuff['DIM'] = 1
 stuff['PRG'] = 1
 stuff['PRM'] = 1
 stuff['COG'] = 2
