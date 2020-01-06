@@ -1,7 +1,3 @@
-# 1 PRG PRM
-# 2 COG CUG RUG PLG
-# 3 COM CUM RUM PLM
-# 4
 from itertools import combinations
 import os
 
@@ -9,7 +5,6 @@ import os
 class ElevatorSystem:
     def __init__(self, stuff, elevator=1, move=0):
         self.move = move
-        self.floors = [1, 2, 3, 4]
         self.elevator = elevator
         self.stuff = stuff
 
@@ -19,24 +14,24 @@ class ElevatorSystem:
             retstr += "-" + k + str(self.stuff[k])
         return retstr
 
-    def __str__(self):
-        retstr = ""
-        for f in range(4, 0, -1):
-            retstr += "F" + str(f) + " "
-            if self.elevator == f:
-                retstr += "E"
-            else:
-                retstr += "."
-            retstr += "  "
-            for k in sorted(self.stuff):
-                if self.stuff[k] == f:
-                    retstr += k
-                else:
-                    retstr += ".  "
-                retstr += " "
-            retstr += "\n"
+    # def __str__(self):
+    #     retstr = ""
+    #     for f in range(4, 0, -1):
+    #         retstr += "F" + str(f) + " "
+    #         if self.elevator == f:
+    #             retstr += "E"
+    #         else:
+    #             retstr += "."
+    #         retstr += "  "
+    #         for k in sorted(self.stuff):
+    #             if self.stuff[k] == f:
+    #                 retstr += k
+    #             else:
+    #                 retstr += ".  "
+    #             retstr += " "
+    #         retstr += "\n"
             
-        return retstr.rstrip()
+    #     return retstr.rstrip()
 
     def checkValidity(self):
         # check for microchips without generators
@@ -51,7 +46,7 @@ class ElevatorSystem:
         return True
 
 
-    def getNextMoves(self, visited={}):
+    def getNextMoves(self):
         moves = []
         
         stuffonfloor = []
@@ -60,7 +55,7 @@ class ElevatorSystem:
                 stuffonfloor.append(k)
         for j in (1, -1):
             newfloor = self.elevator + j
-            if newfloor in self.floors:
+            if newfloor in (1, 2, 3, 4):
                 for i in (1, 2):
                     comb = combinations(stuffonfloor, i)
                     for c in list(comb):
@@ -79,7 +74,10 @@ class ElevatorSystem:
         return True
                 
 
-# stuff = {}
+stuff = {}
+
+
+
 # stuff['HG'] = 2
 # stuff['HM'] = 1
 # stuff['LG'] = 3
@@ -90,11 +88,10 @@ class ElevatorSystem:
 # 3 COM CUM RUM PLM
 # 4
 
-stuff = {}
-stuff['ELG'] = 1
-stuff['ELM'] = 1
-stuff['DIG'] = 1
-stuff['DIM'] = 1
+# stuff['ELG'] = 1
+# stuff['ELM'] = 1
+# stuff['DIG'] = 1
+# stuff['DIM'] = 1
 stuff['PRG'] = 1
 stuff['PRM'] = 1
 stuff['COG'] = 2
@@ -106,17 +103,7 @@ stuff['CUM'] = 3
 stuff['RUM'] = 3
 stuff['PLM'] = 3
 
-
 es = ElevatorSystem(stuff)
-
-print(es)
-
-print()
-
-# for m in es.getNextMoves():
-#     print(m)
-#     print(m.visited)
-#     print()
 
 visited = {}
 
@@ -132,7 +119,7 @@ while Q:
         # print(v.visited)
         # v.printsteps()
         break
-    for n in v.getNextMoves(visited):
+    for n in v.getNextMoves():
         if n.stringify() not in visited:
             Q.append(n)
             visited[n.stringify()] = True
