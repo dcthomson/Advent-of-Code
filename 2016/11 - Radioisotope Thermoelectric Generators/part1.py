@@ -7,7 +7,8 @@ import os
 
 
 class ElevatorSystem:
-    def __init__(self, stuff, elevator=1, visited=[]):
+    def __init__(self, stuff, elevator=1, visited=[], move=0):
+        self.move = move
         self.floors = [1, 2, 3, 4]
         self.elevator = elevator
         self.stuff = stuff
@@ -81,7 +82,7 @@ class ElevatorSystem:
         return True
 
 
-    def getNextMoves(self):
+    def getNextMoves(self, visited={}):
         moves = []
         
         stuffonfloor = []
@@ -97,7 +98,7 @@ class ElevatorSystem:
                         stuff = self.stuff.copy()
                         for thing in c:
                             stuff[thing] = newfloor
-                        es = ElevatorSystem(stuff, newfloor, self.visited.copy())
+                        es = ElevatorSystem(stuff, newfloor, self.visited.copy(), self.move + 1)
                         if es.checkValidity():
                             moves.append(es)
         return moves
@@ -155,13 +156,14 @@ while Q:
     # print(v)
     # print(v.visited)
     if v.allup():
-        print(len(v.visited) - 1)
+        print(v.move)
         # print(v.visited)
         # v.printsteps()
         break
-    for n in v.getNextMoves():
-        if n.stringify() not in v.visited:
+    for n in v.getNextMoves(visited):
+        if n.stringify() not in visited:
             Q.append(n)
+            visited[n.stringify()] = True
 
 
 
