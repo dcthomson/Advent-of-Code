@@ -1,30 +1,47 @@
 import sys
+import hashlib
 
-path = ""
+class Room:
 
-with open(sys.argv[1]) as f:
-    path = f.readline()
+    def __init__(self, x, y, hash):
+        self.x = x
+        self.y = y
+        self.hash = hash
+
+    def __str__(self):
+        retstr = "(" + str(self.x) + ", " + str(self.y) + ") "
+        retstr += self.hash
+        return retstr
+
+    def getneighbors(self):
+        neighbors = []
+        md5 = hashlib.md5(self.hash.encode()).hexdigest()
+        if md5[0] in ('bcdef'):
+            if self.y != 0:
+                neighbors.append(Room(self.x, self.y - 1, self.hash + "U"))
+        if md5[1] in ('bcdef'):
+            if self.y != 3:
+                neighbors.append(Room(self.x, self.y + 1, self.hash + "D"))
+        if md5[2] in ('bcdef'):
+            if self.x != 0:
+                neighbors.append(Room(self.x - 1, self.y, self.hash + "L"))
+        if md5[3] in ('bcdef'):
+            if self.x != 3:
+                neighbors.append(Room(self.x + 1, self.y, self.hash + "R"))
+        return neighbors
+
+initial = "dmypynyp"
+
+room = Room(0, 0, initial)
 
 # BFS
-# copied from day 13
-explored = []
-Q = [(0, 0)]
+
+Q = [room]
 while Q:
     node = Q.pop(0)
-    if node not in explored:
-        explored.append(node)
-        neighbors = []
-        if walloropen(node[0], node[1] + 1, fav) == ".":
-            neighbors.append((node[0], node[1] + 1))
-        if walloropen(node[0] + 1, node[1], fav) == ".":
-            neighbors.append((node[0] + 1, node[1]))
-        if node[1] - 1 >= 0:
-            if walloropen(node[0], node[1] - 1, fav) == ".":
-                neighbors.append((node[0], node[1] - 1))
-        if node[0] - 1 >= 0:
-            if walloropen(node[0] - 1, node[1], fav) == ".":
-                neighbors.append((node[0] - 1, node[1]))
-    
-        for neighbor in neighbors:
-            steps[neighbor] = steps[node] + 1
-            Q.append(neighbor)
+    # print(node)
+    if node.x == 3 and node.y == 3:
+        print(node.hash.lstrip(initial))
+        break
+    for neighbor in node.getneighbors():
+        Q.append(neighbor)
