@@ -88,10 +88,10 @@ stuff = {}
 # 3 COM CUM RUM PLM
 # 4
 
-# stuff['ELG'] = 1
-# stuff['ELM'] = 1
-# stuff['DIG'] = 1
-# stuff['DIM'] = 1
+stuff['ELG'] = 1
+stuff['ELM'] = 1
+stuff['DIG'] = 1
+stuff['DIM'] = 1
 stuff['PRG'] = 1
 stuff['PRM'] = 1
 stuff['COG'] = 2
