@@ -1,19 +1,40 @@
 import sys
 
 class Coord:
-    def __init__(self, x, y, c):
-        self.x = x
-        self.y = y
-        self.c = c
+    def __init__(self, coord, size, found):
+        self.x = coord[0]
+        self.y = coord[1]
+        self.pathsize = size
+        self.found = found
+        
+
+    def getneighbors(self, duct):
+        neighbors = []
+        pathsize = self.pathsize + 1
+        for c in ((self.x + 1, self.y),
+                  (self.x - 1, self.y),
+                  (self.x, self.y + 1),
+                  (self.x, self.y - 1)):
+            if duct[c] != "#":
+                found = self.found.copy()
+                if duct[c] != ".":
+                    found[duct[c]] = True
+                neighbors.append(Coord(c, pathsize, found))
+
+        return neighbors
+
+    def stringify(self):
+        retstr = str(self.x) + "-" + str(self.y) + "-"
+        for i in sorted(self.found.keys()):
+            retstr += str(i)
+        retstr = retstr.rstrip("-")
+        return retstr
+
 
 duct = {}
 
-found = []
-
-start = None
 tofind = []
-
-beenthere = {}
+findcount = 0
 
 with open(sys.argv[1]) as f:
     y = 0
@@ -26,37 +47,27 @@ with open(sys.argv[1]) as f:
                 if num == 0:
                     start = (x,y)
                 tofind.append((x,y))
-                print(x, y, c)
+                findcount += 1
             except:
                 pass
             x += 1
         y += 1
-    
 
-steps = 0
-beenthere = {}
-found = {}
+Q = [Coord(start, 0, {'0': True})]
 
-Q = [(start, steps)]
+visited = {}
 
-while len(Q) > 0:
-    coord, steps = Q.pop(0)
+mostfound = ""
 
-    try:
-        if int(duct[coord]) not in found:
-            found[duct[coord]] = True
-            print(found)
-            print(tofind)
-            if len(tofind) == len(found):
-                print("found last num at ", coord, "in", steps, "steps")
-                break
-    except:
-        pass
-    
-    adj_coords = [(coord[0] + 1, coord[1]),
-                  (coord[0] - 1, coord[1]),
-                  (coord[0], coord[1] + 1),
-                  (coord[0], coord[1] - 1)]
-    for coord in adj_coords:
-        if duct[coord] != "#":
-            Q.append((coord, steps + 1))
+while Q:
+    node = Q.pop(0)
+    # print(node.stringify(), node.pathsize)
+    # print(node)
+    if len(node.found) == findcount:
+        print(node.pathsize)
+        break
+    for neighbor in node.getneighbors(duct):
+        neighborstr = neighbor.stringify()
+        if neighborstr not in visited:
+            visited[neighborstr] = True
+            Q.append(neighbor)
