@@ -51,17 +51,19 @@ class Ring:
 
     def transferpresents(self, giver):
         # print("removed elf:", self.elves[giver])
+        
         del self.elves[giver]
 
 
 
-elfcount = int(sys.argv[1])
+# elfcount = int(sys.argv[1])
+elfcount = 5
 ring = Ring(elfcount)
 
 curelf = 0
 
 while elfcount > 1:
-    try:
+    # try:
         # if not elfcount % 1000:
         print("elfcount:", elfcount)
         # print("ring:\n",  ring)
@@ -71,9 +73,9 @@ while elfcount > 1:
         ring.transferpresents(ae)
         elfcount -= 1
         curelf = ring.nextelf(curelf)
-    except:
-        print(ring.elves)
-        break
+    # except:
+    #     print(ring.elves)
+    #     break
 
 print(curelf)
 print(ring.elves[0])
