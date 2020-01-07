@@ -1,5 +1,6 @@
 from itertools import combinations
 import os
+import sys
 
 
 class ElevatorSystem:
@@ -14,36 +15,64 @@ class ElevatorSystem:
             retstr += "-" + k + str(self.stuff[k])
         return retstr
 
-    # def __str__(self):
-    #     retstr = ""
-    #     for f in range(4, 0, -1):
-    #         retstr += "F" + str(f) + " "
-    #         if self.elevator == f:
-    #             retstr += "E"
-    #         else:
-    #             retstr += "."
-    #         retstr += "  "
-    #         for k in sorted(self.stuff):
-    #             if self.stuff[k] == f:
-    #                 retstr += k
-    #             else:
-    #                 retstr += ".  "
-    #             retstr += " "
-    #         retstr += "\n"
+    def __str__(self):
+        retstr = ""
+        for f in range(4, 0, -1):
+            retstr += "F" + str(f) + " "
+            if self.elevator == f:
+                retstr += "E"
+            else:
+                retstr += "."
+            retstr += "  "
+            for k in sorted(self.stuff):
+                if self.stuff[k] == f:
+                    retstr += k
+                else:
+                    retstr += ".  "
+                retstr += " "
+            retstr += "\n"
             
-    #     return retstr.rstrip()
+        return retstr.rstrip()
 
-    def checkValidity(self):
+    def checkValidity(self, oldfloor):
+        # floors = {}
+        # for k, v in self.stuff.items():
+        #     if v not in floors:
+        #         floors[v] = {"microchips": [], "generators": []}
+        #     if k[-1] == "M":
+        #         floors[v]["microchips"].append(k[:-1])
+        #     else:
+        #         floors[v]["generators"].append(k[:-1])
+        # for floor in (self.elevator, oldfloor):
+        #     if floor in floors:
+        #         gens = len(floors[floor]["generators"])
+        #         micros = len(floors[floor]["microchips"])
+        #         if gens != 0 and micros != 0:
+        #             for n in floors[floor]["microchips"]:
+        #                 if n not in floors[floor]["generators"]:
+        #                     if gens >= 1:
+        #                         return False
+        # return True
+
         # check for microchips without generators
         for k, v in self.stuff.items():
-            if k.endswith("M"):
-                name = k.rstrip("M")
-                if v != self.stuff[name + "G"]:
-                    # microchip is not with its generator
-                    for k2, v2 in self.stuff.items():
-                        if k2.endswith("G") and v2 == v:
-                            return False
+            # only check this floor and previous floor
+            # other floors have not changed
+            if v == oldfloor or v == self.elevator:
+                if k[-1] == "M":
+                    name = k[:-1]
+                    if v != self.stuff[name + "G"]:
+                        # microchip is not with its generator
+                        for k2, v2 in self.stuff.items():
+                            if k2[-1] == "G" and v2 == v:
+                                return False
         return True
+            
+
+
+
+
+       
 
 
     def getNextMoves(self):
@@ -63,8 +92,10 @@ class ElevatorSystem:
                         for thing in c:
                             stuff[thing] = newfloor
                         es = ElevatorSystem(stuff, newfloor, self.move + 1)
-                        if es.checkValidity():
+                        # print(es)
+                        if es.checkValidity(self.elevator):
                             moves.append(es)
+                        # print()
         return moves
 
     def allup(self):
@@ -77,31 +108,10 @@ class ElevatorSystem:
 stuff = {}
 
 
-
-# stuff['HG'] = 2
-# stuff['HM'] = 1
-# stuff['LG'] = 3
-# stuff['LM'] = 1
-
-# 1 PRG PRM ELG ELM DIG DIM
-# 2 COG CUG RUG PLG
-# 3 COM CUM RUM PLM
-# 4
-
-stuff['ELG'] = 1
-stuff['ELM'] = 1
-stuff['DIG'] = 1
-stuff['DIM'] = 1
-stuff['PRG'] = 1
-stuff['PRM'] = 1
-stuff['COG'] = 2
-stuff['CUG'] = 2
-stuff['RUG'] = 2
-stuff['PLG'] = 2
-stuff['COM'] = 3
-stuff['CUM'] = 3
-stuff['RUM'] = 3
-stuff['PLM'] = 3
+with open(sys.argv[1]) as f:
+    for line in f:
+        floor, name, t = line.rstrip().split()
+        stuff[name + t] = int(floor)
 
 es = ElevatorSystem(stuff)
 
@@ -111,20 +121,11 @@ Q = [es]
 
 while Q:
     v = Q.pop(0)
-    # os.system('cls||clear')
-    # print(v)
-    # print(v.visited)
     if v.allup():
         print(v.move)
-        # print(v.visited)
-        # v.printsteps()
         break
     for n in v.getNextMoves():
-        if n.stringify() not in visited:
+        nstr = n.stringify()
+        if nstr not in visited:
             Q.append(n)
-            visited[n.stringify()] = True
-
-
-
-    # visited[str(elevator) + stringify(stuff)] = True
-    # move = Q.pop(0)
+            visited[nstr] = True

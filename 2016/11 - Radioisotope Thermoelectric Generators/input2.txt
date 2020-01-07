@@ -1,0 +1,14 @@
+1 EL G
+1 EL M
+1 DI G
+1 DI M
+1 PR G
+1 PR M
+2 CO G
+2 CU G
+2 RU G
+2 PL G
+3 CO M
+3 CU M
+3 RU M
+3 PL M
