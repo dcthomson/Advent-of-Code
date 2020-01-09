@@ -1,11 +1,6 @@
 import sys
 import math
 
-def calc_fuel(num):
-    num = num / 3
-    num = math.floor(num)
-    return num - 2
-
 with open(sys.argv[1], "r") as f:
     
     total = 0
@@ -15,7 +10,10 @@ with open(sys.argv[1], "r") as f:
         modtotal = 0
 
         while num > 0:
-            num = calc_fuel(num)
+            num = num / 3
+            num = math.floor(num)
+            num -= 2
+
             if num > 0:
                 modtotal += num
 
