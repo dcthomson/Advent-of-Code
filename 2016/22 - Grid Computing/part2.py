@@ -1,6 +1,7 @@
 import sys
 import copy
 import curses
+import time
 
 class color:
    GREEN = '\033[92m'
@@ -25,126 +26,98 @@ class Node:
         return retstr
 
 
-class Grid:
-    def __init__(self, nodes, steps=0, empty=False, changes=[]):
-        self.nodes = grid
-        self.steps = steps
-        if empty:
-            self.empty = empty
-        else:
-            self.empty = self.getempty()
-        for n in changes:
-            self.nodes[(n.x, n.y)] = n
+def drawgrid(grid, stdscr):
+    longest = 0
+    for _, n in grid.items():
+        l = len(str(n.used) + "/" + str(n.size))
+        if l > longest:
+            longest = l
 
-    def stringify(self):
-        retstr = ""
-        for k in sorted(self.nodes):
-            n = self.nodes[k]
-            for i in (n.x, n.y, n.size, n.used, n.avail, n.thedata):
-                retstr += str(i) + "-"
-            
-        return retstr[:-1]
+    empty = None
 
+    for _, node in grid.items():
+        s = str(node.used) + "/" + str(node.size)
 
-    def setdata(self):
-        for _, n in self.nodes.items():
+        for _ in range(len(s), longest):
+            s = " " + s
+        
+        if node.used == 0:
+            empty = (node.x, node.y)
+            stdscr.attron(curses.color_pair(1))
+        elif node.thedata:
+            stdscr.attron(curses.color_pair(3))
+        stdscr.addstr(node.y + 1, node.x * (longest + 1), s)
+        stdscr.attroff(curses.color_pair(1))
+        stdscr.attroff(curses.color_pair(3))
+        stdscr.refresh()
+    return empty
+
+def mainprog(stdscr):
+
+    stdscr.clear()
+    stdscr.refresh()
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+
+    moves = 0
+
+    grid = {}
+
+    with open(sys.argv[1]) as f:
+        for line in f:
+            if line.startswith("/dev/grid"):
+                splitline = line.split()
+                (_, x, y) = splitline[0].split("-")
+                x = int(x.lstrip("x"))
+                y = int(y.lstrip("y"))
+                size = int(splitline[1].rstrip("T"))
+                used = int(splitline[2].rstrip("T"))
+                avail = int(splitline[3].rstrip("T"))
+                grid[(x,y)] = Node(x, y, size, used, avail)
+
+    for _, n in grid.items():
+        try:
+            _ = grid[(n.x, n.y - 1)]
+        except:
             try:
-                _ = self.nodes[(n.x, n.y - 1)]
+                _ = grid[(n.x + 1, n.y)]
             except:
+                n.thedata = True
+
+    empty = drawgrid(grid, stdscr)
+
+    while not grid[(0, 0)].thedata:
+
+        k = stdscr.getch()
+        for dir in ((curses.KEY_DOWN, "down", (empty[0], empty[1] + 1)),
+                    (curses.KEY_UP, "up", (empty[0], empty[1] - 1)),
+                    (curses.KEY_RIGHT, "right", (empty[0] + 1, empty[1])),
+                    (curses.KEY_LEFT, "left", (empty[0] - 1, empty[1]))):
+            if k == dir[0]:
                 try:
-                    _ = self.nodes[(n.x + 1, n.y)]
+                    if grid[empty].size >= grid[dir[2]].used:
+                        if grid[dir[2]].thedata:
+                            grid[empty].thedata = True
+                            grid[dir[2]].thedata = False
+                        grid[empty].used = grid[dir[2]].used
+                        grid[dir[2]].used = 0
+                        empty = drawgrid(grid, stdscr)
+                        moves += 1
+
+                    else:
+                        stdscr.addstr(0, 0, "Can't move " + dir[1] + "not enough room                          ")
                 except:
-                    n.thedata = True
-                    # print(n)
-
-    def getempty(self):
-        for _, n in self.nodes.items():
-            if n.used == 0:
-                return n
-
-    def __str__(self):
-        retstr = ""
-        longest = 0
-        for _, n in self.nodes.items():
-            l = len(str(n.used) + "/" + str(n.size))
-            if l > longest:
-                longest = l
+                    stdscr.addstr(0, 0, "Can't move " + dir[1] + ", " + dir[1] + " doesn't exist                                    ")
         
-        y = 0
-        for k in sorted(self.nodes.keys(), key=lambda n: (n[1], n[0])):
-            node = self.nodes[k]
-            if node.y != y:
-                retstr += "\n"
-                y = node.y
-            s = str(node.used) + "/" + str(node.size)
-            for _ in range(len(s), longest):
-                retstr += " "
-            retstr += str(node.used) + "/" + str(node.size) + "  "
-        return retstr
-    
-    
-    def getNextMoves(self):
-        nodes = []
-        for c in ((self.empty.x, self.empty.y - 1),
-                  (self.empty.x, self.empty.y + 1),
-                  (self.empty.x - 1, self.empty.y),
-                  (self.empty.x + 1, self.empty.y)):
-            try:
-                nodes.append(self.nodes[c])
-            except:
-                pass
+    return moves
 
-        grids = []
 
-        for node in nodes:
-            if node.used <= self.empty.size:
-                # if data fits
-                used = copy.deepcopy(node)
-                empty = copy.deepcopy(self.empty)
-            
-                empty.used = used.used
-                if used.thedata:
-                    empty.thedata = True
-                    used.thedata = False
-                grids.append(Grid(self.nodes, self.steps + 1, used, [empty]))
-        return grids
-        
 
-grid = {}
+def main():
+    moves = curses.wrapper(mainprog)
+    print(moves)
 
-with open(sys.argv[1]) as f:
-    for line in f:
-        if line.startswith("/dev/grid"):
-            splitline = line.split()
-            (_, x, y) = splitline[0].split("-")
-            x = int(x.lstrip("x"))
-            y = int(y.lstrip("y"))
-            size = int(splitline[1].rstrip("T"))
-            used = int(splitline[2].rstrip("T"))
-            avail = int(splitline[3].rstrip("T"))
-            grid[(x,y)] = Node(x, y, size, used, avail)
-
-g = Grid(grid)
-
-g.setdata()
-
-print(g)
-
-Q = [g]
-
-visited = {}
-
-while Q:
-    print(visited)
-    g = Q.pop(0)
-    if g.nodes[(0, 0)].thedata:
-
-        print(g.steps)
-        break
-    for ng in g.getNextMoves():
-        ngstr = ng.stringify()
-        if ngstr not in visited:
-            Q.append(ng)
-            visited[ngstr] = True
-
-print("DONE")
+if __name__ == "__main__":
+    main()
