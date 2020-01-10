@@ -31,8 +31,7 @@ DONE, YAY!
 <BR>
 <br>
 2016<br>
-22.2 Grid Computing - moving data (df)<br>
-25.1-2 Clock Signal - assembunny<br>
+DONE, YAY!<br>
 <br>
 2015<br>
 DONE, YAY!
