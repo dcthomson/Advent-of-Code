@@ -3,7 +3,11 @@ import os.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 import OpcodeComputer
 
-# BFS
+# BFS - won't work cuz the robot can't jump to the next spot in queue
+
+# check all possible directions and go the way that hasn't been traveled yet.
+# if all traveled, go the way that was traveled the longest ago (keep track
+# of coords and what step it was last traveled at)
 
 line = ""
 
