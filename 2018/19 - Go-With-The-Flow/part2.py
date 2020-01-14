@@ -22,21 +22,22 @@ class Device:
             self.B = instruction[2]
             self.C = instruction[3]
             self.regs[self.ipreg] = self.ip
-#            prtstr = "ip=%s %s " % (self.ip, self.regs)
-#            prtstr += "%s %s %s %s " % (op, self.A, self.B, self.C)
+            prtstr = "ip=%s %s " % (self.ip, self.regs)
+            # prtstr += "%s %s %s %s " % (op, self.A, self.B, self.C)
             instruction[0]()
-#            prtstr += str(self.regs)
+            prtstr += "=> "
+            prtstr += str(self.regs)
             self.ip = self.regs[self.ipreg] + 1
-#            print prtstr
-            print(self.regs)
-#             i = 0
-#             print(instruction)
-#             for reg in self.regs:
-#                 print(i, reg)
-#                 i += 1
-            # time.sleep(1)
+            print(prtstr)
+            # print(self.regs)
+            # i = 0
+            # print(instruction)
+            # for reg in self.regs:
+            #     print(i, reg)
+            #     i += 1
+            # time.sleep(.5)
             # os.system('clear')
-        # print "reg 0: %s" % (self.regs[0])
+        print("reg 0: %s" % (self.regs[0]))
 
     def __str__(self):
         return str(self.regs)
