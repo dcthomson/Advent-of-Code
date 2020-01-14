@@ -1,27 +1,34 @@
-import re
-import collections
+# Q should be an ordered dict with coord and tool key and minutes (steps) value
+# hmmmm, maybe not, lets Q up a list of objects, then sort them by minute (steps)
 
-input_lines = []
-with open("input.txt", 'r') as f:
-    for line in f:
-        line = line.strip()
-        input_lines.append(line)
 
-a,b = map(int, [re.findall('\d+', input_lines[i])[1] for i in [22, 24]])
-number_to_factorize = 10551236 + a * 22 + b
 
-factors = collections.defaultdict(lambda: 0)
-possible_prime_divisor = 2
-while possible_prime_divisor ** 2 <= number_to_factorize:
-  while number_to_factorize % possible_prime_divisor == 0:
-    number_to_factorize /= possible_prime_divisor
-    factors[possible_prime_divisor] += 1
-  possible_prime_divisor += 1
-if number_to_factorize > 1:
-  factors[number_to_factorize] += 1
+# HOW TO SORT OBJECTS
+customObjects = [obj1, obj2, obj3, obj4, obj5]
+ 
+# One line sort function method using an inline lambda function lambda x: x.date
+# The value for the key param needs to be a value that identifies the sorting property on the object
+customObjects.sort(key=lambda x: x.date, reverse=True)
+ 
+for obj in customObjects:
+	print("Sorted Date from obj: " +str(obj.date) + " with title: " +obj.title)
 
-sum_of_divisors = 1
-for prime_factor in factors:
-  sum_of_divisors *= (prime_factor ** (factors[prime_factor] + 1) - 1) / (prime_factor - 1)
 
-print(sum_of_divisors)
+
+
+
+# BFS
+BFS (G, s)                   //Where G is the graph and s is the source node
+      let Q be queue.
+      Q.enqueue( s ) //Inserting s in queue until all its neighbour vertices are marked.
+
+      mark s as visited.
+      while ( Q is not empty)
+           //Removing that vertex from queue,whose neighbour will be visited now
+           v  =  Q.dequeue( )
+
+          //processing all the neighbours of v  
+          for all neighbours w of v in Graph G
+               if w is not visited 
+                        Q.enqueue( w )             //Stores w in Q to further visit its neighbour
+                        mark w as visited.
