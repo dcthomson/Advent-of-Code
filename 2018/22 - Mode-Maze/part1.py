@@ -44,15 +44,15 @@ class Coord:
             else:
                 return False    
 
-    def printChar(self):
+    def getChar(self):
         if self.type == 0:
-            sys.stdout.write(".")
+            return "."
         elif self.type == 1:
-            sys.stdout.write("=")
+            return "="
         elif self.type == 2:
-            sys.stdout.write("|")
+            return "|"
         else:
-            sys.stdout.write("E")
+            return "E"
 
 for line in file:
     if line.startswith("depth"):
@@ -81,9 +81,11 @@ while not allgood:
                 if not coords[(x, y)].el:
                     allgood = False
 
+cave = {}
+
 for y in range(0, targety + 1):
     for x in range(0, targetx + 1):
-        coords[(x, y)].printChar()
+        cave[(x, y)] = coords[(x, y)].getChar()
     print
 
 
