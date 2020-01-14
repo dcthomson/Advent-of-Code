@@ -1,15 +1,19 @@
 import sys
+import time
 
 file = open(sys.argv[1], "r")
 
 class Device:
-    def __init__(self, ipreg, instructions):
+    def __init__(self, ipreg, instructions, reg0):
         self.ipreg = int(ipreg)
         self.ip = 0
-        self.regs = [0,0,0,0,0,0]
+        self.reg0 = reg0
+        self.regs = [reg0,0,0,0,0,0]
         self.instructions = instructions
+        self.nums = []
 
     def run(self):
+        # executions = 0
         while 0 <= self.ip < len(self.instructions):
             instruction = self.instructions[self.ip]
             (op, A, B, C) = instruction.split(" ")
@@ -23,7 +27,15 @@ class Device:
             method()
             prtstr += str(self.regs)
             self.ip = self.regs[self.ipreg] + 1
+            # if self.ip == 28:
+            #     if self.regs[2] not in self.nums:
+            #         print(self.regs[2])
+            #         self.nums.append(self.regs[2])
             print(prtstr)
+            # time.sleep(.5)
+            # executions += 1
+            # if executions > 1000:
+            #     return True
 
     def __str__(self):
         return str(self.regs)
@@ -101,6 +113,17 @@ for line in file:
         ip = line.split(" ")[1]
     else:
         instructions.append(line)
-        
-dev = Device(ip, instructions)
+
+i = 0
+dev = Device(ip, instructions, i)
 dev.run()
+
+
+# i = 148800
+# while True:
+#     dev = Device(ip, instructions, i)
+#     if dev.run() is None:
+#         print("found one")
+#     if not i % 1000:
+#         print(i)
+#     i += 1

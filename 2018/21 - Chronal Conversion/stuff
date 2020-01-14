@@ -1,0 +1,37 @@
+a = 0   # reg 0
+b = 0   # reg 1
+c = 0   # reg 2
+d = 0   # reg 3
+f = 0   # reg 5
+
+00: c = 123
+01: c = c & 456
+02: c = 1 if c == 72 else c = 0
+03: GOTO 5
+04: GOTO 1
+05: c = 0
+06: f = c | 65536
+07: c = 5234604
+08: d = f & 255
+09: c += d
+10: c = c & 16777215
+11: c *= 65899
+12: c = c & 16777215
+13: d = 1 if 256 > f else d = 0
+14: GOTO d + 15
+15: GOTO 17
+16: GOTO 28
+17: d = 0
+18: b = d + 1
+19: b *= 256
+20: b = 1 if b > f else b = 0
+21: GOTO b + 22
+22: GOTO 24
+23: GOTO 25
+24: d += 1
+25: GOTO 18
+26: f = d
+27: GOTO 8
+28: d = 1 if a == c else d = 0
+29: GOTO 30 + d
+30: GOTO 6
