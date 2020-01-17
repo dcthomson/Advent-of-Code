@@ -171,16 +171,6 @@ class Cube:
                     return True
         return False
 
-    # def getintersectcount(self):
-    #     return self.insidecount + self.intersectcount
-
-    # def inside(self, nb):     # check if nanobot center is inside cube
-    #     if nb.c.x > self.o.x and nb.c.x < self.o.x + self.size:
-    #         if nb.c.y > self.o.y and nb.c.y < self.o.y + self.size:
-    #             if nb.c.z > self.o.z and nb.c.z < self.o.z + self.size:
-    #                 return True
-    #     return False
-
     def outside(self, nb):
         if nb.c.x + nb.radius < self.o.x:
             return True
@@ -210,7 +200,6 @@ class Cube:
             dist_squared -= abs(nb.c.z - self.o.z) ** 2
         elif nb.c.z > self.o.z + self.size:
             dist_squared -= abs(nb.c.z - self.o.z + self.size) ** 2
-#        print("ds:", dist_squared)
         return dist_squared > 0
 
     def divideintoeight(self):
@@ -220,12 +209,13 @@ class Cube:
             offset = 1
         else:
             size = self.size / 2
+
             if self.size % 2 == 0:
                 # even size
                 offset = size
             else:
                 # odd size
-                offset = int(size)
+                offset = math.floor(size)
                 size = math.ceil(size)
 
         # Front cubes
@@ -298,29 +288,36 @@ for nanobot in nanobots:
         max = abs(nanobot.c.y)
     if abs(nanobot.c.z) > max:
         max = abs(nanobot.c.z)
-print(max)
 
-newcube = Cube(Coord(-max, -max, -max), max * 2)
+i = 1
+while i < max:
+    i *= 2
 
-while newcube.size > 0:
-#    print(newcube)
-    cubes = newcube.divideintoeight()
-    for c in cubes:
+max = i #lets make the squares all powers of 2 :)
+
+newcubes = [Cube(Coord(-max, -max, -max), max * 2)]
+
+while newcubes[0].size >= 1:
+    dividedcubes = []
+    for nc in newcubes:
+        dividedcubes += nc.divideintoeight()
+    for c in dividedcubes:
         for nanobot in nanobots:
             if c.nanobotinside(nanobot):
                 c.nbcount += 1
-    last = False
-    if newcube.size == 0:
-        last = True
-    print("size:", newcube.size)
-    newcube = False
-    for c in cubes:
-        print(c)
-        if not newcube or c.nbcount > newcube.nbcount:
-            newcube = c
-    if last:
-        break
-    print()
 
-print(newcube.o)
-print(int(abs(newcube.o.x) + abs(newcube.o.y) + abs(newcube.o.z)))
+    newcubes = []
+    nccount = 0
+    for c in dividedcubes:
+        if not newcubes:
+            newcubes.append(c)
+            nccount = c.nbcount
+        elif c.nbcount == nccount:
+            newcubes.append(c)
+        elif c.nbcount > nccount:
+            newcubes = []
+            newcubes.append(c)
+            nccount = c.nbcount
+
+n = newcubes[0]
+print(int(abs(n.o.x) + abs(n.o.y) + abs(n.o.z)))  
