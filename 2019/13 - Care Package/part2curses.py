@@ -2,9 +2,6 @@ import sys
 import os
 import curses
 import time
-
-import os.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 import OpcodeComputer
 
 game = {}
