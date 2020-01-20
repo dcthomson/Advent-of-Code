@@ -21,10 +21,7 @@ TO DO:<br>
 25.1-2  Cryostasis<br>
 <br>
 2018<br>
-19.2    More registers (figure out loop)<br>
-21.1-2  More registers<br>
-22.2    rocky wet narrow tools pathing<br>
-23.2    4D nanobots -- octree<br>
+DONE, YAY!<br>
 <br>
 2017<br>
 DONE, YAY!
