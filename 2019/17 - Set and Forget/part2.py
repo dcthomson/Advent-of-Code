@@ -1,6 +1,7 @@
 import sys
 import os
 import OpcodeComputer
+import time
 
 intcode = None
 
@@ -25,20 +26,14 @@ A = getascii("R,4,L,10,L,10")
 B = getascii("L,8,R,12,R,10,R,4")
 C = getascii("L,8,L,8,R,10,R,4")
 
-print(mmr)
-print(A)
-print(B)
-print(C)
-
 # [65, 44, 66, 44, 65, 44, 66, 44, 65, 44, 67, 44, 66, 44, 67, 44, 65, 44, 67, 10]
 # [82, 44, 52, 44, 76, 44, 49, 48, 44, 76, 44, 49, 48, 10]
 # [76, 44, 56, 44, 82, 44, 49, 50, 44, 82, 44, 49, 48, 44, 82, 44, 52, 10]
 # [76, 44, 56, 44, 76, 44, 56, 44, 82, 44, 49, 48, 44, 82, 44, 52, 10]
 
-
 inpoot = mmr + A + B + C
 
-print(inpoot)
+inpoot += [110, 10]
 
 map = {}
 
@@ -51,31 +46,19 @@ while intcode.done == False:
         inputted = True
     else:
         ascii = intcode.runOpcode()
+
     try:
         if ascii == 10:
-            # os.system('cls||clear')
             x = 0
             y += 1
-            print()
+            # print()  # uncomment for output
         else:
             map[(x, y)] = str(chr(ascii))
             x += 1
-            print(str(chr(ascii)), end="")
+            if 0 <= ascii <= 127: 
+                # print(str(chr(ascii)), end="") # uncomment for output
+                pass        
+            else:
+                print(ascii)
     except:
         break
-
-intersectionsum = 0
-
-for k, v in map.items():
-    try:
-        if (v == "#" and
-            map[(k[0] - 1, k[1])] == "#" and
-            map[(k[0] + 1, k[1])] == "#" and
-            map[(k[0], k[1] + 1)] == "#" and
-            map[(k[0], k[1] - 1)] == "#"):
-            # found intersection
-            intersectionsum += k[0] * k[1]
-    except:
-        pass
-
-print(intersectionsum)
