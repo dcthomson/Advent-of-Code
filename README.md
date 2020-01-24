@@ -9,7 +9,6 @@ Christmas advent calendar of programming challenges
 
 TO DO:<br>
 2019<br>
-15.1-2  Oxygen System - Intcode<br>
 16.2    Flawed Frequency Transmission<br>
 18.1-2  Many-Worlds Interpretation - keys and doors<br>
 20.2    Donut Maze<br>
