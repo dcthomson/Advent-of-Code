@@ -46,7 +46,7 @@ with open(sys.argv[1]) as f:
         y += 1
 
 # FIND PORTALS
-portals = {}
+iportals = {}
 oportals = {}
 # OUTER
 
@@ -93,37 +93,40 @@ for y in range(innertopright[0], innerbottomright[0]):
     if donut[(y, x)] == ".":
         iportals[(y, x)] = donut[(y, x - 2)] + donut[(y, x - 1)]
 
-portalpairs = {}
+iportalpairs = {}
+oportalpairs = {}
 start = None
 end = None
 
-for k, v in portals.items():
-    for k2, v2 in portals.items():
+
+# portals = {}
+# for p in (iportals, oportals):
+#     portals.update(p)
+
+for k, v in iportals.items():
+    for k2, v2 in oportals.items():
         if v == v2 and k != k2:
-            portalpairs[k] = k2
+            iportalpairs[k] = k2
         if v == "AA":
-            start = k
+            start = (k[0], k[1], 0)
         if v == "ZZ":
-            end = k
+            end = (k[0], k[1], 0)
+for k, v in oportals.items():
+    for k2, v2 in iportals.items():
+        if v == v2 and k != k2:
+            oportalpairs[k] = k2
+        if v == "AA":
+            start = (k[0], k[1], 0)
+        if v == "ZZ":
+            end = (k[0], k[1], 0)
 
-# printdonut(donut)
-# print()
-# print(outertopleft)
-# print(outertopright)
-# print(innertopleft)
-# print(innertopright)
-# print(innerbottomleft)
-# print(innerbottomright)
-# print(outerbottomleft)
-# print(outerbottomright)
-
-# print(portals)
-# print(portalpairs)
 
 visited = {}
 
+
 distance = 0
 Q = [(start, 0)]
+visited[(start, 0)] = 0
 
 while Q:
     node, distance = Q.pop(0)
@@ -134,15 +137,21 @@ while Q:
         visited[node] = distance
         neighbors = []
         if donut[(node[0] - 1, node[1])] == ".":
-            neighbors.append((node[0] - 1, node[1]))
+            neighbors.append((node[0] - 1, node[1], node[2]))
         if donut[(node[0], node[1] + 1)] == ".":
-            neighbors.append((node[0], node[1] + 1))
+            neighbors.append((node[0], node[1] + 1, node[2]))
         if donut[(node[0] + 1, node[1])] == ".":
-            neighbors.append((node[0] + 1, node[1]))
+            neighbors.append((node[0] + 1, node[1], node[2]))
         if donut[(node[0], node[1] - 1)] == ".":
-            neighbors.append((node[0], node[1] - 1))
-        if (node[0], node[1]) in portalpairs:
-            neighbors.append(portalpairs[(node[0], node[1])])
+            neighbors.append((node[0], node[1] - 1, node[2]))
+        if (node[0], node[1]) in iportalpairs:
+            x, y = iportalpairs[(node[0], node[1])]
+            neighbors.append((x, y, node[2] - 1))
+        if (node[0], node[1]) in oportalpairs:
+            if node[2] != 0:
+                x, y = oportalpairs[(node[0], node[1])]
+                neighbors.append((x, y, node[2] + 1))
         
         for neighbor in neighbors:
-            Q.append((neighbor, distance + 1))
+            if neighbor not in visited:
+                Q.append((neighbor, distance + 1))
