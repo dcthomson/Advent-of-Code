@@ -42,13 +42,10 @@ Q = commands.copy()
 while True:
     c = Q.pop(0)
 
-    print(c, end='')
     inpoot = getascii(c)
     inpoot += getascii(end)
 
     intcode.reset()
-
-    print()
 
     inputted = False
     while True:
@@ -69,6 +66,7 @@ while True:
                     break
                 pass
             else:
+                print(c)
                 print(ascii)
                 exit()
 
