@@ -18,9 +18,9 @@ class Opcode:
         return self.done
 
     def runOpcode(self, inpoot=None):
-        if self.done:
-            print("Exiting")
-            exit()
+        # if self.done:
+        #     print("Exiting")
+        #     exit()
         if inpoot is not None:
             # self.input = [inpoot]
             try:
@@ -124,7 +124,7 @@ class Opcode:
                     else:
                         # _setvalue(self.nums[self.index + 1], self.input.pop(0))
                         val = self.input.pop(0)
-                        print(val)
+                        # print(val)
                         _setvalue(params[0], val)
                         # print("Got 1 input")
                     setval = True
