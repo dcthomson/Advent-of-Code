@@ -1,5 +1,5 @@
 class Opcode:
-    def __init__(self, s, name=False, replacements=False):
+    def __init__(self, s, name=None, replacements=False):
         self.setInput(s, replacements)
         self.name = name
         self.done = False
@@ -18,9 +18,9 @@ class Opcode:
         return self.done
 
     def runOpcode(self, inpoot=None):
-        if self.done:
-            print("Exiting")
-            exit()
+        # if self.done:
+        #     print("Exiting")
+        #     exit()
         if inpoot is not None:
             # self.input = [inpoot]
             try:
@@ -115,16 +115,17 @@ class Opcode:
                 setval = False
                 while setval == False:
                     if len(self.input) == 0:                       
-                        if self.name:
-                            # _setvalue(self.nums[self.index + 1], int(input(self.name + ": Enter input: ")))
-                            _setvalue(params[0], int(input(self.name + ": Enter input: ")))
-                        else:
-                            # _setvalue(self.nums[self.index + 1], int(input("Enter input: ")))
-                            _setvalue(params[0], int(input("Enter input: "))) 
+                        # if self.name is not None:
+                        #     # _setvalue(self.nums[self.index + 1], int(input(self.name + ": Enter input: ")))
+                        #     _setvalue(params[0], int(input("NIC " + str(self.name) + ": Enter input: ")))
+                        # else:
+                        #     # _setvalue(self.nums[self.index + 1], int(input("Enter input: ")))
+                        #     _setvalue(params[0], int(input("Enter input: "))) 
+                        _setvalue(params[0], -1)
                     else:
                         # _setvalue(self.nums[self.index + 1], self.input.pop(0))
                         val = self.input.pop(0)
-                        print(val)
+                        # print("val:", val)
                         _setvalue(params[0], val)
                         # print("Got 1 input")
                     setval = True
