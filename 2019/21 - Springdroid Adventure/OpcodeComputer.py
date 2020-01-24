@@ -10,9 +10,17 @@ class Opcode:
     def setInput(self, s, replacements):
         nums = s.split(",")
         self.nums = list(map(int, nums))
+        self.backupnums = self.nums.copy()
         if replacements:
             for k, v in replacements.items():
                 self.nums[k] = v
+
+    def reset(self):
+        self.done = False
+        self.index = 0
+        self.relativebase = 0
+        self.input = []
+        self.nums = self.backupnums.copy()
 
     def checkifdone(self):
         return self.done
