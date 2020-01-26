@@ -29,9 +29,9 @@ inpoot = []
 intcode = None
 
 instructions = ["NOT", "AND", "OR"]
-reg1 = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "T", "J"]
+reg1 = ["A", "B", "C", "D", "T", "J"]
 reg2 = ["T", "J"]
-end = "RUN\n"
+end = "WALK\n"
 commandend = getascii(end)
 
 commands = []
