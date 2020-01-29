@@ -1,6 +1,21 @@
+NOT E J
+NOT H T
+AND T J
+NOT J J
+
+# jump if C is missing and D is there @--.#
 NOT C T
 AND D T
+AND T J
+
+# jump if B is missing and D is there @--.#
+NOT B T
+AND D T
 OR T J
+
+# jump if A is missing and D is there @.--#
 NOT A T
+AND D T
 OR T J
+
 RUN

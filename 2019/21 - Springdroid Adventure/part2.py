@@ -15,7 +15,11 @@ def getascii(s):
 instructions = []
 with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "instructions2.txt")) as w:
     for line in w:
-        instructions.append(line)
+        if line != "\n":
+            # skip blank lines
+            if not line.startswith("#"):
+                # skip comments
+                instructions.append(line)
 
 inpoot = []
 for instruction in instructions:
