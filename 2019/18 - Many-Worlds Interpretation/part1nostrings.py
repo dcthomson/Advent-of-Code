@@ -6,6 +6,7 @@ import sys
 import string
 import collections
 import time
+import queue
 
 maze = {}
 doors = {}
@@ -23,9 +24,11 @@ with open(sys.argv[1]) as f:
             elif c in string.ascii_uppercase:
                 doors[(x,y)] = c
             elif c == "@":
-                current = ((x, y), [])
+                current = (x, y)
             x += 1
         y += 1
+
+keylen = len(keys)
 
 # print(keys)
 # print(doors)
@@ -38,46 +41,47 @@ longest = 0
 
 t0 = time.time()
 
-visited = []
-Q = collections.OrderedDict()
-Q[stringify(current)] = 1
-while Q:
-    node = Q.popitem(last=False)
-    steps = node[1]
-    node = node[0]
-    if node not in visited:
+visited = {}
+Q = queue.Queue()
+Q.put((current, "", 0))
+while True:
+    node = Q.get()
+    # print("node:", node)
+    steps = node[2]
+    keys = node[1]
+    coord = node[0]
+    # print(steps, coord, keys)
+    if (coord, keys) not in visited:
         # print(steps, node)
-        visited.append(node)
-        nodelist = node.split("-") 
-        nodecoord = (int(nodelist[0]), int(nodelist[1]))
-        nodekeys = list(nodelist[2])
+        visited[(coord, keys)] = steps
         neighbors = []
-        for coord in ((nodecoord[0] + 1, nodecoord[1]),
-                      (nodecoord[0] - 1, nodecoord[1]),
-                      (nodecoord[0], nodecoord[1] + 1),
-                      (nodecoord[0], nodecoord[1] - 1)):
+        for coord in ((coord[0] + 1, coord[1]),
+                      (coord[0] - 1, coord[1]),
+                      (coord[0], coord[1] + 1),
+                      (coord[0], coord[1] - 1)):
             newkeys = False
             if coord in maze:
                 if maze[coord] != "#":
                     if maze[coord] in string.ascii_lowercase:
-                        if maze[coord] not in nodekeys:
-                            newkeys = nodekeys.copy()
-                            newkeys.append(maze[coord])
-                            newkeys.sort()
+                        if maze[coord] not in keys:
+                            newkeys = keys + maze[coord]
+                            newkeys = ''.join(sorted(newkeys))
                             # check if done
-                            if len(newkeys) == len(keys):
-                                print("DONE:", steps)
+                            newkeylen = len(newkeys)
+                            if newkeylen == keylen:
+                                print("DONE:", steps + 1)
                                 exit()
-                            if len(newkeys) > longest:
+                            if newkeylen > longest:
                                 print(round(time.time() - t0, 2), steps, newkeys)
                                 longest = len(newkeys)
                     elif maze[coord] in string.ascii_uppercase:
-                        if maze[coord].lower() not in nodekeys:
+                        if maze[coord].lower() not in keys:
                             # found door without key :(
                             continue
                     if newkeys:
                         neighbors.append((coord, newkeys))
                     else:
-                        neighbors.append((coord, nodekeys))
+                        neighbors.append((coord, keys))
         for neighbor in neighbors:
-            Q[stringify(neighbor)] = steps + 1
+            # print("neighbor:", neighbor)
+            Q.put((neighbor[0], neighbor[1], steps + 1))
