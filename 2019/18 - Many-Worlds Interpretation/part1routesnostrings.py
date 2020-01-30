@@ -79,12 +79,12 @@ for letter in string.ascii_lowercase:
                 y = int(y)
                 visited.append((x, y))
 
-for k, v in routes.items():
-    print()
-    print(k)
-    for k2, v2 in v.items():
-        print("  ", k2 + ": ", end='')
-        print(v2)
+# for k, v in routes.items():
+#     print()
+#     print(k)
+#     for k2, v2 in v.items():
+#         print("  ", k2 + ": ", end='')
+#         print(v2)
 
 # for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
 #     print(k, v)
@@ -92,17 +92,20 @@ for k, v in routes.items():
 # exit()
 
 shortest = False
-
+longest = 0
 Q = [(0, ["@"])]
 
 while Q:
-    node = Q.pop()
+    node = Q.pop(0)
     steps = int(node[0])
     keys = node[1]
     # print(shortest, len(Q), len(keys), steps)
     if shortest:
         if steps >= shortest:
             continue
+    if len(keys) > longest:
+        print("longest:", keys)
+        longest = len(keys)
     if len(keys) == numkeys + 1:
         if shortest:
             if steps <= shortest:
