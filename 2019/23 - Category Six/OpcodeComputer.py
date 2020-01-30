@@ -17,6 +17,9 @@ class Opcode:
     def checkifdone(self):
         return self.done
 
+    def receivePacket(self, ints=[]):
+        self.input.append(ints)
+
     def runOpcode(self, inpoot=None):
         # if self.done:
         #     print("Exiting")
@@ -53,7 +56,7 @@ class Opcode:
                 for i in range(0, pcount):
                     # print("i:", i)
                     # return parameter values
-                    _checksignal(self.index + pnum)
+                    _setvalue(self.index + pnum, 0, False)
                     if ptype[i] == 0:
                         index = self.nums[self.index + pnum]
                     elif ptype[i] == 1:
@@ -63,7 +66,7 @@ class Opcode:
                     
                     # print("index:", index)
 
-                    _checksignal(index)
+                    _setvalue(index, 0, False)
                     if getindex:
                         params.append(index)
                     else:
@@ -72,9 +75,7 @@ class Opcode:
                     pnum += 1
 
                 return params
-
-            def _checksignal(index):
-                _setvalue(index, 0, False)
+                
 
             def _setvalue(index, value, overwrite=True):
                 # when overwrite is set to false we do not overwrite the value,
@@ -121,6 +122,7 @@ class Opcode:
                         # else:
                         #     # _setvalue(self.nums[self.index + 1], int(input("Enter input: ")))
                         #     _setvalue(params[0], int(input("Enter input: "))) 
+                        # return
                         _setvalue(params[0], -1)
                     else:
                         # _setvalue(self.nums[self.index + 1], self.input.pop(0))
