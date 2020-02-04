@@ -6,6 +6,8 @@ class Opcode:
         self.index = 0
         self.relativebase = 0
         self.input = []
+        self.packet = []
+        self.inputnegone = False
 
     def setInput(self, s, replacements):
         nums = s.split(",")
@@ -18,7 +20,8 @@ class Opcode:
         return self.done
 
     def receivePacket(self, ints=[]):
-        self.input.append(ints)
+        for i in ints:
+            self.input.append(i)
 
     def runOpcode(self, inpoot=None):
         # if self.done:
@@ -111,28 +114,41 @@ class Opcode:
 
                 params = _getparams(self.nums[self.index], 1, True)
 
-                # print(params)
-
-                setval = False
-                while setval == False:
-                    if len(self.input) == 0:                       
-                        # if self.name is not None:
-                        #     # _setvalue(self.nums[self.index + 1], int(input(self.name + ": Enter input: ")))
-                        #     _setvalue(params[0], int(input("NIC " + str(self.name) + ": Enter input: ")))
-                        # else:
-                        #     # _setvalue(self.nums[self.index + 1], int(input("Enter input: ")))
-                        #     _setvalue(params[0], int(input("Enter input: "))) 
-                        # return
+                if self.input:
+                    val = self.input.pop(0)
+                    _setvalue(params[0], val)
+                    self.index += 2
+                else:
+                    if not self.inputnegone:
                         _setvalue(params[0], -1)
+                        self.inputnegone = True
                     else:
-                        # _setvalue(self.nums[self.index + 1], self.input.pop(0))
-                        val = self.input.pop(0)
-                        # print("val:", val)
-                        _setvalue(params[0], val)
-                        # print("Got 1 input")
-                    setval = True
+                        self.inputnegone = False
+                        self.index += 2
+                        return
+                        
+                    # print(self.name, "Waiting for input!!!")
+                    # self.index += 2
+                    # return
+                # setval = False
+                # while setval == False:
+                #     if len(self.input) == 0:                       
+                #         # if self.name is not None:
+                #         #     # _setvalue(self.nums[self.index + 1], int(input(self.name + ": Enter input: ")))
+                #         #     _setvalue(params[0], int(input("NIC " + str(self.name) + ": Enter input: ")))
+                #         # else:
+                #         #     # _setvalue(self.nums[self.index + 1], int(input("Enter input: ")))
+                #         #     _setvalue(params[0], int(input("Enter input: "))) 
+                #         # return
+                #         _setvalue(params[0], -1)
+                #     else:
+                #         # _setvalue(self.nums[self.index + 1], self.input.pop(0))
+                #         val = self.input.pop(0)
+                #         print("val:", val)
+                #         _setvalue(params[0], val)
+                #         # print("Got 1 input")
+                #     setval = True
 
-                self.index += 2
 
             elif instcode == 4:
                 # output value
@@ -140,7 +156,9 @@ class Opcode:
 
                 self.index += 2
 
-                return params[0]
+                self.packet.append(params[0])
+
+                # return params[0]
 
             elif instcode == 5:
                 # JUMP-IF-TRUE
