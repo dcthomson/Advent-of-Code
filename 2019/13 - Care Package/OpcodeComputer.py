@@ -23,11 +23,11 @@ class Opcode:
             exit()
         if inpoot is not None:
             self.input = [inpoot]
-            try:
-                for i in inpoot:
-                    self.input.append(i)
-            except:
-                self.input.append(inpoot)
+            # try:
+            #     for i in inpoot:
+            #         self.input.append(i)
+            # except:
+            #     self.input.append(inpoot)
 
         while self.nums[self.index] != 99:
             instcode = int(str(self.nums[self.index])[-2:])
