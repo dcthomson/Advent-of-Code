@@ -124,7 +124,7 @@ class Opcode:
                     else:
                         # _setvalue(self.nums[self.index + 1], self.input.pop(0))
                         val = self.input.pop(0)
-                        print(val)
+                        # print(val)
                         _setvalue(params[0], val)
                         # print("Got 1 input")
                     setval = True
