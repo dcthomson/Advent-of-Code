@@ -86,7 +86,7 @@ def main(stdscr):
             paddley = getpaddley(game)
 
         if bally and paddley:
-            time.sleep(0.05)
+            time.sleep(0.005)
             if paddley == bally:
                 coord.append(opcode.runOpcode(0))
             elif paddley > bally:
