@@ -122,6 +122,7 @@ class Opcode:
                     if not self.inputnegone:
                         _setvalue(params[0], -1)
                         self.inputnegone = True
+                        self.index += 2
                     else:
                         self.inputnegone = False
                         self.index += 2
