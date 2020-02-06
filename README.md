@@ -11,7 +11,7 @@ TO DO:<br>
 2019<br>
 
 | Day |Stars|Problem|
-| :-: | --- | ----- |
+| :-: | :-: | ----- |
 | 16  | *   | Flawed Frequency Transmission |
 | 18  | *   | Many-Worlds Interpretation - keys and doors |
 | 22  | *   | Slam Shuffle - modular arithmatic |
