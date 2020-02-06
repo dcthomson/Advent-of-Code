@@ -9,12 +9,10 @@ Christmas advent calendar of programming challenges
 
 TO DO:<br>
 2019<br>
-16.2    Flawed Frequency Transmission<br>
-18.1-2  Many-Worlds Interpretation - keys and doors<br>
-21.2    Springdroid Adventure - Intcode<br>
-22.2    Slam Shuffle - modular arithmatic<br>
-23.1-2  Category Six - Intcode<br>
-25.1-2  Cryostasis<br>
+16 *    Flawed Frequency Transmission<br>
+18 *    Many-Worlds Interpretation - keys and doors<br>
+22 *    Slam Shuffle - modular arithmatic<br>
+25 **   Cryostasis<br>
 <br>
 2018<br>
 DONE, YAY!<br>
