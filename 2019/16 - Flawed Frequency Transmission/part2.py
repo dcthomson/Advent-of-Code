@@ -1,10 +1,11 @@
 import sys
 
 basepattern = [0, 1, 0, -1]
+# basepattern = [1,1,1,1,1,1,1,1]
 
 with open(sys.argv[1]) as f:
     signal = f.readline()
-    # turn string insto a list of ints
+    # turn string into a list of ints
     signal = list(map(int, list(signal)))
     signal *= 10000
     signalsize = len(signal)
@@ -23,7 +24,7 @@ with open(sys.argv[1]) as f:
             patternindex = 0
             total = 0
             for i in range(0, signalsize):
-
+                print(i, "/", signalsize)
                 if j == repeatcount:
                     j = 0
                     patternindex += 1
@@ -38,5 +39,7 @@ with open(sys.argv[1]) as f:
             newsignal.append(int(str(total)[-1]))
             # print(newsignal)
         signal = newsignal
+
+        print("".join(str(x) for x in signal))
 
     print("".join(str(x) for x in signal)[0:8])
