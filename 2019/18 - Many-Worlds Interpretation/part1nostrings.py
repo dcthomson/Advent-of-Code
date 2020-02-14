@@ -69,10 +69,10 @@ while True:
                             # check if done
                             newkeylen = len(newkeys)
                             if newkeylen == keylen:
-                                print("DONE:", steps + 1)
-                                exit()
+                                print("DONE:", round(time.time() - t0, 2), "---", steps + 1)
+                                sys.exit()
                             if newkeylen > longest:
-                                print(round(time.time() - t0, 2), steps, newkeys)
+                                print(round(time.time() - t0, 2), steps, maze[coord], coord, newkeys)
                                 longest = len(newkeys)
                     elif maze[coord] in string.ascii_uppercase:
                         if maze[coord].lower() not in keys:

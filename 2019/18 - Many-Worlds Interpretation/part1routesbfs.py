@@ -1,6 +1,7 @@
 import sys
 import string
-from collections import deque
+import queue
+from itertools import combinations
 
 maze = {}
 doors = {}
@@ -13,7 +14,7 @@ with open(sys.argv[1]) as f:
         x = 0
         for c in line:
             maze[(x, y)] = c
-            if c in string.ascii_lowercase or c == "@":
+            if c in string.ascii_lowercase:
                 keys[c] = (x, y)
             elif c in string.ascii_uppercase:
                 doors[c] = (x, y)
@@ -34,6 +35,8 @@ def stringify(coord, steps=0, intheway=list()):
         return ("%s-%s-%s-%s") % (coord[0], coord[1], steps, intheway)
     else:
         return ("%s-%s-%s-") % (coord[0], coord[1], steps)
+
+farthestdistance = 0
 
 for letter in string.ascii_lowercase:
     if letter in keys:
@@ -61,6 +64,8 @@ for letter in string.ascii_lowercase:
                                         alreadyhave = True
                                         break
                                 if not alreadyhave:
+                                    if steps + 1 > farthestdistance:
+                                        farthestdistance = steps + 1
                                     routes[letter][maze[coord]] = (steps + 1, intheway)
                                     if maze[coord] not in routes:
                                         routes[maze[coord]] = {}
@@ -79,60 +84,87 @@ for letter in string.ascii_lowercase:
                 y = int(y)
                 visited.append((x, y))
 
-# for k, v in routes.items():
-#     print()
-#     print(k)
-#     for k2, v2 in v.items():
-#         print("  ", k2 + ": ", end='')
-#         print(v2)
+for k, v in routes.items():
+    print()
+    print(k)
+    for k2, v2 in v.items():
+        print("  ", k2 + ": ", end='')
+        print(v2)
 
 # for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
 #     print(k, v)
 
-
-keycoords = keys
+# exit()
 
 shortest = False
 longest = 0
-Q = deque()
-Q.append((0, ["@"]))
-visited = {}
+Q = [(0, ["@"])]
+totalsteps = 0
 while Q:
-    node = Q.pop()
-    # print(len(Q), node)
-    steps = int(node[0])
-    keys = node[1]
-    if shortest and steps > shortest:
-        continue
-
-    current = keys[-1]
-    keysstr = ''.join(sorted(keys))
-
-    if (keycoords[current], keysstr) in visited:
-        if steps >= visited[(keycoords[current], keysstr)]:
-            continue
-    visited[(keycoords[current], keysstr)] = steps
-
-    if len(keys) == numkeys:
-        if not shortest or steps <= shortest:
-            shortest = steps
-            # print(shortest, keys)
-
-    current = keys[-1]
-    for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
-        # print(k, v)
-    # for k, v in routes[current].items():
-        if k in keys:
-            continue
-        somethinginway = False
-        for intheway in v[1]:
-            if intheway.lower() not in keys:
-                somethinginway = True
-                break
-                
-        if not somethinginway:
-            newkeys = keys + [k]
-            Q.append(((steps + int(v[0]), newkeys)))
+    totalsteps += 1
+    print(totalsteps, len(Q))
+    Q.sort()
+    toremove = []
+    i = 0
+    for node in Q:
+        steps = int(node[0])
+        keys = node[1]
+        if steps > totalsteps + farthestdistance:
+            break
+        if steps < totalsteps - farthestdistance:
+            toremove.append(i)
+        # print(shortest, len(Q), len(keys), steps)
+        # if shortest:
+        #     if steps >= shortest:
+        #         continue
+        if len(keys) > longest:
+            print("longest:", steps, keys)
+            longest = len(keys)
+        if len(keys) == numkeys + 1:
+            if shortest:
+                if steps <= shortest:
+                    shortest = steps
+                    print(shortest, keys)
+            else:
+                shortest = steps
+                print(shortest, keys)
+            print("totalsteps:", totalsteps)
+            sys.exit()
+        current = keys[-1]
+        # for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
+            # print(k, v)
+        for k, v in routes[current].items():
+            # if shortest:
+            #     if int(v[0]) >= shortest:
+            #         continue
+            if int(v[0]) + steps != totalsteps:
+                continue
+            if k in keys:
+                # print("Continuing")
+                continue
+            doorinway = False
+            untraversedkey = False
+            for intheway in v[1]:
+                if intheway.isupper():
+                    # door
+                    if intheway.lower() not in keys:
+                        doorinway = True
+                        break
+                else:
+                    # key or start
+                    if intheway not in keys:
+                        untraversedkey = True
+                        break
+                    
+            if not doorinway and not untraversedkey:
+                # print("keys:", keys)
+                newkeys = keys + [k]
+                # print("newkeys:", newkeys)
+                Q.append(((steps + int(v[0]), newkeys)))
+        i += 1
+    for i in sorted(toremove, reverse=True):
+        del Q[i]
 
 
 print(shortest)
+print(totalsteps)

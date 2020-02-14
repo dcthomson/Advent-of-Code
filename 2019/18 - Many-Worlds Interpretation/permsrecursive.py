@@ -1,5 +1,8 @@
+import string
+
 import sys
 import string
+import queue
 from itertools import combinations
 
 maze = {}
@@ -24,7 +27,7 @@ current = "@"
 
 numkeys = len(keys)
 
-lowers = list(keys.values())
+lowers = list(keys.keys())
 lowers.append("@")
 
 routes = {}
@@ -34,6 +37,8 @@ def stringify(coord, steps=0, intheway=list()):
         return ("%s-%s-%s-%s") % (coord[0], coord[1], steps, intheway)
     else:
         return ("%s-%s-%s-") % (coord[0], coord[1], steps)
+
+farthestdistance = 0
 
 for letter in string.ascii_lowercase:
     if letter in keys:
@@ -61,6 +66,8 @@ for letter in string.ascii_lowercase:
                                         alreadyhave = True
                                         break
                                 if not alreadyhave:
+                                    if steps + 1 > farthestdistance:
+                                        farthestdistance = steps + 1
                                     routes[letter][maze[coord]] = (steps + 1, intheway)
                                     if maze[coord] not in routes:
                                         routes[maze[coord]] = {}
@@ -79,67 +86,40 @@ for letter in string.ascii_lowercase:
                 y = int(y)
                 visited.append((x, y))
 
-# for k, v in routes.items():
-#     print()
-#     print(k)
-#     for k2, v2 in v.items():
-#         print("  ", k2 + ": ", end='')
-#         print(v2)
+for k, v in routes.items():
+    print()
+    print(k)
+    for k2, v2 in v.items():
+        print("  ", k2 + ": ", end='')
+        print(v2)
 
-# for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
-#     print(k, v)
 
-# exit()
 
-shortest = False
-longest = 0
-Q = [(0, ["@"])]
+loweststeps = False
 
-while Q:
-    node = Q.pop(0)
-    steps = int(node[0])
-    keys = node[1]
-    # print(shortest, len(Q), len(keys), steps)
-    if shortest:
-        if steps >= shortest:
-            continue
-    if len(keys) > longest:
-        print("longest:", keys)
-        longest = len(keys)
-    if len(keys) == numkeys + 1:
-        if shortest:
-            if steps <= shortest:
-                shortest = steps
-                print(shortest, keys)
+keys = "@"
+
+def addletter(keys, steps, loweststeps):
+    if not loweststeps or steps < loweststeps:
+        if len(keys) == len(lowers):
+            print(keys, steps)
+            return steps
         else:
-            shortest = steps
-            print(shortest, keys)
-    current = keys[-1]
-    for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
-        # print(k, v)
-    # for k, v in routes[current].items():
-        if shortest:
-            if int(v[0]) >= shortest:
-                continue
-        if k in keys:
-            continue
-        doorinway = False
-        untraversedkey = False
-        for intheway in v[1]:
-            if intheway.isupper():
-                # door
-                if intheway.lower() not in keys:
-                    doorinway = True
-                    break
-            else:
-                # key or start
-                if intheway not in keys:
-                    untraversedkey = True
-                    break
-                
-        if not doorinway and not untraversedkey:
-            newkeys = keys + [k]
-            Q.append(((steps + int(v[0]), newkeys)))
+            current = keys[-1]
+            for destination in lowers:
+                if destination not in keys:
+                    # let's check if anything is in the way
+                    somethinginway = False
+                    for intheway in routes[current][destination][1]:
+                        if intheway.lower() not in keys:
+                            somethinginway = True
+                            break
 
+                    if not somethinginway:
+                        newsteps = steps + routes[current][destination][0]
+                        loweststeps = addletter(keys + destination, 
+                                                newsteps, 
+                                                loweststeps)
+    return loweststeps
 
-print(shortest)
+print(addletter("@", 0, loweststeps))
