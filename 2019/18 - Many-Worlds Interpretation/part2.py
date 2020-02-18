@@ -1,14 +1,11 @@
 import sys
 import string
-import time
-import queue
+from collections import deque
 
 maze = {}
 doors = {}
 keys = {}
 current = None
-
-robots = []
 
 with open(sys.argv[1]) as f:
     y = 0
@@ -16,128 +13,126 @@ with open(sys.argv[1]) as f:
         x = 0
         for c in line:
             maze[(x, y)] = c
-            if c in string.ascii_lowercase:
-                keys[(x, y)] = c
+            if c in string.ascii_lowercase or c == "@":
+                keys[c] = (x, y)
             elif c in string.ascii_uppercase:
-                doors[(x,y)] = c
-            elif c == "@":
-                robots.append((x, y))
+                doors[c] = (x, y)
             x += 1
         y += 1
 
-mid = False
+current = "@"
 
-if len(robots) == 1:
-    mid = robots[0]
-    maze[mid] = "#"
-    maze[(mid[0] + 1, mid[1])] = "#"
-    maze[(mid[0] - 1, mid[1])] = "#"
-    maze[(mid[0], mid[1] + 1)] = "#"
-    maze[(mid[0], mid[1] - 1)] = "#"
-    maze[(mid[0] + 1, mid[1] + 1)] = "."
-    maze[(mid[0] - 1, mid[1] + 1)] = "."
-    maze[(mid[0] + 1, mid[1] - 1)] = "."
-    maze[(mid[0] - 1, mid[1] - 1)] = "."
-    robots.pop()
-    robots.append((mid[0] - 1, mid[1] - 1))
-    robots.append((mid[0] + 1, mid[1] - 1))
-    robots.append((mid[0] - 1, mid[1] + 1))
-    robots.append((mid[0] + 1, mid[1] + 1))
-else:
-    smallx = None
-    smally = None
-    for robot in robots:
-        if smallx is None:
-            smallx = robot[0]
-        else:
-            if robot[0] < smallx:
-                smallx = robot[0]
-        if smally is None:
-            smally = robot[1]
-        else:
-            if robot[1] < smally:
-                smally = robot[1]
-    mid = (smallx + 1, smally + 1)
-        
+numkeys = len(keys)
 
-r1 = robots[0]
-r2 = robots[1]
-r3 = robots[2]
-r4 = robots[3]
+lowers = list(keys.values())
+lowers.append("@")
 
-keylen = len(keys)
+routes = {}
 
-longest = 0
+def stringify(coord, steps=0, intheway=list()):
+    if intheway:
+        return ("%s-%s-%s-%s") % (coord[0], coord[1], steps, intheway)
+    else:
+        return ("%s-%s-%s-") % (coord[0], coord[1], steps)
 
-t0 = time.time()
-
-visited = {}
-Q = queue.Queue()
-Q.put((r1, r2, r3, r4, "", 0))
-while True:
-    node = Q.get()
-    # print("Q, visited:", Q.qsize(), len(visited))
-    # print("node:", node)
-    steps = node[5]
-    keys = node[4]
-    # order = node[6]
-    r = [node[0], node[1], node[2], node[3]]
-    for i in (0, 1, 2, 3):
-        if (r[i], keys) not in visited or steps <= visited[(r[i], keys)]:
-            visited[(r[i], keys)] = steps
-
+for letter in string.ascii_lowercase:
+    if letter in keys:
+        routes[letter] = {}
+        Q = [stringify(keys[letter])]
+        visited = [keys[letter]]
+        while Q and len(routes[letter]) < len(keys):
+            node = Q.pop(0)
+            (x, y, steps, intheway) = node.split("-")
+            x = int(x)
+            y = int(y)
+            steps = int(steps)
             neighbors = []
-            for coord in ((r[i][0] + 1, r[i][1]),
-                          (r[i][0] - 1, r[i][1]),
-                          (r[i][0], r[i][1] + 1),
-                          (r[i][0], r[i][1] - 1)):
-                newkeys = False
-                if coord in maze:
+            for coord in ((x + 1, y),
+                        (x - 1, y),
+                        (x, y + 1),
+                        (x, y - 1)):
+                if coord in maze and coord not in visited:
                     if maze[coord] != "#":
-                        if maze[coord] in string.ascii_lowercase:
-                            if maze[coord] not in keys:
-
-                                # keys = ''.join(sorted(keys))
-
-                                newkeys = keys + maze[coord]
-
-                                # check if done
-                                newkeylen = len(newkeys)
-                                if newkeylen > longest:
-                                    missing = ""
-                                    for c in string.ascii_lowercase:
-                                        if c not in newkeys:
-                                            missing += c
-                                    print(round(time.time() - t0, 2), steps, newkeys, missing, Q.qsize(), len(visited))
-                                    longest = len(newkeys)
-
-                                if newkeylen == keylen:
-                                    print("DONE:", steps + 1)
-                                    sys.exit()
+                        if maze[coord] in string.ascii_lowercase or maze[coord] == "@":
+                            if maze[coord] != letter:
+                                alreadyhave = False
+                                for v in routes[letter].values():
+                                    if maze[coord] in v[1]:
+                                        alreadyhave = True
+                                        break
+                                if not alreadyhave:
+                                    routes[letter][maze[coord]] = (steps + 1, intheway)
+                                    if maze[coord] not in routes:
+                                        routes[maze[coord]] = {}
+                                    routes[maze[coord]][letter] = (steps + 1, intheway)
+                                newintheway = intheway + maze[coord]
                         elif maze[coord] in string.ascii_uppercase:
-                            if maze[coord].lower() not in keys:
-                                # found door without key :(
-                                continue
-                        if newkeys:
-                            if i == 0:
-                                neighbors.append((coord, r[1], r[2], r[3], newkeys))
-                            elif i == 1:
-                                neighbors.append((r[0], coord, r[2], r[3], newkeys))
-                            elif i == 2:
-                                neighbors.append((r[0], r[1], coord, r[3], newkeys))
-                            elif i == 3:
-                                neighbors.append((r[0], r[1], r[2], coord, newkeys))
+                            newintheway = intheway + maze[coord]
                         else:
-                            if i == 0:
-                                neighbors.append((coord, r[1], r[2], r[3], keys))
-                            elif i == 1:
-                                neighbors.append((r[0], coord, r[2], r[3], keys))
-                            elif i == 2:
-                                neighbors.append((r[0], r[1], coord, r[3], keys))
-                            elif i == 3:
-                                neighbors.append((r[0], r[1], r[2], coord, keys))
-        
-                # print(neighbors)
-            for n in neighbors:
-                # print("neighbor:", neighbor)
-                Q.put((n[0], n[1], n[2], n[3], n[4], steps + 1))
+                            newintheway = intheway
+
+                        neighbors.append(stringify(coord, steps + 1, newintheway))
+            for neighbor in neighbors:
+                Q.append(neighbor)
+                (x, y, steps, intheway) = neighbor.split("-")
+                x = int(x)
+                y = int(y)
+                visited.append((x, y))
+
+# for k, v in routes.items():
+#     print()
+#     print(k)
+#     for k2, v2 in v.items():
+#         print("  ", k2 + ": ", end='')
+#         print(v2)
+
+# for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
+#     print(k, v)
+
+
+keycoords = keys
+
+shortest = False
+longest = 0
+Q = deque()
+Q.append((0, ["@"]))
+visited = {}
+while Q:
+    node = Q.pop()
+    # print(len(Q), node)
+    steps = int(node[0])
+    keys = node[1]
+    if shortest and steps > shortest:
+        continue
+
+    current = keys[-1]
+    keysstr = ''.join(sorted(keys))
+
+    if (keycoords[current], keysstr) in visited:
+        if steps >= visited[(keycoords[current], keysstr)]:
+            continue
+    visited[(keycoords[current], keysstr)] = steps
+
+    if len(keys) == numkeys:
+        if not shortest or steps <= shortest:
+            shortest = steps
+            # print(shortest, keys)
+
+    current = keys[-1]
+    for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
+        # print(k, v)
+    # for k, v in routes[current].items():
+        if k in keys:
+            continue
+        somethinginway = False
+        for intheway in v[1]:
+            if intheway.lower() not in keys:
+                somethinginway = True
+                break
+                
+        if not somethinginway:
+            newkeys = keys + [k]
+            Q.append(((steps + int(v[0]), newkeys)))
+
+
+print(shortest)
