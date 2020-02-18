@@ -58,15 +58,15 @@ r2 = robots[1]
 r3 = robots[2]
 r4 = robots[3]
 
-maze[r1] = "ab"
-maze[r2] = "bc"
-maze[r3] = "cd"
-maze[r4] = "de"
+maze[r1] = "r1"
+maze[r2] = "r2"
+maze[r3] = "r3"
+maze[r4] = "r4"
 
-keys["ab"] = r1
-keys["bc"] = r2
-keys["cd"] = r3
-keys["de"] = r4
+keys["r1"] = r1
+keys["r2"] = r2
+keys["r3"] = r3
+keys["r4"] = r4
 
 numkeys = len(keys)
 
@@ -125,12 +125,12 @@ for letter in keys:
                 y = int(y)
                 visited.append((x, y))
 
-for k, v in routes.items():
-    print()
-    print(k)
-    for k2, v2 in v.items():
-        print("  ", k2 + ": ", end='')
-        print(v2)
+# for k, v in routes.items():
+#     print()
+#     print(k)
+#     for k2, v2 in v.items():
+#         print("  ", k2 + ": ", end='')
+#         print(v2)
 
 # for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
 #     print(k, v)
@@ -141,7 +141,7 @@ keycoords = keys
 shortest = False
 longest = 0
 Q = deque()
-Q.append((0, ["ab", "bc", "cd", "de"], ["ab", "bc", "cd", "de"]))
+Q.append((0, ["r1", "r2", "r3", "r4"], ["r1", "r2", "r3", "r4"]))
 visited = {}
 while Q:
     node = Q.pop()
@@ -165,8 +165,8 @@ while Q:
                 break
     # print("\n", len(Q), current, node)
 
-    keysstr = ''.join(keys)
-    # keysstr = ''.join(sorted(keys))
+    # keysstr = ''.join(keys)
+    keysstr = ''.join(sorted(keys))
 
     if (current[0], current[1], current[2], current[3], keysstr) in visited:
         if steps >= visited[(current[0], current[1], current[2], current[3], keysstr)]:
@@ -174,9 +174,9 @@ while Q:
     visited[(current[0], current[1], current[2], current[3], keysstr)] = steps
 
     if len(keys) == numkeys:
-        if not shortest or steps <= shortest:
+        if not shortest or steps < shortest:
             shortest = steps
-            print(shortest, keys)
+            # print(shortest, keys)
 
     for i in (0, 1, 2, 3):
         # for k, v in sorted(routes[curr].items(), key=lambda x:x[1][0], reverse=True):
