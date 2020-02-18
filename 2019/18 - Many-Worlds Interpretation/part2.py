@@ -6,6 +6,8 @@ maze = {}
 doors = {}
 keys = {}
 current = None
+robots = []
+
 
 with open(sys.argv[1]) as f:
     y = 0
@@ -13,19 +15,63 @@ with open(sys.argv[1]) as f:
         x = 0
         for c in line:
             maze[(x, y)] = c
-            if c in string.ascii_lowercase or c == "@":
+            if c in string.ascii_lowercase:
                 keys[c] = (x, y)
             elif c in string.ascii_uppercase:
-                doors[c] = (x, y)
+                doors[c] = (x,y)
+            elif c == "@":
+                robots.append((x, y))
             x += 1
         y += 1
 
-current = "@"
+mid = False
+
+if len(robots) == 1:
+    mid = robots[0]
+    maze[mid] = "#"
+    maze[(mid[0] + 1, mid[1])] = "#"
+    maze[(mid[0] - 1, mid[1])] = "#"
+    maze[(mid[0], mid[1] + 1)] = "#"
+    maze[(mid[0], mid[1] - 1)] = "#"
+    maze[(mid[0] + 1, mid[1] + 1)] = "."
+    maze[(mid[0] - 1, mid[1] + 1)] = "."
+    maze[(mid[0] + 1, mid[1] - 1)] = "."
+    maze[(mid[0] - 1, mid[1] - 1)] = "."
+    robots.pop()
+    robots.append((mid[0] - 1, mid[1] - 1))
+    robots.append((mid[0] + 1, mid[1] - 1))
+    robots.append((mid[0] - 1, mid[1] + 1))
+    robots.append((mid[0] + 1, mid[1] + 1))
+else:
+    smallx = None
+    smally = None
+    for robot in robots:
+        if smallx is None or robot[0] < smallx:
+            smallx = robot[0]
+        if smally is None or robot[1] < smally:
+            smally = robot[1]
+
+    mid = (smallx + 1, smally + 1)
+
+r1 = robots[0]
+r2 = robots[1]
+r3 = robots[2]
+r4 = robots[3]
+
+maze[r1] = "ab"
+maze[r2] = "bc"
+maze[r3] = "cd"
+maze[r4] = "de"
+
+keys["ab"] = r1
+keys["bc"] = r2
+keys["cd"] = r3
+keys["de"] = r4
 
 numkeys = len(keys)
 
-lowers = list(keys.values())
-lowers.append("@")
+# lowers = list(keys.values())
+# lowers.append("@")
 
 routes = {}
 
@@ -35,7 +81,7 @@ def stringify(coord, steps=0, intheway=list()):
     else:
         return ("%s-%s-%s-") % (coord[0], coord[1], steps)
 
-for letter in string.ascii_lowercase:
+for letter in keys:
     if letter in keys:
         routes[letter] = {}
         Q = [stringify(keys[letter])]
@@ -95,44 +141,59 @@ keycoords = keys
 shortest = False
 longest = 0
 Q = deque()
-Q.append((0, ["@"]))
+Q.append((0, ["ab", "bc", "cd", "de"], ["ab", "bc", "cd", "de"]))
 visited = {}
 while Q:
     node = Q.pop()
-    # print(len(Q), node)
+    
     steps = int(node[0])
     keys = node[1]
+    current = node[2]
     if shortest and steps > shortest:
         continue
 
-    current = keys[-1]
+    justmoved = keys[-1]
+    found = False
+    for v in routes.values():
+        if justmoved in v:
+            for i in (0, 1, 2, 3):
+                if current[i] in v:
+                    current[i] = justmoved
+                    found = True
+                    break
+            if found:
+                break
+    # print("\n", len(Q), current, node)
     keysstr = ''.join(sorted(keys))
 
-    if (keycoords[current], keysstr) in visited:
-        if steps >= visited[(keycoords[current], keysstr)]:
+    if (current[0], current[1], current[2], current[3], keysstr) in visited:
+        if steps >= visited[(current[0], current[1], current[2], current[3], keysstr)]:
             continue
-    visited[(keycoords[current], keysstr)] = steps
+    visited[(current[0], current[1], current[2], current[3], keysstr)] = steps
 
     if len(keys) == numkeys:
         if not shortest or steps <= shortest:
             shortest = steps
             # print(shortest, keys)
 
-    current = keys[-1]
-    for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
-        # print(k, v)
-    # for k, v in routes[current].items():
-        if k in keys:
-            continue
-        somethinginway = False
-        for intheway in v[1]:
-            if intheway.lower() not in keys:
-                somethinginway = True
-                break
-                
-        if not somethinginway:
-            newkeys = keys + [k]
-            Q.append(((steps + int(v[0]), newkeys)))
+    for i in (0, 1, 2, 3):
+        # for k, v in sorted(routes[curr].items(), key=lambda x:x[1][0], reverse=True):
+            # print(k, v)
+        for k, v in routes[current[i]].items():
+            if k in keys:
+                continue
+            somethinginway = False
+            for intheway in v[1]:
+                if intheway.lower() not in keys:
+                    somethinginway = True
+                    break
+                    
+            if not somethinginway:
+                newkeys = keys + [k]
+                # print("appending:", newkeys)
+                newcurrent = current.copy()
+                newcurrent[i] = k
+                Q.append(((steps + int(v[0]), newkeys, newcurrent)))
 
 
 print(shortest)

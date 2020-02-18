@@ -29,11 +29,11 @@ lowers.append("@")
 
 routes = {}
 
-def stringify(coord, steps=0, intheway=list()):
-    if intheway:
-        return ("%s-%s-%s-%s") % (coord[0], coord[1], steps, intheway)
-    else:
-        return ("%s-%s-%s-") % (coord[0], coord[1], steps)
+# def stringify(coord, steps=0, intheway=list()):
+#     if intheway:
+#         return ("%s-%s-%s-%s") % (coord[0], coord[1], steps, intheway)
+#     else:
+#         return ("%s-%s-%s-") % (coord[0], coord[1], steps)
 
 intheway = []
 steps = 0
