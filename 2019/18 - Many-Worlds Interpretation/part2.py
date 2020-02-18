@@ -125,12 +125,12 @@ for letter in keys:
                 y = int(y)
                 visited.append((x, y))
 
-# for k, v in routes.items():
-#     print()
-#     print(k)
-#     for k2, v2 in v.items():
-#         print("  ", k2 + ": ", end='')
-#         print(v2)
+for k, v in routes.items():
+    print()
+    print(k)
+    for k2, v2 in v.items():
+        print("  ", k2 + ": ", end='')
+        print(v2)
 
 # for k, v in sorted(routes[current].items(), key=lambda x:x[1][0], reverse=True):
 #     print(k, v)
@@ -164,7 +164,9 @@ while Q:
             if found:
                 break
     # print("\n", len(Q), current, node)
-    keysstr = ''.join(sorted(keys))
+
+    keysstr = ''.join(keys)
+    # keysstr = ''.join(sorted(keys))
 
     if (current[0], current[1], current[2], current[3], keysstr) in visited:
         if steps >= visited[(current[0], current[1], current[2], current[3], keysstr)]:
@@ -174,7 +176,7 @@ while Q:
     if len(keys) == numkeys:
         if not shortest or steps <= shortest:
             shortest = steps
-            # print(shortest, keys)
+            print(shortest, keys)
 
     for i in (0, 1, 2, 3):
         # for k, v in sorted(routes[curr].items(), key=lambda x:x[1][0], reverse=True):
