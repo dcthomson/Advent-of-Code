@@ -1,45 +1,26 @@
 import sys
 
-basepattern = [0, 1, 0, -1]
-# basepattern = [1,1,1,1,1,1,1,1]
+signal = ""
 
 with open(sys.argv[1]) as f:
-    signal = f.readline()
+    signalstr = f.readline()
     # turn string into a list of ints
-    signal = list(map(int, list(signal)))
-    signal *= 10000
-    signalsize = len(signal)
+    signal = list(map(int, list(signalstr)))
 
-    basepatsize = len(basepattern)
+signal *= 10000
+signalsize = len(signal)
+offset = int(signalstr[:7])
 
-    newsignal = []
 
-    for num in range(0, 100):
-        print(num)
-        repeatcount = 0
-        newsignal = []
-        for k in range(0, signalsize):
-            print(k, "/", signalsize)
-            j = 0
-            patternindex = 0
-            total = 0
-            for i in range(0, signalsize):
-                print(i, "/", signalsize)
-                if j == repeatcount:
-                    j = 0
-                    patternindex += 1
-                    if patternindex >= basepatsize:
-                        patternindex = 0
-                else:
-                    j += 1
-                total += signal[i] * basepattern[patternindex]
-                # print(signal[i],"*", basepattern[patternindex], end="   +   ")
-            repeatcount += 1
-            # print(int(str(total)[-1]))
-            newsignal.append(int(str(total)[-1]))
-            # print(newsignal)
-        signal = newsignal
+for i in range(100):
+    partial_sum = sum(signal[j] for j in range(offset, signalsize))
+    for j in range(offset, signalsize):
+        t = partial_sum
+        partial_sum -= signal[j]
+        if t >= 0:
+            signal[j] = t % 10
+        else:
+            signal[j] = (-t) % 10
 
-        print("".join(str(x) for x in signal))
-
-    print("".join(str(x) for x in signal)[0:8])
+            
+print(''.join(map(str, signal[offset: offset+8])))
