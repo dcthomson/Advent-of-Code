@@ -1,60 +1,18 @@
 import sys
 
-decksize = 119315717514047
-
-class Deck:
-    def __init__(self, size):
-        self.deck = []
-        self.size = size
-        for i in range(0, size):
-            self.deck.append(i)
-
-    def newstack(self):
-        self.deck.reverse()
-
-    def cut(self, num):
-        self.deck = self.deck[num:] + self.deck[:num]
-
-    def dealwithincrement(self, num):
-        newdeck = [None] * self.size
-        index = 0
-        for i in self.deck:
-            newdeck[index] = i
-            index += num
-            if index > self.size:
-                index = index - self.size
-        self.deck = newdeck
-
-print("Creating deck...", end="")
-deck = Deck(decksize)
-print("DONE")
-
-lines = []
-
+m = 119315717514047
+n = 101741582076661
+pos = 2020
+shuffles = { 'deal with increment ': lambda x,m,a,b: (a*x %m, b*x %m),
+         'deal into new stack': lambda _,m,a,b: (-a %m, (m-1-b)%m),
+         'cut ': lambda x,m,a,b: (a, (b-x)%m) }
+a,b = 1,0
 with open(sys.argv[1]) as f:
-    for line in f:
-        lines.append(line.rstrip())
-
-print("runnin lines")
-for line in lines:
-    if line == "deal into new stack":
-        print(line, "...", end="")
-        deck.newstack()
-        print("DONE")
-    if line.startswith("cut "):
-        print(line, "...", end="")
-        num = int(line.split()[1])
-        deck.cut(num)
-        print("DONE")
-    if line.startswith("deal with increment"):
-        print(line, "...", end="")
-        num = int(line.split()[3])
-        deck.dealwithincrement(num)
-        print("DONE")
-
-i = 0
-for card in deck.deck:
-    if card == 2019:
-        print(i)
+  for s in f.read().strip().split('\n'):
+    for name,fn in shuffles.items():
+      if s.startswith(name):
+        arg = int(s[len(name):]) if name[-1] == ' ' else 0
+        a,b = fn(arg, m, a, b)
         break
-    i += 1
+r = (b * pow(1-a, m-2, m)) % m
+print(f"Card at #{pos}: {((pos - r) * pow(a, n*(m-2), m) + r) % m}")
