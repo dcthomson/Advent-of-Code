@@ -9,14 +9,7 @@ Christmas advent calendar of programming challenges
 
 TO DO:<br>
 2019<br>
-
-| Day |Stars|Problem|
-| :-: | :-: | ----- |
-| 16  | *   | Flawed Frequency Transmission |
-| 18  | *   | Many-Worlds Interpretation - keys and doors |
-| 22  | *   | Slam Shuffle - modular arithmatic |
-| 25  |     | Cryostasis |
-
+DONE, YAY!<br>
 <br>
 2018<br>
 DONE, YAY!<br>
