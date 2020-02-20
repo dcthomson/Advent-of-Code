@@ -1,4 +1,8 @@
+import os.path
+from itertools import chain, combinations
+
 class Opcode:
+
     def __init__(self, s, name=False, replacements=False):
         self.setInput(s, replacements)
         self.name = name
@@ -6,6 +10,14 @@ class Opcode:
         self.index = 0
         self.relativebase = 0
         self.input = []
+        self.initialinput = open(os.path.join(os.path.abspath(os.path.dirname(__file__)), "getstuff.txt"))
+        self.stuff = ["monolith",
+                      "astronaut ice cream",
+                      "hologram",
+                      "ornament",
+                      "asterisk",
+                      "fixed point",
+                      "dark matter"]
 
     def setInput(self, s, replacements):
         nums = s.split(",")
@@ -115,18 +127,28 @@ class Opcode:
                 setval = False
                 while setval == False:
                     if len(self.input) == 0:                       
-                        if self.name:
-                            # _setvalue(self.nums[self.index + 1], int(input(self.name + ": Enter input: ")))
-                            _setvalue(params[0], int(input(self.name + ": Enter input: ")))
-                        else:
-                            # _setvalue(self.nums[self.index + 1], int(input("Enter input: ")))
-                            _setvalue(params[0], int(input("Enter input: "))) 
-                    else:
-                        # _setvalue(self.nums[self.index + 1], self.input.pop(0))
-                        val = self.input.pop(0)
-                        print(val)
-                        _setvalue(params[0], val)
-                        # print("Got 1 input")
+
+                        command = self.initialinput.readline()
+                        if command == "":
+                            # get powerset
+                            ps = list(chain.from_iterable(combinations(self.stuff, r) for r in range(len(self.stuff)+1)))
+                            for items in ps:
+                                for i in items:
+                                    command += "take " + i + "\n"
+                                command += "east\n"
+                                for i in items:
+                                    command += "drop " + i + "\n"
+                            print(command)
+                            # command = input()
+
+                        for c in command:
+                            self.input.append(ord(c))
+                        if self.input[-1] != 10:
+                            self.input.append(10)
+                        # print(command)
+
+                    val = self.input.pop(0)
+                    _setvalue(params[0], val)
                     setval = True
 
                 self.index += 2
