@@ -26,6 +26,14 @@ with open(sys.argv[1]) as f:
 
 mid = False
 
+# change mid from
+# ...
+# .@.
+# ...
+# to
+# @#@
+# ###
+# @#@
 if len(robots) == 1:
     mid = robots[0]
     maze[mid] = "#"
