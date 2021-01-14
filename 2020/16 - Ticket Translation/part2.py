@@ -24,11 +24,10 @@ with open(sys.argv[1], "r") as f:
             elif tickettype == "nearby":
                 tickets.append(line)
 
-sum = 0
-
 validtickets = []
 
 for ticket in tickets:
+    ticketvalid = True
     for num in ticket.split(","):
         num = int(num)
         valid = False
@@ -36,10 +35,51 @@ for ticket in tickets:
             i = fields[field]
             if i[0][0] <= num <= i[0][1] or i[1][0] <= num <= i[1][1]:
                 valid = True
-
-    if valid:
+        if not valid:
+            ticketvalid = False
+            break
+    if ticketvalid:
         validtickets.append(ticket)
 
-print(len(tickets))
-tickets = validtickets
-print(len(tickets))
+tickets = []
+tickets.append([int(i) for i in myticket.split(",")])
+for t in validtickets:
+    tickets.append([int(i) for i in t.split(",")])
+
+fieldnames = {}
+for i in range( 0, len(tickets[0]) ):
+    fieldnames[i] = {}
+    for fieldname in fields:
+        fieldnames[i][fieldname] = True
+        for ticket in tickets:
+            within = False
+            for field in fields[fieldname]:
+                if field[0] <= ticket[i] <= field[1]:
+                    within = True
+            if not within:
+                del fieldnames[i][fieldname]
+                break
+
+
+finalfn = {}
+while len(finalfn) < len(fields):
+    lastfield = ""
+    for i in fieldnames:
+        if len(fieldnames[i]) == 1:
+            for k in fieldnames[i]:
+                finalfn[k] = i
+                lastfield = k
+
+    for i in fieldnames:
+        try:
+            del fieldnames[i][lastfield]    
+        except:
+            pass
+
+myticket = [int(i) for i in myticket.split(",")]
+total = 1
+for k in finalfn:
+    if k.startswith("departure"):
+        total *= myticket[finalfn[k]]
+
+print(total)
