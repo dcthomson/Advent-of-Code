@@ -63,7 +63,7 @@ def countlit(image):
     return count
 
 
-for iteration in range(0,2):
+for iteration in range(0,50):
 
     newimage = {}
     (minx, miny, maxx, maxy) = getboundries(image)

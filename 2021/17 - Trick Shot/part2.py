@@ -23,6 +23,8 @@ while t < xmin:
     z += 1
     t += z
 
+hits = 0
+
 for x in range(z,xmax + 1):
     y = ymin
     posx = 0
@@ -62,10 +64,11 @@ for x in range(z,xmax + 1):
                     bottomrighthit = True
         
         if hit:
+            hits += 1
 #            print("HIT!",x,y)
             if curmaxheight > maxheight:
                 maxheight = curmaxheight
             dy += 1
         y += 1
 
-print(maxheight)
+print(hits)

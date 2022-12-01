@@ -1,3 +1,4 @@
+from ensurepip import version
 import sys
 
 hexstr = ""
@@ -10,7 +11,34 @@ with open(sys.argv[1], "r") as f:
 
 print(binstr)
 
-pversion = binstr[0:3]
-ptype = binstr[3:6]
+versiontotal = 0
 
-print(pversion, ptype)
+def parsepacket(binstr):
+    
+    global versiontotal
+
+    pversion = binstr[0:3]
+    binstr = binstr[3:]
+    versiontotal += int(pversion, 2)
+
+
+    ptype = binstr[0:3]
+    binstr = binstr[3:]
+
+    if int(ptype, 2) == 4:
+        # literal value
+        literal = ""
+        while binstr[0] == "1":
+            literal += binstr[1:5]
+            binstr = binstr[5:]
+        literal += binstr[1:5]
+        binstr = binstr[5:]
+        print("literal:", int(literal, 2))
+    
+    else:
+        # not literal
+        i = 0
+
+parsepacket(binstr)
+
+print(versiontotal)
