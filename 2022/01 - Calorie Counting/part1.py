@@ -12,6 +12,7 @@ with open(sys.argv[1], "r") as f:
             calories = 0
         else:
             calories += int(line)
+
     if calories != 0:
         if calories > mostcalories:
             mostcalories = calories
