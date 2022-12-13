@@ -3,6 +3,9 @@
 settings.json
 launch.json
 
+# AoC
+input.txt
+
 #############
 # Python
 
