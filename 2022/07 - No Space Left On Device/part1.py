@@ -1,16 +1,30 @@
 import sys
 
+did = 0
+
+directories = {}
+files = {}
+
 class Directory:
-    def __init__(self, name, parentindex):
+    def __init__(self, name, parentindex=None):
         self.name = name
-        self.size = 0
+        self.did = did
+        did += 1
         self.parent = parentindex
+        self.size = 0
         self.items = []
+
+    def getsize(self):
+        for i in self.items:
+            self.size += i.getsize()
 
 class File:
     def __init__(self, name, size):
         self.name = name
         self.size = size
+
+    def getsize(self):
+        return self.size
 
 with open(sys.argv[1], "r") as f:
 
