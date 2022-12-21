@@ -68,6 +68,15 @@ def getsize(d):
 
     return directories[d].size
 
-getsize("/")
+totalsize = getsize("/")
 
-print(sum)
+freespace = 70000000 - totalsize
+
+bestdir = None
+
+for d in directories:
+    if directories[d].size > 30000000 - freespace:
+        if bestdir is None or directories[d].size < directories[bestdir].size:
+            bestdir = d
+
+print(directories[bestdir].size)
