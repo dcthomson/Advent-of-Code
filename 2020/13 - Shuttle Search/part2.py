@@ -29,6 +29,8 @@ i = 0
 found = False
 
 while not found:
+    if i % 10000000 == 0:
+        print("{:,}".format(i))
     i += largest
     found = True
     for k in numdict:
