@@ -16,12 +16,10 @@ def domath(s, i=0):
             op = "+"
         elif c == "*":
             op = "*"
+        elif c == "(":
+            num, i = domath(s, i + 1)
         elif c != " ":
-            if c == "(":
-                num, i = domath(s, i + 1)
-
-            else:
-                num = int(c)
+            num = int(c)
             if total is None:
                 total = num 
             else:
@@ -35,6 +33,7 @@ def domath(s, i=0):
 
 t = 0
 for line in lines:
-    num = domath(line)[0]
+    num, _ = domath(line)
     t += num
+    # print(num, ": ", line, sep="")
 print(t)
