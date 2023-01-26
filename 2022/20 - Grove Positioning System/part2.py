@@ -44,6 +44,8 @@ with open(sys.argv[1], "r") as f:
 coords[index - 1].next = 0
 coords[0].prev = index - 1
 
+print(index)
+
 printcoords(coords)
 for _ in range(10):
     for n in range(index):
@@ -55,7 +57,7 @@ for _ in range(10):
 
         #insert back into linkedlist
         k = n
-        if coords[n].num >= 0:
+        if coords[n].num > 0:
             for _ in range(coords[n].num % index):
                 k = coords[k].next
         else:
