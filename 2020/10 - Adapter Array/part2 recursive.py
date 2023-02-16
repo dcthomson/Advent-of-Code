@@ -19,7 +19,7 @@ def getnext(i):
         global arrangements
         arrangements += 1
         if arrangements % 1000000 == 0:
-            print(arrangements)
+            print(f"{arrangements:,d}")
     for j in range(1, 4):
         if i + j in adapters:
             getnext(i + j)
