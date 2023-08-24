@@ -1,50 +1,69 @@
 import sys
 
 foods = []
-allingredients = {}
 allergenmap = {}
+
+class Food:
+
+    def __init__(self, line):
+        (ingredients, allergens) = line.split(" (contains ")
+        self.ingredients = ingredients.split()
+        allergens = allergens.replace(')', '')
+        self.allergens = allergens.split(", ")
+
+    def __str__(self):
+        retstr = ""
+        retstr += " ".join(self.ingredients)
+        if (self.allergens):
+            retstr += " (contains "
+            retstr += ", ".join(self.allergens)
+            retstr += ")"
+        return retstr
+    
+    def findallergen(self, food2):
+        # print("Comparing:")
+        # print("  ", self.__str__())
+        # print("  ", food2.__str__())
+        sameingredients = list(set(self.ingredients) & set(food2.ingredients))
+        sameallergens = list(set(self.allergens) & set(food2.allergens))
+        for i, a in allergenmap.items():
+            if a in sameallergens:
+                sameallergens.remove(a)
+            if i in sameingredients:
+                sameingredients.remove(i)
+        if len(sameingredients) == 1:
+            if len(sameallergens) == 1:
+                # print("     Add to allergen map:", sameingredients[0], sameallergens[0])
+                allergenmap[sameingredients[0]] = sameallergens[0]
+                # print("      ", allergenmap)
+                return True
+        return False
 
 with open(sys.argv[1], "r") as f:
     for line in f:
         line = line.rstrip()
-        (ingredients, allergens) = line.split(" (contains ")
-        ingredients = ingredients.split()
-        for i in ingredients:
-            allingredients[i] = True
-        allergens = allergens.replace(')', '')
-        allergens = allergens.split(", ")
-        foods.append({'ingredients' : ingredients, 'allergens' : allergens})
+        foods.append(Food(line))
 
-for k in allingredients:
-    print(k)
+added = True
 
-def removeingredient(foods, allergen, ingredient):
-    print("Removing:", allergen, ingredient)
-    for foodarr in foods:
-        try:
-            foodarr['ingredients'].remove(ingredient)
-        except ValueError:
-            pass
-        try:
-            foodarr['allergens'].remove(allergen)
-        except ValueError:
-            pass
+while added:
+    added = False
+    for food1 in foods:
+        for food2 in foods:
+            if (food1.findallergen(food2)):
+                added = True
 
-    return foods
 
-def getallergenandingredientcount(foods):
-    count = 0
-    for foodarr in foods:
-        count += len(foodarr['ingredients'])
-        count += len(foodarr['allergens'])
-    return count
+count = 0
 
-def printfoods(foods):
-    for count, food in enumerate(foods, start=1):
-        print(count, food)
-    print()
+for food in foods:
+    for ingredient in food.ingredients:
+        if ingredient not in allergenmap:
+            count += 1
 
-origfoodstuffcount = 0
+print(count)
+
+exit()
 
 while origfoodstuffcount != getallergenandingredientcount(foods):
     originalfoodstuffcount = getallergenandingredientcount(foods)
