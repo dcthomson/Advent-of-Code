@@ -10,24 +10,37 @@ with open(sys.argv[1], "r") as f:
         rulenum, rule = line.split(": ")
         rules[int(rulenum)] = rule
 
-print(rules)
-
 strings = []
 
-def runrule(currentruleset, s=""):
+print(rules)
+print()
+
+def runrule(currentruleset, strarr=[]):
+
+    print(currentruleset, ":", s, " ", end="")
     if "a" in currentruleset or "b" in currentruleset:
         s += currentruleset.replace('"', '')
-        # strings.append(s)
+        s = [s]
     elif "|" in currentruleset:
-        for r in currentruleset.split("|"):
-            s = runrule(r.strip(), s)
+        l, r = currentruleset.split("|")
+        s1 = s2 = s
+        s1 = runrule(l.strip(), s1)
+        strings.append(s1)
+        print("s1: ", s1)
+        s2 = runrule(r.strip(), s2)
+        print("s2: ", s2)
+        strings.append(s2)
     else:
         for rnum in currentruleset.split():
             s = runrule(rules[int(rnum)], s)
     print(s)
     return s
 
-runrule(rules[0])
+
+
+print(runrule(rules[0]))
+
+print(strings)
 
 # longest = 0
 # for s in strings:
