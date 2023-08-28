@@ -19,6 +19,12 @@ class Food:
             retstr += ", ".join(self.allergens)
             retstr += ")"
         return retstr
+    
+    def removeingredients(self, removeingredientslist):
+        newingredientlist = self.ingredients
+        for i in removeingredientslist:
+            if i in newingredientlist:
+                newingredientlist.remove(i)
 
 with open(sys.argv[1], "r") as f:
     for line in f:
@@ -48,14 +54,44 @@ for a in allergens:
     for i in allingredientsset.intersection(*foodsets):
         probableallergens.add(i)
 
+inertingredients = ingredients.copy()
+
 for a in probableallergens:
-    ingredients.discard(a)
-    
-count = 0
+    inertingredients.discard(a)
 
 for f in foods:
-    for i in f.ingredients:
-        if i in ingredients:
-            count += 1
+    f.removeingredients(inertingredients)
 
-print(count)
+for i in inertingredients:
+    try:
+        ingredients.remove(i)
+    except KeyError:
+        pass
+
+while ingredients:
+    for a in allergens:
+        allingredientsset = set()
+        foodsets = []
+        for f in foods:
+            if a in f.allergens:
+                allingredientsset.update(f.ingredients)
+                foodsets.append(set(f.ingredients))
+
+        i =  allingredientsset.intersection(*foodsets)
+        if len(i) == 1:
+            allergenmap[a] = i.pop()
+
+    for f in foods:
+        for v in allergenmap.values():
+            f.removeingredients([v])
+            try:
+                ingredients.remove(v)
+            except KeyError:
+                pass
+
+dangerousingredients = []
+
+for key, value in sorted(allergenmap.items()):
+    dangerousingredients.append(value)
+
+print(",".join(dangerousingredients))
