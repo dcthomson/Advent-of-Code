@@ -13,12 +13,14 @@ with open(sys.argv[1], "r") as f:
             polymer = line
 
 
-for j in range(0, 10):
+for j in range(0, 40):
+    print(j)
     newpolymer = ""
+    polymerlen = len(polymer)
     for i, c in enumerate(polymer):
-        #print(i, c, newpolymer)
+        # print(i, c)
         newpolymer += c
-        if i < len(polymer) - 1:
+        if i < polymerlen - 1:
             newpolymer += pairs[c + polymer[i+1]]
     polymer = newpolymer
 
