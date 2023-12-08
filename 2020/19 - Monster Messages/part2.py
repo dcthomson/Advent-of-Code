@@ -1,7 +1,8 @@
 import sys
 
 rules = {}
-matches = []
+messages = []
+longestmatch = 0
 
 with open(sys.argv[1], "r") as f:
     matching = False
@@ -14,26 +15,36 @@ with open(sys.argv[1], "r") as f:
                 rulenum, rule = line.split(": ")
                 rules[int(rulenum)] = rule
         else:
-            matches.append(line.rstrip())
+            line = line.rstrip()
+            messages.append(line)
+            if len(line) > longestmatch:
+                longestmatch = len(line)
+
+# print(longestmatch)
+
+# rules[8] = "42 | 42 8"
+# rules[11] = "42 31 | 42 11 31"
 
 tab = ""
 
-def bfs(queue, rules, tab, count = 0, s = ""):
+def bfs(rules, queue = [0], matches = [], s = ""):
 
     while queue:
-        # print(tab, "Q:", queue)
+        # print("Q:", queue)
         m = queue.pop(0)
-        # print(tab, "Q:", queue)
+        # print("Q:", queue)
         rule = rules[int(m)]
-        # print(tab, "s:", s)
-        # print(tab, "rule:", rule)
+        # print("s:", s)
+        # print("rule:", rule)
         # print()
         if "|" in rule:
             queuecopy = queue.copy()
             (first, second) = rule.split(" | ")
             queue = first.split() + queue
             queuecopy = second.split() + queuecopy
-            count = bfs(queuecopy, rules, tab + "  ", count, s)
+            # if len(s) > longestmatch:
+                # break
+            matches = bfs(rules, queuecopy, matches, s)
         elif '"' in rule:
             if "a" in rule:
                 s += "a"
@@ -44,12 +55,18 @@ def bfs(queue, rules, tab, count = 0, s = ""):
 
     # print(s)
 
-    if s in matches:
+    matches.append(s)
+    return matches
+
+print(bfs(rules, [31]))
+
+print(bfs(rules, [42]))
+
+count = 0
+
+for s in bfs(rules):
+    if s in messages:
+        print(s)
         count += 1
-    return count
-
-queue = [0]
-
-count = bfs(queue, rules, tab)
 
 print(count)
