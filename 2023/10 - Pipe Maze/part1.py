@@ -60,4 +60,4 @@ while nextpipe != start:
             nextpipe = d
             break
 
-print(steps // 2 + (steps % 2 > 0))
+print(steps // 2 + (steps % 2 > 0)) # divide and round up
