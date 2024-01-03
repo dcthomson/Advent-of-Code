@@ -20,20 +20,30 @@ with open(sys.argv[1], "r") as f:
 lowest = False
 seedpair = []
 
-for s in seeds:
-    seedpair.append(s)
-    if len(seedpair) == 2:
-        print(str(seedpair[0]))
-        for seed in range(seedpair[0], seedpair[0] + seedpair[1]):
-            num = seed
-            for m in maps:
-                for line in m:
-                    (dest, source, length) = line
-                    if source <= num <= source + length:
-                        num = dest + num - source
-                        break
-                    
-            if not lowest or num < lowest:
-                lowest = num
-        seedpair = []    
-print(lowest)
+print(seeds)
+min = None
+max = 0
+
+for line in maps[-1]:
+    (dest, source, length) = line
+    if min is None or dest < min:
+        min = dest
+    if dest + length > max:
+        max = dest + length
+
+print(min, max)
+
+for num in range(0, max):
+    n = num
+    for m in reversed(maps):
+        for line in m:
+            (dest, source, length) = line
+            if dest <= num <= dest + length:
+                num = source + num - dest
+                break
+    for i in range(0, len(seeds), 2):
+        if seeds[i] < num < seeds[i] + seeds[i+1]:
+            print(n)
+            exit()
+
+exit()
