@@ -14,10 +14,11 @@ with open(sys.argv[1], "r") as f:
         n = n*5
         n = n[:-1]
 
-        print(s*5, " ", end="")
-        print(n)
+        s = s + "?"
+        s = s*5
+        s = s[:-1]
 
-        springs.append([s*5, n])
+        springs.append([s, n])
 
 def parsespr(spr):
     nums = []
