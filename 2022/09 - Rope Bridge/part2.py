@@ -54,10 +54,9 @@ with open(sys.argv[1], "r") as f:
 
         (dir, steps) = line.split()
 
-        print("==", dir, steps, "==")
+        # print("==", dir, steps, "==")
 
         for _ in range(0, int(steps)):
-            # oldrope = rope.copy()
             for i in range(0,9):
                 x = rope[i][0]
                 y = rope[i][1]
@@ -65,30 +64,23 @@ with open(sys.argv[1], "r") as f:
                     x += dirs[dir][0]
                     y += dirs[dir][1]
 
-                #print(x,y,rope)
-                if abs(x - rope[i + 1][0]) == 2:
-                    newx = (rope[i + 1][0] + x) / 2
-                    # if rope[i + 1][0] < x:
-                    #     newx = rope[i + 1][0] + 1
-                    # else:
-                    #     newx = rope[i + 1][0] - 1
-                else:
-                    newx = x
-                if abs(y - rope[i + 1][1]) >= 2:
-                    newy = (rope[i + 1][1] + y) / 2
-                    # if rope[i + 1][1] < y:
-                    #     newy = rope[i + 1][1] + 1
-                    # else:
-                    #     newy = rope[i + 1][1] - 1
-                else:
-                    newy = y
+                xdist = abs(x - rope[i + 1][0])
+                ydist = abs(y - rope[i + 1][1])
+                newx = rope[i + 1][0]
+                newy = rope[i + 1][1]
+                if xdist == 2:
+                    newx = int((rope[i + 1][0] + x) / 2)
+                    if ydist == 1:
+                        newy = y
+                if ydist == 2:
+                    newy = int((rope[i + 1][1] + y) / 2)
+                    if xdist == 1:
+                        newx = x
                 rope[i + 1] = (newx, newy)
-                # elif rope[i + 1][0] == x or rope[i + 1][1] == y:
-                        # rope[i + 1] = oldrope[i]
 
                 rope[i] = (x,y)
             if rope[9] not in visited:
                 visited[rope[9]] = True
-            printrope(rope)
+        # printrope(rope)
 
 print(len(visited))
