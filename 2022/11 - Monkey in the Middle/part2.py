@@ -1,6 +1,8 @@
 import sys
 import math
 
+sys.set_int_max_str_digits(0)
+
 monkeys = []
 
 class Monkey:
@@ -105,7 +107,7 @@ with open(sys.argv[1], "r") as f:
 for i in range(0,10000):
     print(i)
     for m in monkeys:
-        print(m)
+        # print(m)
         m.inspectnthrow()
 
 inspectnums = []

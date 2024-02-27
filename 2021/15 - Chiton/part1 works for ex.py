@@ -1,5 +1,15 @@
 import sys
 
+sys.setrecursionlimit(5000)
+
+class Node():
+
+    def __init__(self, num):
+        self.num = num
+        self.path = False
+        self.shortest = 
+
+
 grid = dict()
 
 maxx = 0
@@ -23,8 +33,6 @@ def go(grid, coord, steps=0, path=[]):
     
     #if shortest is not None:
         #print(shortest)
-    newpath = path.copy()
-    newpath.append(coord)
     if coord not in grid:
         # we've gone out of the boundries of the grid
         return
@@ -42,6 +50,8 @@ def go(grid, coord, steps=0, path=[]):
             shortest = steps
             print(shortest)
     else:
+        newpath = path.copy()
+        newpath.append(coord)
         go(grid, (coord[0], coord[1] + 1), steps, newpath)
         go(grid, (coord[0], coord[1] - 1), steps, newpath)
         go(grid, (coord[0] + 1, coord[1]), steps, newpath)
