@@ -13,6 +13,7 @@ class Monkey:
         self.oper = oper
         self.opernum = opernum
         self.divisby = divisby
+        self.isdivisby = [0]
         self.t = t
         self.f = f
 
@@ -24,36 +25,43 @@ class Monkey:
         return retstr
 
     def inspectnthrow(self):
-#        print("Monkey ", self.num, ":", sep="")
+        # print("Monkey ", self.num, ":", sep="")
         for i in self.items:
             # inspect
             self.inspectnum += 1
-#            print("  Monkey inspects an item with a worry level of ", i, ".", sep="")
+            # print("  Monkey inspects an item with a worry level of ", i, ".", sep="")
             if self.oper == "+":
-#                print("    Worry level increases by ", self.opernum, end="", sep="")
+                # print("    Worry level increases by ", self.opernum, end="", sep="")
                 i += self.opernum
             elif self.oper == "*":
-#                print("    Worry level is multiplied by ", i, end="", sep="")
+                # print("    Worry level is multiplied by ", self.opernum, end="", sep="")
                 i *= self.opernum
             elif self.oper == "squared":
-#                print("    Worry level is multiplied by itself", end="", sep="")
+                # print("    Worry level is multiplied by itself", end="", sep="")
                 i *= i
-#            print(" to ", i, ".", sep="")
+            # print(" to ", i, ".", sep="")
 
             # no damage worry level drop
 #            i = i // 3
 #            print("    Monkey gets bored with item. Worry level is divided by 3 to ", i, ".", sep="")
             
             # throw
-#            print("    Current worry level is ", end="")
-            if not i % self.divisby:
-#                print("divisible by ", self.divisby, ".", sep="")
-#                print("    Item with worry level ", i, " is thrown to monkey ", self.t, ".", sep="")
-                monkeys[self.t].catch(i)
-            else:
-#                print("not divisible by ", self.divisby, ".", sep="")
-#                print("    Item with worry level ", i, " is thrown to monkey ", self.f, ".", sep="")
-                monkeys[self.f].catch(i)
+            # print("    Current worry level is ", end="")
+            # print(i)
+                # print()
+            for n in reversed(self.isdivisby):
+                if n < i:
+                    if not (i - n) % self.divisby:
+        #                print("divisible by ", self.divisby, ".", sep="")
+        #                print("    Item with worry level ", i, " is thrown to monkey ", self.t, ".", sep="")
+                        self.isdivisby.append(i)
+                        self.isdivisby.sort()
+                        monkeys[self.t].catch(i)
+                    else:
+        #                print("not divisible by ", self.divisby, ".", sep="")
+        #                print("    Item with worry level ", i, " is thrown to monkey ", self.f, ".", sep="")
+                        monkeys[self.f].catch(i)
+                    break
             self.items = []
 
     def catch(self, wl):
@@ -104,11 +112,16 @@ with open(sys.argv[1], "r") as f:
             monkeys.append(Monkey(items, oper, opernum, divisby, divisbytrue, divisbyfalse, monkeynum))
             monkeynum += 1
 
-for i in range(0,10000):
+for i in range(1,10000 + 1):
     print(i)
     for m in monkeys:
         # print(m)
         m.inspectnthrow()
+    if i == 1 or i == 20 or not i % 1000:
+        print("== After round", i, "==")
+        for m in monkeys:
+            print("Monkey", m.num, "inspected items", m.inspectnum, "times.")
+        print()
 
 inspectnums = []
 
