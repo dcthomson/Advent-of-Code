@@ -32,18 +32,18 @@ TO DO:<br>
 <br>
 
 2022<br>
-11.2
-13
-15.2
-16
-17.2
-18.2
-19
-20.2
-22.2
-23
-24
-25
+11.2 monkeys - patterns?<br>
+13 brackets<br>
+15.2 beacons<br>
+16 volcano dfs/bfs<br>
+17.2 tetris - patterns<BR>
+18.2 find outside surface area - subtract anything inside<br>
+19 robots dfs/bfs<br>
+20.2 modulus<br>
+22.2 folding a cube<br>
+23 moving elves<br>
+24 blizzards - bfs?<br>
+25 strange base5<br>
 <br>
 
 2021<br>
