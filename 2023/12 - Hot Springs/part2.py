@@ -20,9 +20,14 @@ with open(sys.argv[1], "r") as f:
 
         springs.append([s, n])
 
-def parsespr(spr):
+def checkspr(spr, numstr, sprintcount):
+
+    if spr.count('#') != sprintcount:
+        return False
+    
     nums = []
     s = 0
+
     for c in spr:
         if c == "#":
             s += 1
@@ -32,7 +37,9 @@ def parsespr(spr):
             s = 0
     if s != 0:
         nums.append(s)
-    return ",".join(str(x) for x in nums)
+    if ",".join(str(x) for x in nums) == numstr:
+        return True
+    return False
         
 arrangements = 0
 
@@ -41,10 +48,11 @@ for spr in springs:
     s = spr[0]
     positions = [pos for pos, char in enumerate(s) if char == "?"]
     newstr = s
+    springcount = sum(int(x) for x in spr[1].split(","))
     for l in product(*(["#."] * s.count('?'))):
         for n, p in enumerate(positions):
             newstr = newstr[:p] + l[n] + newstr[p+1:]
-        if parsespr(newstr) == spr[1]:
+        if checkspr(newstr, spr[1], springcount):
             arrangements += 1
             arr += 1
     print(arr)
