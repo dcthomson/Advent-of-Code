@@ -1,6 +1,7 @@
 import sys
 
 start = None
+loop = {}
 grid = {}
 charmap = {'|': "NS",
            '-': "EW",
@@ -41,7 +42,10 @@ elif "W" in charmap[grid[start[0], start[1]-1]]:
 steps = 0
 prevpipe = start
 
+loop = {start:True}
+
 while nextpipe != start:
+    loop[nextpipe] = True
     steps += 1
     dirs = []
     for c in charmap[grid[nextpipe]]:
@@ -60,4 +64,5 @@ while nextpipe != start:
             nextpipe = d
             break
 
-print(steps // 2 + (steps % 2 > 0))
+for coord in loop:
+    print(coord)
