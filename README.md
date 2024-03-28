@@ -43,7 +43,6 @@ TO DO:<br>
 22.2 folding a cube<br>
 23 moving elves<br>
 24 blizzards - bfs?<br>
-25 strange base5<br>
 <br>
 
 2021<br>
