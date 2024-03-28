@@ -41,7 +41,6 @@ TO DO:<br>
 19 robots dfs/bfs<br>
 20.2 modulus<br>
 22.2 folding a cube<br>
-23 moving elves<br>
 24 blizzards - bfs?<br>
 <br>
 
