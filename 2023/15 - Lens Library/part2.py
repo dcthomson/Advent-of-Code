@@ -14,11 +14,7 @@ with open(sys.argv[1], "r") as f:
 
         steps = line.split(",")
 
-
-
 total = 0
-
-
 
 for step in steps:
     val = 0
