@@ -55,7 +55,10 @@ dir = 0
 
 # printgrove(grove)
 
-for _ in range(10):
+round = 0
+elfmoved = True
+
+while elfmoved:
 
     for c in grove:
         # is anyone near me?
@@ -106,12 +109,14 @@ for _ in range(10):
 
 
     # check proposals and move them
+    elfmoved = False
     for orig, p in proposed.items():
         count = 0
         for p2 in proposed.values():
             if p2 == p:
                 count += 1
         if count == 1:
+            elfmoved = True
             del grove[orig]
             grove[p] = True
 
@@ -121,4 +126,5 @@ for _ in range(10):
 
     dir += 1
     dir = dir % 4
-printgrove(grove)
+    round += 1
+print(round)
