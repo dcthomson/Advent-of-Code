@@ -60,4 +60,3 @@ while place >= 0:
     else:
         total += val
 print(snafu)
-#    if abs(val) - total > abs(val * 2) - total:
