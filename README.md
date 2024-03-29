@@ -13,7 +13,7 @@ TO DO:<br>
 12.2 spring patterns<br>
 13.2 find smudge -- easy<br>
 14.2 find pattern<br>
-15.2 lenses<vr>
+15.2 lenses<br>
 17 bfs<br>
 18 find interior area<br>
 19.2 ?<br>
