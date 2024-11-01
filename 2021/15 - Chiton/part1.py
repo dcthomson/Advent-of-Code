@@ -58,7 +58,7 @@ def go(grid, coord, steps=0):
 #        return
 #    print(count)
     if coord == (maxx - 1, maxy - 1):
-        print(shortest[coord])
+#        print(shortest[coord])
         # found end
         return
 #        if shortest is None or steps < shortest:
@@ -66,14 +66,12 @@ def go(grid, coord, steps=0):
 #            print(shortest)
     else:
 #        print(coord, steps)
-        print(shortest)
+#        print(shortest)
         go(grid, (coord[0], coord[1] + 1), steps)
         go(grid, (coord[0] + 1, coord[1]), steps)
         go(grid, (coord[0], coord[1] - 1), steps)
         go(grid, (coord[0] - 1, coord[1]), steps)
         
 go(grid, (0,0))
-
-print("Hey!")
 
 print(shortest[(maxx - 1, maxy - 1)] - grid[(0,0)])
