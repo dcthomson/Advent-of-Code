@@ -22,6 +22,7 @@ class ALU:
             raise ValueError("Value is not a register: w,x,y,z")
         
     def aluset(self, c, n):
+        n = int(n)
         if c == 'w':
             self.w = n
         elif c == 'x':
@@ -108,8 +109,7 @@ with open(sys.argv[1], "r") as f:
         instructions.append(line)
 
 num =       100000000000000
-
-while num > 10000000000000:
+while num >= 11111111111111:
     num -= 1
     nstr = str(num)
     # print("num: ", nstr)
@@ -122,6 +122,8 @@ while num > 10000000000000:
         num = int(s)
         print("0 Found -- SKIP:", nstr, "->", s)
         continue
+    # else:
+    #     print(nstr)
     alu = ALU()
     currnum = ""
     for instruction in instructions:
