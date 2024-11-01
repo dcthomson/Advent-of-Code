@@ -14,9 +14,9 @@ with open(sys.argv[1], "r") as f:
 
 
 for j in range(0, 40):
-    print(j)
     newpolymer = ""
     polymerlen = len(polymer)
+    print(j, polymerlen)
     for i, c in enumerate(polymer):
         # print(i, c)
         newpolymer += c
