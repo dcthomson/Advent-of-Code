@@ -12,7 +12,7 @@ with open(sys.argv[1], "r") as f:
 
 safecount = 0
 
-for report in reports:
+def checkreport(report):
     prev = False
     direction = False
     safe = True
@@ -41,7 +41,17 @@ for report in reports:
             prev = i
             if not safe:
                 break
+    return safe
 
+for report in reports:
+
+    safe = checkreport(report)
+        
+    if not safe:
+        for i in range(0, len(report)):
+            safe = checkreport(report[:i] + report[i+1:])
+            if safe:
+                break
     if safe:
         safecount += 1
 
