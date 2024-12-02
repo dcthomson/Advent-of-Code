@@ -6,14 +6,18 @@ xmin = xmax = ymin = ymax = 0
 
 grid = {}
 
+print("Reading input...", end="", flush=True)
+
 with open(sys.argv[1], "r") as f:
 
     for line in f:
         line = line.strip()
 
-        (direction, distance, _) = line.split()
+        (direction, _, distance) = line.split()
 
-        distance = int(distance)
+        distance = distance[2:7]
+
+        distance = int(distance, 16)
 
         if direction == "R":
             for i in range(0, distance):
@@ -48,11 +52,18 @@ with open(sys.argv[1], "r") as f:
                     ymax = y
                 grid[x,y] = "#"
 
+print("DONE")
+print(xmin, xmax, ymin, ymax)
+print("Marking everything else with '.'...", end="", flush=True)
+
 # mark everything else with "."
 for y in range(ymin, ymax + 1):
     for x in range(xmin, xmax + 1):
         if (x,y) not in grid:
             grid[x,y] = "."
+
+print("DONE")
+print("Finding Edges...", end="", flush=True)
 
 #for y in range(ymin, ymax + 1):
 #    for x in range(xmin, xmax + 1):
@@ -68,6 +79,9 @@ for x in range(xmin, xmax):
 for y in range(ymin, ymax):
     edges.append((xmin, y))
     edges.append((xmax, y))
+
+print("DONE")
+print("Marking all outside...", end="", flush=True)
 
 visited = []
 
@@ -87,6 +101,9 @@ for edgecoord in edges:
                     visited.append(c)
                     queue.append(c)
 
+print("DONE")
+print("Counting lava...", end="", flush=True)
+
 cmlava = 0
 
 for y in range(ymin, ymax + 1):
@@ -100,4 +117,5 @@ for y in range(ymin, ymax + 1):
 #        print(grid[x,y], end="")
 #    print()
 
+print("DONE")
 print(cmlava)

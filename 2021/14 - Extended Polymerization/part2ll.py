@@ -48,7 +48,7 @@ with open(sys.argv[1], "r") as f:
 
 print(polymer)
 
-for j in range(0, 30):
+for j in range(0, 40):
     print(j, ": ", end="")
     count = 0
     for n in polymer:
