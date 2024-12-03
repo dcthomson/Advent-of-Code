@@ -14,7 +14,7 @@ TO DO:<br>
 13.2 find smudge -- easy<br>
 14.2 find pattern<br>
 15.2 lenses<br>
-17 bfs<br>
+17 A*<br>
 18 find interior area<br>
 19.2 ?<br>
 20 broadcasting<br>
@@ -40,7 +40,7 @@ TO DO:<br>
 
 2021<br>
 14.2 ?<br>
-15 bfs<br>
+15 A*<br>
 16 confusing instructions<br>
 18.1 brackets
 18.2 ?<br>
