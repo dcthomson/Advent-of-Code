@@ -2,6 +2,7 @@ import sys
 
 polymer = ""
 pairs = dict()
+pair10 = dict()
 
 with open(sys.argv[1], "r") as f:
     for line in f:
@@ -12,17 +13,19 @@ with open(sys.argv[1], "r") as f:
         elif line != '':
             polymer = line
 
+for k in pairs:
+    p = k
+    for j in range(0, 10):
+        i = 0
+        while True:
+            try:
+                p = p[:i+1] + pairs[p[i] + p[i+1]] + p[i+1:] 
+                i += 2
+            except:
+                break
+    pair10[k] = p
 
-for j in range(0, 40):
-    newpolymer = ""
-    polymerlen = len(polymer)
-    print(j, polymerlen)
-    for i, c in enumerate(polymer):
-        # print(i, c)
-        newpolymer += c
-        if i < polymerlen - 1:
-            newpolymer += pairs[c + polymer[i+1]]
-    polymer = newpolymer
+print(pair10)
 
 elements = dict()
 for c in polymer:

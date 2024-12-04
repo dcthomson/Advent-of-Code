@@ -14,15 +14,14 @@ with open(sys.argv[1], "r") as f:
 
 
 for j in range(0, 40):
-    newpolymer = ""
-    polymerlen = len(polymer)
-    print(j, polymerlen)
-    for i, c in enumerate(polymer):
-        # print(i, c)
-        newpolymer += c
-        if i < polymerlen - 1:
-            newpolymer += pairs[c + polymer[i+1]]
-    polymer = newpolymer
+    i = 0
+    print(j)
+    while True:
+        try:
+            polymer = polymer[:i+1] + pairs[polymer[i] + polymer[i+1]] + polymer[i+1:] 
+            i += 2
+        except:
+            break
 
 elements = dict()
 for c in polymer:

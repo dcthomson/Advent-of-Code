@@ -71,8 +71,8 @@ with open(sys.argv[1], "r") as f:
 
 for x in range(1, 4001):
     for m in range(1, 4001):
-        print(x,m, total)
         for a in range(1, 4001):
+            print(x,m,a, total)
             for s in range(1, 4001):
                 v = {'x': x, 'm': m, 'a': a, 's': s}
                 if workflows['in'].check(v, workflows):

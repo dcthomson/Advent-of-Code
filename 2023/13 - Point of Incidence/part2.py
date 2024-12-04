@@ -8,6 +8,7 @@ class Mirrorpatch():
     def __init__(self, h, v):
         self.vert = v
         self.horiz = h
+        self.oldfold = False
 
     def __str__(self):
         retstr = ""
@@ -45,7 +46,9 @@ class Mirrorpatch():
             except IndexError:
                 return foldfound
         return foldfound
-
+    
+    def flipsmudge(x, y):
+        
 horiz = []
 vert = []
 
@@ -70,7 +73,16 @@ with open(sys.argv[1], "r") as f:
 total = 0
 
 for mp in mps:
-    newmp = copy.deepcopy(mp)
+    mirrornum = 0
+    hf = mp.findhorizontalfold()
+    if hf:
+        mp.oldfold = "H" + str(hf)
+    vf = mp.findverticalfold()
+    if vf:
+        mp.oldfold = "V" + str(vf)
+
+for mp in mps:
+    mpcopy = copy.deepcopy(mp)
     for each coord in grid:
         change coord
         mtotal =0

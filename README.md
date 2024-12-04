@@ -9,26 +9,20 @@ Christmas advent calendar of programming challenges
 
 TO DO:<br>
 2023<br>
-10.2
-12.2
-13.2
-14.2
-15.2
-17.1
-17.2
-18.1
-18.2
-19.2
-20.1
-20.2
-21.2
-22.1
-22.2
-23.2
-24.1
-24.2
-25.1
-25.2
+10.2 find area inside loop<br>
+12.2 spring patterns<br>
+13.2 find smudge -- easy<br>
+14.2 find pattern<br>
+15.2 lenses<br>
+17 A*<br>
+18 find interior area<br>
+19.2 ?<br>
+20 broadcasting<br>
+21.2 elf steps<br>
+22 tetris kinda<br>
+23.2 bfs/dfs
+24 hailstone intersections<br>
+25 wires<br>
 <br>
 
 2022<br>
@@ -41,13 +35,12 @@ TO DO:<br>
 19 robots dfs/bfs<br>
 20.2 modulus<br>
 22.2 folding a cube<br>
-23 moving elves<br>
 24 blizzards - bfs?<br>
 <br>
 
 2021<br>
 14.2 ?<br>
-15 bfs<br>
+15 A*<br>
 16 confusing instructions<br>
 18.1 brackets
 18.2 ?<br>

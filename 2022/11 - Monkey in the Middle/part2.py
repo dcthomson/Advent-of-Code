@@ -13,7 +13,8 @@ class Monkey:
         self.oper = oper
         self.opernum = opernum
         self.divisby = divisby
-        self.isdivisby = [0]
+        #self.isdivisby = [0]
+        self.highdivis = 0
         self.t = t
         self.f = f
 
@@ -49,19 +50,17 @@ class Monkey:
             # print("    Current worry level is ", end="")
             # print(i)
                 # print()
-            for n in reversed(self.isdivisby):
-                if n < i:
-                    if not (i - n) % self.divisby:
-        #                print("divisible by ", self.divisby, ".", sep="")
-        #                print("    Item with worry level ", i, " is thrown to monkey ", self.t, ".", sep="")
-                        self.isdivisby.append(i)
-                        self.isdivisby.sort()
-                        monkeys[self.t].catch(i)
-                    else:
-        #                print("not divisible by ", self.divisby, ".", sep="")
-        #                print("    Item with worry level ", i, " is thrown to monkey ", self.f, ".", sep="")
-                        monkeys[self.f].catch(i)
-                    break
+            # for n in reversed(self.isdivisby):
+            #     if n < i:
+            if not (i - self.highdivis) % self.divisby:
+#                print("divisible by ", self.divisby, ".", sep="")
+#                print("    Item with worry level ", i, " is thrown to monkey ", self.t, ".", sep="")
+                self.highdivis = i
+                monkeys[self.t].catch(i)
+            else:
+#                print("not divisible by ", self.divisby, ".", sep="")
+#                print("    Item with worry level ", i, " is thrown to monkey ", self.f, ".", sep="")
+                monkeys[self.f].catch(i)
             self.items = []
 
     def catch(self, wl):
