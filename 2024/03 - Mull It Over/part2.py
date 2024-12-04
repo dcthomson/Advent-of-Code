@@ -16,20 +16,20 @@ with open(sys.argv[1], "r") as f:
 
         while do or dont or mul:
 
-            do   = re.search(r'do\(\)', s)
-            dont = re.search(r'don\'t\(\)', s)
-            mul  = re.search(r"mul\(\d\d?\d?,\d\d?\d?\)", s)
+            do = re.search(r"do\(\)", s)
+            dont = re.search(r"don\'t\(\)", s)
+            mul = re.search(r"mul\(\d\d?\d?,\d\d?\d?\)", s)
 
             if do:
                 if not dont or do.start() < dont.start():
                     if not mul or do.start() < mul.start():
                         enabled = True
-                        s = s[do.end():]
+                        s = s[do.end() :]
             if dont:
                 if not do or dont.start() < do.start():
                     if not mul or dont.start() < mul.start():
                         enabled = False
-                        s = s[dont.end():]
+                        s = s[dont.end() :]
             if mul:
                 if not do or mul.start() < do.start():
                     if not dont or mul.start() < dont.start():
@@ -38,6 +38,6 @@ with open(sys.argv[1], "r") as f:
                             nums = nums[:-1]
                             (l, r) = nums.split(",")
                             total += int(l) * int(r)
-                        s = s[mul.end():]
+                        s = s[mul.end() :]
 
     print(total)
