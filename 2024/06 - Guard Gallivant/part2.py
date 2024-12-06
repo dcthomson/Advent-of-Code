@@ -4,7 +4,7 @@ ogrid = {}
 
 start = None
 
-x = y = xmax = ymax = 0
+x = y = 0
 
 with open(sys.argv[1], "r") as f:
 
@@ -15,11 +15,7 @@ with open(sys.argv[1], "r") as f:
             ogrid[(x,y)] = c
             if c not in "#.":
                 start = (x,y)
-            if x > xmax:
-                xmax = x
             x += 1
-        if y > ymax:
-            ymax = y
         y += 1
 
 def runguard(grid, start):
@@ -47,11 +43,11 @@ def runguard(grid, start):
                 dir += 1
                 if dir > 3:
                     dir = 0
-                next = (current[0] + dirs[dir][0], current[1] + dirs[dir][1])
-            current = next
+            else:
+                current = next
         return (visited, "loop")
     except:
-        # we hit an edge, pass to next iteration
+        # we hit an edge
         return (visited, "hitedge")
 
 (visited, _) = runguard(ogrid, start)
