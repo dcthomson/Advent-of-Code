@@ -22,15 +22,19 @@ with open(sys.argv[1], "r") as f:
 # for i in disk:
 #     print(str(i), end="")
 # print()
+moved = []
 numindexes = []
 numid = False
-moved = False
 for i in range(len(disk) - 1, 0, -1):
     if disk[i] != ".":
         if not numid or numid == disk[i]:
             numid = disk[i]
             numindexes.append(i)
-        if disk[i - 1] != numid:
+        if numid in moved:
+            numid = False
+            numindexes = []
+            continue
+        if numid and disk[i - 1] != numid:
             spacelength = 0
             spacestart = False
             for j in range(0, len(disk)):
@@ -47,18 +51,16 @@ for i in range(len(disk) - 1, 0, -1):
                     if spacestart and spacelength >= len(numindexes):
                         for n, k in enumerate(numindexes):
                             disk[spacestart + n] = numid
-                        for k in numindexes:
                             disk[k] = "."
-                        moved = True
+                        spacestart = False  
+                        # for i in disk:
+                        #     print(str(i), end="")
+                        # print()
+                        moved.append(numid)
+                        break
                     spacestart = False
-                if moved:
-                    # for i in disk:
-                    #     print(str(i), end="")
-                    # print()
-                    break
             numid = False
-            numindexes = []
-            moved = False                         
+            numindexes = []              
 
 total = 0
 for n, i in enumerate(disk):

@@ -3,17 +3,7 @@ import time
 
 disk = []
 
-class File:
-    def __init__(self, size, id=False):
-        self.id = id
-        self.size = size
-        self.processed = False
-
-    def __repr__(self):
-        if id:
-            return str(self.id) * self.size
-        else:
-            return "." * self.size
+maxid = 0
 
 with open(sys.argv[1], "r") as f:
 
@@ -24,55 +14,56 @@ with open(sys.argv[1], "r") as f:
         s = ""
         for i, c in enumerate(line):
             if not i % 2:
-                disk.append(File(int(c), id))
+                for j in range(0, int(c)):
+                    disk.append(id)
+                    maxid = id
                 id += 1
             else:
-                disk.append(File(int(c)))
+                for j in range(0, int(c)):
+                    disk.append(".")
 
+moved = {}
 
+def getfile(id):
+    indexes = []
+    for n, i in enumerate(disk):
+        if i == id:
+            indexes.append(n)
+    return indexes
 
-fid = 1
-sid = 0
-while fid > sid:
-    for f in reversed(disk):
-        if f.id and not f.processed:
-            fid = f.id
-            f.processed = True
-            break
-
-    for f in disk:
-        if not f.id:
-            if f.size >= disk[fid].size:
-                sid = f.id
+def getspace(size):
+    indexes = []
+    for n, i in enumerate(disk):
+        found = True
+        if i == ".":
+            for k in range(0, size):
+                try:
+                    if disk[n + k] != ".":
+                        found = False
+                        break
+                except:
+                    pass
+            if found:
+                for k in range(0, size):
+                    indexes.append(n + k)
                 break
-    if fid > sid:
-        if disk[fid].size == disk[sid].size:
-            disk[sid].id = disk[fid].id
-            disk[fid].id = False
-        elif disk[fid].size > disk[sid].size:
-            disk[sid].size -= disk[fid].size
-            disk.insert(sid, disk[fid])
-            disk[fid].id = False
-    print(fid, sid)
-    print(disk)
-    time.sleep(5)
+    return indexes
 
+def swap(disk, file, space):
+    if file[0] > space[0]:
+        for n, i in enumerate(file):
+            disk[space[n]] = disk[file[n]]
+            disk[file[n]] = "."
 
-    # period = file = None
-    # length = len(disk)
-    # for l, i in enumerate(disk):
-    #     r = length - l - 1
-    #     if period is None and disk[l] == ".":
-    #         period = l
-    #     if file is None and disk[r] != ".":
-    #         file = r
-    #     if period is not None and file is not None:
-    #         break
-    # if period < file:
-    #     disk[period] = disk[file]
-    #     disk[file] = "."
-    # else:
-    #     break
+for i in range(maxid, 0, -1):
+    file = getfile(i)
+    filesize = len(file)
+    space = getspace(filesize)
+
+    swap(disk, file, space)
+    # for i in disk:
+    #     print(str(i), end="")
+    # print()
 
 total = 0
 for n, i in enumerate(disk):
