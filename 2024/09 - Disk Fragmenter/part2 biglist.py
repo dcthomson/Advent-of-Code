@@ -19,9 +19,6 @@ with open(sys.argv[1], "r") as f:
                 for j in range(0, int(c)):
                     disk.append(".")
 
-# for i in disk:
-#     print(str(i), end="")
-# print()
 moved = []
 numindexes = []
 numid = False
@@ -53,9 +50,6 @@ for i in range(len(disk) - 1, 0, -1):
                             disk[spacestart + n] = numid
                             disk[k] = "."
                         spacestart = False  
-                        # for i in disk:
-                        #     print(str(i), end="")
-                        # print()
                         moved.append(numid)
                         break
                     spacestart = False

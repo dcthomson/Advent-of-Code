@@ -22,8 +22,6 @@ with open(sys.argv[1], "r") as f:
                 for j in range(0, int(c)):
                     disk.append(".")
 
-moved = {}
-
 def getfile(id):
     indexes = []
     for n, i in enumerate(disk):
@@ -61,9 +59,6 @@ for i in range(maxid, 0, -1):
     space = getspace(filesize)
 
     swap(disk, file, space)
-    # for i in disk:
-    #     print(str(i), end="")
-    # print()
 
 total = 0
 for n, i in enumerate(disk):
