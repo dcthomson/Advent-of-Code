@@ -57,42 +57,8 @@ class Area:
                                 if (pd == coorddir and
                                     (coord[0] + dcoord[0], coord[1] + dcoord[1]) == pcoord):
                                     q.append((pcoord, pd))
-                    # print(self.name, side)
 
-                self.psides.append(side)
-
-            # placed = False
-            # for side in self.psides:
-            #     for sc in side:
-            #         for k,v in dirs.items():
-            #             if ((coord[0] + v[0], coord[1] + v[1]) == sc and 
-            #                     coorddir == self.pcoords):
-            #                 side.append(coord)
-            #                 placed = True
-            # if not placed:
-            #     self.psides.append([coord])                            
-                    
-    def __repr__(self):
-        ret = self.name + "\n"
-        # ret += "  perimeter: " + str(self.perimeter) + "\n"
-        ret += "  coords: "
-        for c in self.coords:
-            ret += "(" + str(c[0]) + "," + str(c[1]) + ") "
-        ret += "\n"
-        ret += "  pcoords: "
-        for pc in self.pcoords:
-            ret += "(" + str(pc[0]) + "," + str(pc[1]) + ") "
-            # ret += str(pc)
-            # ret += "(" + str(k[0]), 
-            # str(pc[0]) + "," + str(pc[1]) + ") "
-        ret += "\n"
-        ret += "  psides: "
-        for side in self.psides:
-            ret += "\n    "
-            for c in side:
-                ret += "(" + str(c[0]) + "," + str(c[1]) + ") "
-        ret += "\n"
-        return ret
+                self.psides.append(side)                    
 
 with open(sys.argv[1], "r") as f:
 
@@ -119,15 +85,6 @@ for y in range(0, ymax):
         if not found:
             a = Area(grid, (x,y))
             areas[grid[(x,y)]].append(a)
-
-# print(areas)
-
-# total = 0
-
-# for v in areas.values():
-#     # total += len(v.coords) * len(v.psides) 
-#     print(v)
-# print(total)
 
 total = 0
 for key in areas:
