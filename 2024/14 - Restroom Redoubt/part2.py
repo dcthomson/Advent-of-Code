@@ -55,6 +55,12 @@ while True:
             y -= ymax
 
         robot['p'] = (x, y)
+
+    # printrobots(robots)
+    # print(i)
+    # time.sleep(.5)
+
+
     if not (i - 14) % 101 and not (i - 94) % 103:
         printrobots(robots)
         print(i)
