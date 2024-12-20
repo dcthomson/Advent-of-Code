@@ -1,4 +1,5 @@
 import sys
+from queue import PriorityQueue
 
 maze = {}
 
@@ -22,9 +23,20 @@ with open(sys.argv[1], "r") as f:
         ymax = y
         y += 1
 
-moveq = []
-turnq = []
+q = PriorityQueue()
+q.put(start, 0)
+came_from = dict()
+cost_so_far = dict()
+came_from[start] = None
+cost_so_far[start] = 0
+dirs = ((0,-1),(1,0),(0,1),(-1,0))
 
+while not q.empty():
+    current = q.get()
 
+    if current == end:
+        break
 
-while moveq or turnq:
+    for d in dirs:
+        next = (current[0] + d[0], current[1] + d[1])
+        new_cost = cost_so_far[current] + 

@@ -26,6 +26,17 @@ def beginswith(s, count=0, newtowels=towels.copy()):
             if s.startswith(towel):
                 count = beginswith(s[len(towel):], count, newtowels.copy())
     return count
+def beginswith(s):
+    # print(s)
+    if s == "":
+        return True
+    for towel in towels:
+        # print(towel)
+        if s.startswith(towel):
+            ret = beginswith(s[len(towel):])
+            if ret:
+                return True
+    return False
 
 count = 0
 
@@ -34,5 +45,7 @@ for pattern in patterns:
     pcount = beginswith(pattern)
     print(pcount)
     count += pcount
+    if beginswith(pattern):
+        count += 1
 
 print(count)
