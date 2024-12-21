@@ -92,4 +92,4 @@ total = 0
 for k, v in sorted(cheats.items()):
     print(v, k)
     total += v
-print(total)
+print(ssteps[end], esteps[start], total)
