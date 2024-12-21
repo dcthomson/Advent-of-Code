@@ -22,17 +22,15 @@ with open(sys.argv[1], "r") as f:
         y += 1
     ymax = y
 
-# run bfs from start and end to get distance
-# to both from all nodes
-
 # loop through every available space use manhatten
 # distance to check cheat distance then check distance
 # from start to coord and end to cheat coord
 
 q = []
 q.append(start)
-reached = []
-reached.append(start)
+ssteps = {}
+steps = 0
+ssteps[start] = steps
 dirs = {"N":(0,-1), 
         "E":(1,0),
         "S":(0,1),
@@ -40,8 +38,58 @@ dirs = {"N":(0,-1),
 
 while q:
     current = q.pop(0)
+    steps += 1
     for d in dirs.values():
         next = (current[0] + d[0], current[1] + d[1])
-        if next not in reached:
+        if next not in ssteps and grid[next] != "#":
             q.append(next)
-            reached.append(next)
+            ssteps[next] = steps
+
+q = []
+q.append(end)
+esteps = {}
+steps = 0
+esteps[end] = steps
+dirs = {"N":(0,-1), 
+        "E":(1,0),
+        "S":(0,1),
+        "W":(-1,0)}
+
+while q:
+    current = q.pop(0)
+    steps += 1
+    for d in dirs.values():
+        next = (current[0] + d[0], current[1] + d[1])
+        if next not in esteps and grid[next] != "#":
+            q.append(next)
+            esteps[next] = steps
+
+# print(ssteps)
+# print(esteps)
+
+cheats = defaultdict(int)
+
+for c in grid:
+    if grid[c] != "#":
+        for x in range(-20, 20):
+            for y in range(-20, 20):
+                cheatsteps = abs(x) + abs(y)
+                if cheatsteps <= 20:
+                    cheatcoord = (c[0] + x, c[1] + y)
+                    try:
+                        if grid[cheatcoord] != "#":
+                            
+                            newsteps = ssteps[c]
+                            newsteps += esteps[cheatcoord]
+                            newsteps += cheatsteps
+                            difference = ssteps[end] - newsteps
+
+                            if difference >= 100:
+                                cheats[difference] += 1
+                    except:
+                        pass
+total = 0
+for k, v in sorted(cheats.items()):
+    print(v, k)
+    total += v
+print(total)
