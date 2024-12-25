@@ -1,12 +1,6 @@
 #from logging.config import _RootLoggerConfiguration
 import sys
-import time
-import os
 import heapdict
-
-##############################################
-### LETS FIGURE OUT A*
-##############################################
 
 grid = {}
 
@@ -23,7 +17,27 @@ with open(sys.argv[1], "r") as f:
         maxx = x
         y += 1
     maxy = y
-    
+
+for y in range(0,maxy):
+    for i in range(1,5):
+        for x in range(0,maxx):
+            newnum = grid[(x,y)] + i
+            if newnum >= 10:
+                newnum -= 9
+            grid[((maxx*i)+x,y)] = newnum
+
+maxx *= 5
+
+for x in range(0,maxx):
+    for i in range(1,5):
+        for y in range(0,maxy):
+            newnum = grid[(x,y)] + i
+            if newnum >= 10:
+                newnum -= 9
+            grid[(x, (maxy*i)+y)] = newnum
+
+maxy *= 5
+
 start = (0,0)
 end = (maxx-1,maxy-1)
 
