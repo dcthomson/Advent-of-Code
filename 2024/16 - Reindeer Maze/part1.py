@@ -44,7 +44,7 @@ class graph:
         x = abs(a.getx() - b.getx())
         y = abs(a.gety() - b.gety())
         retval = x + y
-        if a.getx() == b.getx() or a.gety() == b.gety():
+        if a.getx() != b.getx() and a.gety() != b.gety():
             retval += 1000
         return x + y
 
@@ -84,12 +84,11 @@ frontier = heapdict.heapdict()
 frontier[start] = 0
 came_from = dict()
 cost_so_far = dict()
-came_from[start] = None
-cost_so_far[start] = 0
+came_from[start.__repr__()] = None
+cost_so_far[start.__repr__()] = 0
 
 while list(frontier.keys()):
     currenttuple = frontier.popitem()
-    print(currenttuple)
     current = currenttuple[0]
 
     if current.coord == end.coord:
@@ -99,9 +98,9 @@ while list(frontier.keys()):
     for next in maze.neighbors(current):
         cost = maze.cost(current, next)
         if cost:
-            new_cost = cost_so_far[current] + cost
-            if next not in cost_so_far or new_cost < cost_so_far[next]:
-                cost_so_far[next] = new_cost
+            new_cost = cost_so_far[current.__repr__()] + cost
+            if next.__repr__() not in cost_so_far or new_cost < cost_so_far[next.__repr__()]:
+                cost_so_far[next.__repr__()] = new_cost
                 priority = new_cost + maze.heuristic(end, next)
                 frontier[next] = priority
-                came_from[next] = current
+                came_from[next.__repr__()] = current
