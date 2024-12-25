@@ -1,10 +1,20 @@
 import sys
-from queue import PriorityQueue
+import heapdict
+import time
 
 class node:
     def __init__(self, coord, dir="N"):
         self.coord = coord
         self.dir = dir
+
+    def __repr__(self):
+        retstr = "(x="
+        retstr += "{:03d}".format(self.coord[0])
+        retstr += ", "
+        retstr += "y={:03d}".format(self.coord[1])
+        retstr += ") - "
+        retstr += self.dir
+        return retstr
         
 
 class graph:
@@ -20,15 +30,18 @@ class graph:
             return 1
         elif (self.dirs[n.dir][0] == self.dirs[n2.dir][0] or
               self.dirs[n.dir][1] == self.dirs[n2.dir][1]):
-            return 2001
+            return False
         else:
             return 1001
 
     def neighbors(self, onode):
+        # print(onode)
         n = []
         for dletter, dcoord in self.dirs.items():
             coord = (onode.coord[0] + dcoord[0], onode.coord[1] + dcoord[1])
-            n.append(node(coord, dletter))
+            if self.coords[coord] != "#":
+                n.append(node(coord, dletter))
+        # print(n)
         return n
 
 maze = graph()
@@ -53,25 +66,28 @@ with open(sys.argv[1], "r") as f:
         ymax = y
         y += 1
 
-
-frontier = PriorityQueue()
-frontier.put((0, start))
+frontier = heapdict.heapdict()
+frontier[start] = 0
 came_from = dict()
 cost_so_far = dict()
 came_from[start] = None
 cost_so_far[start] = 0
 
-while not frontier.empty():
-    current = frontier.get()[1]
-    print(current)
+while list(frontier.keys()):
+    currenttuple = frontier.popitem()
+    print(currenttuple)
+    current = currenttuple[0]
 
     if current.coord == end.coord:
+        print(currenttuple[1])
         break
 
     for next in maze.neighbors(current):
-        new_cost = cost_so_far[current] + maze.cost(current, next)
-        if next not in cost_so_far or new_cost < cost_so_far[next]:
-            cost_so_far[next] = new_cost
-            priority = new_cost
-            frontier.put((priority, next))
-            came_from[next] = current
+        cost = maze.cost(current, next)
+        if cost:
+            new_cost = cost_so_far[current] + cost
+            if next not in cost_so_far or new_cost < cost_so_far[next]:
+                cost_so_far[next] = new_cost
+                priority = new_cost
+                frontier[next] = priority
+                came_from[next] = current
