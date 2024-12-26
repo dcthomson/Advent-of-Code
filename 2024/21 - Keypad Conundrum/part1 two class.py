@@ -1,9 +1,12 @@
 import sys
 
+inputcodes = []
+
 with open(sys.argv[1], "r") as f:
 
     for line in f:
         line = line.strip()
+        inputcodes.append(line)
 
 class numpad:
     def __init__(self, p):
@@ -60,8 +63,23 @@ class dirpad:
     def reset(self):
         self.current = self.pad["A"]
 
+    def sortstring(self, s):
+        l = s.split("A")
+        # print(l)
+        sortedlist = []
+        for lils in l:
+            sortedstr = ""
+            for c in (">v<^"):
+                for _ in range(0, lils.count(c)):
+                    sortedstr += c
+            sortedlist.append(sortedstr)
+        # print(sortedlist)
+        return "A".join(sortedlist)
+
     def instructions(self, s):
         ret = ""
+        s = self.sortstring(s)
+        # print(s)
         for c in s:
             ret += self.move(c)
         return ret
@@ -97,6 +115,7 @@ class dirpad:
         path.reverse()
         path.append("A")
         path = "".join(path)
+        path = self.sortstring(path)
         return path
 
 p = {"7": (0,0),
@@ -122,20 +141,21 @@ p = {"^": (1,0),
 robot1 = dirpad(p)
 robot2 = dirpad(p)
 
-s = "029A"
-num = int(s.replace('A', ''))
-numpadinstructions = numpad.instructions(s)
-print(numpadinstructions)
-robot1instructions = robot1.instructions(numpadinstructions)
-print(robot1instructions)
-robot2instructions = robot2.instructions(robot1instructions)
-print(robot2instructions)
+total = 0
 
-print(num, len(robot2instructions))
-print(num * len(robot2instructions))
+for code in inputcodes:
+    num = int(code.replace('A', ''))
+    numpadinstructions = numpad.instructions(code)
+    print("n: ", numpadinstructions)
+    robot1instructions = robot1.instructions(numpadinstructions)
+    print("r1:", robot1instructions)
+    robot2instructions = robot2.instructions(robot1instructions)
+    print("r2:", robot2instructions)
 
-robot3 = pad(p)
-print(len(robot3.instructions("v<<A>>^A<A>AvA<^AA>A<vAAA>^A")))
+    print(len(robot2instructions), num)
+    print()
+    total += num * len(robot2instructions)
 
-robot4 = pad(p)
-print()
+print(total)
+# robot4 = pad(p)
+# print()
