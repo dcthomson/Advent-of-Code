@@ -15,23 +15,23 @@ with open(sys.argv[1], "r") as f:
 
 count = 0
 
-def beginswith(s):
-    global count
-    if s == "":
-        count += 1
-        # print(count)
-        return
-    for towel in towels:
-        if s.startswith(towel):
-            # print(towel, s)
-            beginswith(s[len(towel):])
+def beginswith(s, cache={}):
+    count = 0
+    if s in cache:
+        count = cache[s]
+    elif s == "":
+        count = 1
+    else:
+        for towel in towels:
+            if s.startswith(towel):
+                count += beginswith(s[len(towel):])
+    cache[s] = count
+    return count
 
 totalcount = 0
 
 for pattern in patterns:
-    print(pattern)
-    count = 0
-    beginswith(pattern)
+    count = beginswith(pattern)
     totalcount += count
 
 print(totalcount)
