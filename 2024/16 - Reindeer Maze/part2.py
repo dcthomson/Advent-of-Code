@@ -7,7 +7,7 @@ class node:
     def __init__(self, coord, dir="N", path=[]):
         self.coord = coord
         self.dir = dir
-        self.path = path
+        self.path = path.copy()
         self.path.append(coord)
 
     def __repr__(self):
@@ -118,11 +118,10 @@ while list(frontier.keys()):
         break
 
     if current.coord == end.coord:
-        print(current.path)
-        print(currenttuple[1])
         splits += 1
-        for c in current.path:
-            bestpathcoords[c] = True
+        if str(len(current.path) - 1) == str(currenttuple[1])[-3:]:
+            for c in current.path:
+                bestpathcoords[c] = True
         found = currenttuple[1]
         continue
 
@@ -135,9 +134,5 @@ while list(frontier.keys()):
                 priority = new_cost
                 frontier[next] = priority
                 came_from[next.__repr__()] = current
-
-maze.printgraph(bestpathcoords.keys())
-
-print(splits)
 
 print(len(bestpathcoords.keys()))
