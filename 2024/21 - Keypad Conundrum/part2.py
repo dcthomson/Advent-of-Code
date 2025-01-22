@@ -111,13 +111,5 @@ for code in inputcodes:
                 if not shortest or len(istr3) < shortest:
                     shortest = len(istr3)
     total += shortest * num
-#     robot2instructions = robot2.instructions(robot1instructions)
-#     print("r2:", robot2instructions)
-
-#     print(len(robot2instructions), num)
-#     print()
-#     total += num * len(robot2instructions)
 
 print(total)
-# # robot4 = pad(p)
-# # print()
