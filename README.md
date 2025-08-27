@@ -8,6 +8,10 @@ Christmas advent calendar of programming challenges
 
 
 TO DO:<br>
+2024<br>
+21.2 recursive - robot panels<br>
+24.2 binary math<br>
+
 2023<br>
 10.2 find area inside loop<br>
 12.2 spring patterns<br>
