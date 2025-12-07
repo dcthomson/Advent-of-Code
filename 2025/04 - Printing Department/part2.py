@@ -55,6 +55,5 @@ with open(sys.argv[1], "r") as f:
             changed = True
             total_rolls += 1
             grid[(coord)] = "."
-        # printgrid(grid)
 
     print(total_rolls)
